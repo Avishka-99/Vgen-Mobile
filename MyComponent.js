@@ -7,7 +7,7 @@ class MyComponent extends Component {
         return (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <View style={{ marginVertical: 50 }}>
-                    <Text style={{ fontSize: 25, fontWeight: 'bold' }}> Counter Value = {this.props.counter} </Text>
+                    <Text style={{ fontSize: 24, fontWeight: 'bold' }}> Counter Value = {this.props.counter} </Text>
                 </View>
                 <View style={{ marginVertical: 5 }}>
                     <Button title="Increment +1" style={{ marginVertical: 50 }} onPress={() => { this.props.increaseCounter(1) }} />
