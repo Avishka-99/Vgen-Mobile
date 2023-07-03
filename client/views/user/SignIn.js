@@ -4,13 +4,15 @@ import React from 'react'
 import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper'
 import Constants from 'expo-constants';
-
-export default function SignIn() {
-  console.log(Constants.deviceName)
+import { useDispatch, useSelector } from 'react-redux'
+import { incrementCounterAction } from '../../actions/counterAction';
+export default function SignIn({navigation}) {
+  const dispatch = useDispatch();
   const handleSubmit = () => {
-    Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
+    dispatch(incrementCounterAction('customer'))
+    /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
-    });
+    });*/
   }
   return (
     <KeyboardAvoidingView
@@ -21,6 +23,7 @@ export default function SignIn() {
           style={styles.image}
           source={require('../../assets/signinbg.png')}
           blurRadius={1}
+          contentFit="cover"
         />
         <Image
           style={styles.logo}
@@ -39,10 +42,10 @@ export default function SignIn() {
             label={"Password"}
             style={styles.textInput}
           />
-          <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
-            <Text style={styles.buttonText}>Sign in</Text>
+          <TouchableOpacity  style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
+            <Text  style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
-          <Text>Not a member? <TouchableOpacity><Text>Sign up</Text></TouchableOpacity></Text>
+          <Text style={styles.bottomText}>Not a member? <Text style={styles.signUptext} onPress={()=>navigation.navigate('SignUp')}>Sign up</Text></Text>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -50,7 +53,8 @@ export default function SignIn() {
 }
 const styles = StyleSheet.create({
   avoidingView: {
-    flex: 1
+    flex: 1,
+    
   },
   container: {
     flex: 1,
@@ -69,7 +73,6 @@ const styles = StyleSheet.create({
   },
   logo:{
     flex: 1,
-    resizeMode: "cover",
     position: 'absolute',
     width: "90%",
     height: "30%",
@@ -95,6 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: "2%"
   },
   submitButton: {
+    position:"relative",
     backgroundColor: "dodgerblue",
     color: "white",
     borderRadius: 50,
@@ -102,12 +106,20 @@ const styles = StyleSheet.create({
     height: "15%",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "1%"
+    top:"5%"
   },
   buttonText: {
     color: "white",
     fontSize: 22,
   },
+  bottomText:{
+    position:"relative",
+    top:"5%"
+  },
+  signUptext:{
+    color:"royalblue",
+    textDecorationLine:"underline",
+  }
 
 
 })
