@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform } from 'react-native'
+import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, Touchable } from 'react-native'
 import Axios from 'axios';
 import React from 'react'
 import { Image } from 'expo-image';
@@ -42,7 +42,7 @@ export default function SignIn() {
           <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
             <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
-          <Text>Not a member? Sign up</Text>
+          <Text>Not a member? <TouchableOpacity><Text>Sign up</Text></TouchableOpacity></Text>
         </View>
       </View>
     </KeyboardAvoidingView>
