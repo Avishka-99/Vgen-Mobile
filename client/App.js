@@ -12,6 +12,9 @@ import Constants from 'expo-constants';
 import CustomerMain from './views/customer/CustomerMain';
 import { useSelector } from 'react-redux'
 
+
+//start my work
+
 const AppWrapper = () => {
   return (
     <Provider store={store}>
