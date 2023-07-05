@@ -10,6 +10,7 @@ import { DefaultTheme, DarkTheme, Provider as PaperProvider, BottomNavigation } 
 import { NavigationContainer } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import CustomerMain from './views/customer/CustomerMain';
+import EventOrganizerMain from './views/customer/EventOrganizerMain';
 import { useSelector } from 'react-redux'
 
 
@@ -18,7 +19,7 @@ import { useSelector } from 'react-redux'
 const AppWrapper = () => {
   return (
     <Provider store={store}>
-        <App/>
+      <App />
     </Provider>
   )
 }
@@ -52,27 +53,26 @@ const App = () => {
     }
   })
   return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="dark" />
-        <NavigationContainer>
-          {user == 'customer' ? <PaperProvider>
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
+      <NavigationContainer>
+        {user == 'customer' ?
+          <PaperProvider>
             <CustomerMain />
-            {/* <BottomNavigation
-            navigationState={{ index, routes }}
-            onIndexChange={setIndex}
-            renderScene={renderScene}
-            theme={{ colors: { secondaryContainer: "yellow" } }}
-          /> */}
-          </PaperProvider> : <Landing />}
+          </PaperProvider> : user=='eventorganizer'?
+          <PaperProvider>
+            <EventOrganizerMain />
+          </PaperProvider>:
+          <Landing/>}
 
-          {/*<StatusBar barStyle={'dark-content'} />
+        {/*<StatusBar barStyle={'dark-content'} />
         <View style={styles.topBar} ></View>
         <View style={styles.content}>
           <MyButton/>
         </View>
         <View style={styles.bottomBar}></View>*/}
-        </NavigationContainer>
-      </SafeAreaView>
+      </NavigationContainer>
+    </SafeAreaView>
   );
 };
 
