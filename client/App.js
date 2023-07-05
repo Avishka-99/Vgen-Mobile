@@ -14,7 +14,7 @@ import EventOrganizerMain from './views/customer/EventOrganizerMain';
 import { useSelector } from 'react-redux'
 
 
-//start my work
+//config my new redux
 
 const AppWrapper = () => {
   return (
