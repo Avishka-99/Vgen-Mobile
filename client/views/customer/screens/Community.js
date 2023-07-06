@@ -12,7 +12,7 @@ export default function Community() {
   })
   return (
     <View style={styles.container}>
-    {user=='eventorganizer'?<Text>Event</Text>:<TextTrack>None</TextTrack>}
+    {user=='eventorganizer'?<Text>Event</Text>:<Text>None</Text>}
       <Text>Community</Text>
     </View>
   )

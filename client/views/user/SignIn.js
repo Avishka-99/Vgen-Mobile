@@ -5,7 +5,7 @@ import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper'
 import Constants from 'expo-constants';
 import { useDispatch, useSelector } from 'react-redux'
-import { incrementCounterAction } from '../../actions/counterAction';
+import { setUserAction } from '../../actions/UserAction';
 import * as Font from 'expo-font';
 import { useFonts } from 'expo-font';
 export default function SignIn({ navigation }) {
@@ -14,7 +14,8 @@ export default function SignIn({ navigation }) {
   })
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    dispatch(incrementCounterAction('delivery'))
+    console.log("dasasd")
+    dispatch(setUserAction('customer'))
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
     });*/
