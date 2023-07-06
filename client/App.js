@@ -23,7 +23,7 @@ const AppWrapper = () => {
   )
 }
 const App = () => {
-  var user = useSelector(state => state.counterReducer.counter);
+  var user = useSelector(state => state.userReducer.user);
   console.log("sdfsdf")
   console.log(user);
   //const [user, setUser] = useState('customer');
