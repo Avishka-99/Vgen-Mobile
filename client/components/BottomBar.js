@@ -8,6 +8,8 @@ export default function BottomBar() {
         </View>
     )
 }
+
+
 const styles = StyleSheet.create({
     bar: {
         flex:1,

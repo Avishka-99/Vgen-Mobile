@@ -9,7 +9,7 @@ import { incrementCounterAction } from '../../actions/counterAction';
 export default function SignIn({navigation}) {
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    dispatch(incrementCounterAction('eventorganizer'))
+    dispatch(incrementCounterAction('delivery'))
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
     });*/
