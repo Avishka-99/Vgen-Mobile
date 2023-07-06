@@ -6,10 +6,15 @@ import { TextInput } from 'react-native-paper'
 import Constants from 'expo-constants';
 import { useDispatch, useSelector } from 'react-redux'
 import { incrementCounterAction } from '../../actions/counterAction';
-export default function SignIn({navigation}) {
+import * as Font from 'expo-font';
+import { useFonts } from 'expo-font';
+export default function SignIn({ navigation }) {
+  let [fontsLoaded] = useFonts({
+    "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
+  })
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    dispatch(incrementCounterAction('eventorganizer'))
+    dispatch(incrementCounterAction('delivery'))
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
     });*/
@@ -42,10 +47,10 @@ export default function SignIn({navigation}) {
             label={"Password"}
             style={styles.textInput}
           />
-          <TouchableOpacity  style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
-            <Text  style={styles.buttonText}>Sign in</Text>
+          <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
+            <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
-          <Text style={styles.bottomText}>Not a member? <Text style={styles.signUptext} onPress={()=>navigation.navigate('SignUp')}>Sign up</Text></Text>
+          <Text style={styles.bottomText}>Not a member? <Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -54,7 +59,7 @@ export default function SignIn({navigation}) {
 const styles = StyleSheet.create({
   avoidingView: {
     flex: 1,
-    
+
   },
   container: {
     flex: 1,
@@ -71,14 +76,14 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     marginTop: Constants.deviceName == "iPhone" ? 0 : Constants.statusBarHeight,
   },
-  logo:{
+  logo: {
     flex: 1,
     position: 'absolute',
     width: "90%",
     height: "30%",
     marginTop: Constants.deviceName == "iPhone" ? 0 : Constants.statusBarHeight,
-    left:"5%",
-    top:"12%",
+    left: "5%",
+    top: "12%",
 
   },
   loginContainer: {
@@ -98,7 +103,7 @@ const styles = StyleSheet.create({
     marginBottom: "2%"
   },
   submitButton: {
-    position:"relative",
+    position: "relative",
     backgroundColor: "dodgerblue",
     color: "white",
     borderRadius: 50,
@@ -106,19 +111,19 @@ const styles = StyleSheet.create({
     height: "15%",
     justifyContent: "center",
     alignItems: "center",
-    top:"5%"
+    top: "5%"
   },
   buttonText: {
     color: "white",
     fontSize: 22,
   },
-  bottomText:{
-    position:"relative",
-    top:"5%"
+  bottomText: {
+    position: "relative",
+    top: "5%"
   },
-  signUptext:{
-    color:"royalblue",
-    textDecorationLine:"underline",
+  signUptext: {
+    color: "royalblue",
+    textDecorationLine: "underline",
   }
 
 
