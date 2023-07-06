@@ -4,13 +4,12 @@ import store from './store/store';
 import Landing from './views/user/Landing';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { DefaultTheme, DarkTheme, Provider as PaperProvider, BottomNavigation } from 'react-native-paper';
+import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import CustomerMain from './views/customer/CustomerMain';
 import EventOrganizerMain from './views/customer/EventOrganizerMain';
+import DeliveryMain from './views/delivery/DeliveryMain'
 import { useSelector } from 'react-redux'
 
 
@@ -62,6 +61,9 @@ const App = () => {
           </PaperProvider> : user=='eventorganizer'?
           <PaperProvider>
             <EventOrganizerMain />
+          </PaperProvider>: user=='delivery'?
+          <PaperProvider>
+            <DeliveryMain />
           </PaperProvider>:
           <Landing/>}
 
