@@ -11,6 +11,7 @@ import CustomerMain from './views/customer/CustomerMain';
 import EventOrganizerMain from './views/customer/EventOrganizerMain';
 import DeliveryMain from './views/delivery/DeliveryMain'
 import { useSelector } from 'react-redux'
+import { useFonts } from 'expo-font';
 
 
 //config my new redux
@@ -51,31 +52,37 @@ const App = () => {
       backgroundColor: "dodgerblue"
     }
   })
-  return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar style="dark" />
-      <NavigationContainer>
-        {user == 'customer' ?
-          <PaperProvider>
-            <CustomerMain />
-          </PaperProvider> : user=='eventorganizer'?
-          <PaperProvider>
-            <EventOrganizerMain />
-          </PaperProvider>: user=='delivery'?
-          <PaperProvider>
-            <DeliveryMain />
-          </PaperProvider>:
-          <Landing/>}
+  let [fontsLoaded] = useFonts({
+    "Poppins-light": require('./assets/fonts/Poppins-Light.ttf'),
+    "Poppins-medium": require('./assets/fonts/Poppins-Medium.ttf')
+  });
+  if (fontsLoaded) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar style="dark" />
+        <NavigationContainer>
+          {user == 'customer' ?
+            <PaperProvider>
+              <CustomerMain />
+            </PaperProvider> : user == 'eventorganizer' ?
+              <PaperProvider>
+                <EventOrganizerMain />
+              </PaperProvider> : user == 'delivery' ?
+                <PaperProvider>
+                  <DeliveryMain />
+                </PaperProvider> :
+                <Landing />}
 
-        {/*<StatusBar barStyle={'dark-content'} />
-        <View style={styles.topBar} ></View>
-        <View style={styles.content}>
-          <MyButton/>
-        </View>
-        <View style={styles.bottomBar}></View>*/}
-      </NavigationContainer>
-    </SafeAreaView>
-  );
+          {/*<StatusBar barStyle={'dark-content'} />
+          <View style={styles.topBar} ></View>
+          <View style={styles.content}>
+            <MyButton/>
+          </View>
+          <View style={styles.bottomBar}></View>*/}
+        </NavigationContainer>
+      </SafeAreaView>
+    );
+  }
 };
 
 export default AppWrapper; 
