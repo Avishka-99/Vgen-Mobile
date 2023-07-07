@@ -61,6 +61,7 @@ export default function SignIn({ navigation }) {
             label={"Password"}
             style={styles.textInput}
             onChangeText={(event)=>setPassword(event)}
+            secureTextEntry={true}
           />
           <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
             <Text style={styles.buttonText}>Sign in</Text>
