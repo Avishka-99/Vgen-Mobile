@@ -9,13 +9,13 @@ import { setUserAction } from '../../actions/UserAction';
 import * as Font from 'expo-font';
 import { useFonts } from 'expo-font';
 export default function SignIn({ navigation }) {
-  let [fontsLoaded] = useFonts({
-    "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
-  })
+  // let [fontsLoaded] = useFonts({
+  //   "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
+  // })
   const dispatch = useDispatch();
   const handleSubmit = () => {
     console.log("dasasd")
-    dispatch(setUserAction('customer'))
+    dispatch(setUserAction('delivery'))
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
     });*/
@@ -117,14 +117,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 22,
+    fontFamily: "Poppins-medium",
   },
   bottomText: {
     position: "relative",
-    top: "5%"
+    top: "5%",
+    fontFamily: "Poppins-medium",
   },
   signUptext: {
     color: "royalblue",
     textDecorationLine: "underline",
+    fontFamily: "Poppins-medium",
   }
 
 
