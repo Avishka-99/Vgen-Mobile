@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import Landing from './views/user/Landing';
@@ -12,11 +12,20 @@ import EventOrganizerMain from './views/customer/EventOrganizerMain';
 import DeliveryMain from './views/delivery/DeliveryMain'
 import { useSelector } from 'react-redux'
 import { useFonts } from 'expo-font';
-
+import * as Network from 'expo-network';
 
 //config my new redux
 
 const AppWrapper = () => {
+  const [ipAddress, setIpAddress] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      const { ipAddress } = await Network.getIpAddressAsync()
+      setIpAddress(ipAddress);
+      console.log(ipAddress)
+    })();
+  }, []);
   return (
     <Provider store={store}>
       <App />

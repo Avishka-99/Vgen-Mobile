@@ -1,9 +1,13 @@
 const express = require('express');
+var cors = require('cors');
+const bodyParser = require('body-parser');
 const app = express();
-app.get("/api/get", (req, res) => {
-    //const name = req.body.movie;
-    //const review = req.body.review;
-    res.send("Hellooo there");
-    //res.send("hello")
-})
-app.listen(5000, () => { console.log("Serve listening on port 5000") })
+const userRoutes = require('./api/UserRoutes');
+
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/api',userRoutes);
+
+app.listen(5001, () => { console.log("Server listening on port 5001") })
+
