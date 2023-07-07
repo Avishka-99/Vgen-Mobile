@@ -1,21 +1,33 @@
 import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, Touchable } from 'react-native'
-import Axios from 'axios';
-import React from 'react'
+import React,{useState} from 'react'
 import { Image } from 'expo-image';
 import { TextInput } from 'react-native-paper'
 import Constants from 'expo-constants';
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserAction } from '../../actions/UserAction';
-import * as Font from 'expo-font';
-import { useFonts } from 'expo-font';
+import Axios from '../../api/Axios';
+import * as API_ENDPOINTS from '../../api/ApiEndpoints';
 export default function SignIn({ navigation }) {
+  const [email,setEmail]=useState('');
+  const[password,setPassword]=useState('');
   // let [fontsLoaded] = useFonts({
   //   "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
   // })
+  //console.log(email)
   const dispatch = useDispatch();
   const handleSubmit = () => {
-    console.log("dasasd")
-    dispatch(setUserAction('delivery'))
+    //dispatch(setUserAction('delivery'))
+    Axios.post(API_ENDPOINTS.SIGNIN_URL, {
+      email: email,
+      password: password,
+    }).then((response)=>{
+      if(response.data.type=='Customer'){
+        dispatch(setUserAction('customer'))
+      }else if(response.data.type=='Delivery'){
+        dispatch(setUserAction('delivery'))
+      }
+      //console.log(response.data.type)
+    })
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
     });*/
@@ -42,11 +54,13 @@ export default function SignIn({ navigation }) {
             style={styles.textInput}
             selectionColor="red"
             underlineColor='blue'
+            onChangeText={(event)=>setEmail(event)}
           />
           <TextInput
             mode='outlined'
             label={"Password"}
             style={styles.textInput}
+            onChangeText={(event)=>setPassword(event)}
           />
           <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
             <Text style={styles.buttonText}>Sign in</Text>
