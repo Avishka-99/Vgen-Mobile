@@ -1,8 +1,8 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import Landing from './views/user/Landing';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,26 +11,36 @@ import CustomerMain from './views/customer/CustomerMain';
 import EventOrganizerMain from './views/customer/EventOrganizerMain';
 import DeliveryMain from './views/delivery/DeliveryMain'
 import { useSelector } from 'react-redux'
-import { useFonts } from 'expo-font';
+import { isLoaded, useFonts } from 'expo-font';
 import * as Network from 'expo-network';
+import * as SplashScreen from 'expo-splash-screen'
 
 //config my new redux
 
 const AppWrapper = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [ipAddress, setIpAddress] = useState('');
-
+  let [fontsLoaded] = useFonts({
+    "Poppins-light": require('./assets/fonts/Poppins-Light.ttf'),
+    "Poppins-medium": require('./assets/fonts/Poppins-Medium.ttf')
+  });
   useEffect(() => {
-    (async () => {
-      const { ipAddress } = await Network.getIpAddressAsync()
-      setIpAddress(ipAddress);
-      console.log(ipAddress)
-    })();
-  }, []);
+    async function prepare() {
+      SplashScreen.preventAutoHideAsync();
+    }
+    prepare()
+  }, [])
+  if (!fontsLoaded) {
+    return undefined
+  }else{
+    SplashScreen.hideAsync();
+  }
   return (
     <Provider store={store}>
       <App />
     </Provider>
   )
+
 }
 const App = () => {
   var user = useSelector(state => state.userReducer.user);
@@ -61,37 +71,31 @@ const App = () => {
       backgroundColor: "dodgerblue"
     }
   })
-  let [fontsLoaded] = useFonts({
-    "Poppins-light": require('./assets/fonts/Poppins-Light.ttf'),
-    "Poppins-medium": require('./assets/fonts/Poppins-Medium.ttf')
-  });
-  if (fontsLoaded) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="dark" />
-        <NavigationContainer>
-          {user == 'customer' ?
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="dark" />
+      <NavigationContainer>
+        {user == 'customer' ?
+          <PaperProvider>
+            <CustomerMain />
+          </PaperProvider> : user == 'eventorganizer' ?
             <PaperProvider>
-              <CustomerMain />
-            </PaperProvider> : user == 'eventorganizer' ?
+              <EventOrganizerMain />
+            </PaperProvider> : user == 'delivery' ?
               <PaperProvider>
-                <EventOrganizerMain />
-              </PaperProvider> : user == 'delivery' ?
-                <PaperProvider>
-                  <DeliveryMain />
-                </PaperProvider> :
-                <Landing />}
+                <DeliveryMain />
+              </PaperProvider> :
+              <Landing />}
 
-          {/*<StatusBar barStyle={'dark-content'} />
+        {/*<StatusBar barStyle={'dark-content'} />
           <View style={styles.topBar} ></View>
           <View style={styles.content}>
             <MyButton/>
           </View>
           <View style={styles.bottomBar}></View>*/}
-        </NavigationContainer>
-      </SafeAreaView>
-    );
-  }
-};
+      </NavigationContainer>
+    </SafeAreaView>
+  );
+}
 
 export default AppWrapper; 
