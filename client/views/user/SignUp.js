@@ -51,13 +51,13 @@ export default function SignUp({navigation}) {
               onPress={() => setChecked('first')}
               
             />
-            <Text style={{marginRight:"4%"}}>Customer</Text>
+            <Text style={{marginRight:"4%",fontFamily: "Poppins-medium",}}>Customer</Text>
             <RadioButton
               value="second"
               status={checked === 'second' ? 'checked' : 'unchecked'}
               onPress={() => setChecked('second')}
             />
-            <Text style={{marginRight:"4%"}}>Delivery</Text>
+            <Text style={{marginRight:"4%",fontFamily: "Poppins-medium",}}>Delivery</Text>
           </View>
 
 
@@ -135,14 +135,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 22,
+    fontFamily: "Poppins-medium",
   },
   bottomText: {
     position: "relative",
+    fontFamily: "Poppins-medium",
 
   },
   signUptext: {
     color: "royalblue",
     textDecorationLine: "underline",
+    fontFamily: "Poppins-medium",
   }
 
 

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
 export default function Community() {
-  var user = useSelector(state => state.counterReducer.counter);
+  var user = useSelector(state => state.userReducer.user);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
