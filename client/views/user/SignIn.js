@@ -15,7 +15,7 @@ export default function SignIn({ navigation }) {
   const dispatch = useDispatch();
   const handleSubmit = () => {
     console.log("dasasd")
-    dispatch(setUserAction('customer'))
+    dispatch(setUserAction('delivery'))
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
     });*/
