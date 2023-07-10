@@ -11,7 +11,7 @@ export default function Delivery() {
   })
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text>fuck</Text>
     </View>
   )
 }
