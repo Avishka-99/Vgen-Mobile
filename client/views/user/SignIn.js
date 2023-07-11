@@ -27,7 +27,7 @@ export default function SignIn({ navigation }) {
       } else if (response.data.type == 'Delivery') {
         dispatch(setUserAction('delivery'))
       }
-      console.log(response.data.type)
+      console.log(response.data)
     })
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
