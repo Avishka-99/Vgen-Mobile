@@ -14,7 +14,7 @@ router.post("/signinuser", (req, res) => {
         bcrypt.compare(password, result.toJSON().password, (err, result_2) => {
             
             if (err) {
-                res.sendStatus("er");
+                res.send("er");
             }
             if (result_2) {
                 console.log(result.toJSON().userRole)
@@ -28,9 +28,9 @@ router.post("/signinuser", (req, res) => {
                 const secretKey = 'Avishka';
                 const token = jwt.sign(payload, secretKey, { expiresIn: '10h' });
                 const response = { type, token };
-                res.sendStatus(response);
+                res.send(response);
             } else {
-                res.sendStatus("200");
+                res.send("200");
             }
         });
 
