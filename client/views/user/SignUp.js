@@ -2,70 +2,47 @@ import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpac
 import Axios from 'axios';
 import React, { useState } from 'react'
 import { Image } from 'expo-image';
-import { TextInput, RadioButton } from 'react-native-paper'
+import { RadioButton } from 'react-native-paper'
 import Constants from 'expo-constants';
-
-export default function SignUp({navigation}) {
+import TextInputField from '../../components/TextInputField';
+import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+export default function SignUp({ navigation }) {
   const [checked, setChecked] = useState('first');
+  const [email, setEmail] = useState('');
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'height' : 'height'}
       style={styles.avoidingView}>
-      <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/signinbg.png')}
-          blurRadius={1}
-        />
-        <Image
-          style={styles.logo}
-          source={require('../../assets/vgen_white.png')}
-        />
-        <View style={styles.loginContainer}>
-          <TextInput
-            mode='outlined'
-            label={"Name"}
-            style={styles.textInput}
-            selectionColor="red"
-            underlineColor='blue'
-          />
-          <TextInput
-            mode='outlined'
-            label={"Email"}
-            style={styles.textInput}
-          />
-          <TextInput
-            mode='outlined'
-            label={"Password"}
-            style={styles.textInput}
-          />
-          <TextInput
-            mode='outlined'
-            label={"Confirm password"}
-            style={styles.textInput}
-          />
-          <View style={styles.radioButtonContainer}>
-            <RadioButton
-              value="first"
-              status={checked === 'first' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('first')}
-              
-            />
-            <Text style={{marginRight:"4%",fontFamily: "Poppins-medium",}}>Customer</Text>
-            <RadioButton
-              value="second"
-              status={checked === 'second' ? 'checked' : 'unchecked'}
-              onPress={() => setChecked('second')}
-            />
-            <Text style={{marginRight:"4%",fontFamily: "Poppins-medium",}}>Delivery</Text>
-          </View>
+      <View style={styles.loginContainer}>
+        <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="First name" function={setEmail} />
+        <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Last name" function={setEmail} />
+        <TextInputField isSecured={false} iconType={FontAwesome} iconProps={{ "name": "id-badge", "size": 24 }} height="8%" placeholder="NIC" function={setEmail} />
+        <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "phone", "size": 24 }} height="8%" placeholder="Contact no" function={setEmail} />
+        <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} />
+        <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} />
 
+        <View style={styles.radioButtonContainer}>
+          <RadioButton
+            value="first"
+            status={checked === 'first' ? 'checked' : 'unchecked'}
+            onPress={() => setChecked('first')}
 
-          <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
-            <Text style={styles.buttonText}>Sign up</Text>
-          </TouchableOpacity>
-          <Text style={styles.bottomText}>Already a member? <Text style={styles.signUptext} onPress={()=>navigation.navigate('SignIn')}>Sign in</Text></Text>
+          />
+          <Text style={{ marginRight: "4%", fontFamily: "Poppins-medium", }}>Customer</Text>
+          <RadioButton
+            value="second"
+            status={checked === 'second' ? 'checked' : 'unchecked'}
+            onPress={() => setChecked('second')}
+          />
+          <Text style={{ marginRight: "4%", fontFamily: "Poppins-medium", }}>Delivery</Text>
         </View>
+
+
+        <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
+          <Text style={styles.buttonText}>Sign up</Text>
+        </TouchableOpacity>
+        <Text style={styles.bottomText}>Already a member? <Text style={styles.signUptext} onPress={() => navigation.navigate('SignIn')}>Sign in</Text></Text>
       </View>
     </KeyboardAvoidingView>
   )
@@ -114,13 +91,13 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: "80%",
-    height:40,
-    marginBottom:"1%"
+    height: 40,
+    marginBottom: "1%"
 
   },
-  radioButtonContainer:{
-    alignItems:"center",
-    flexDirection:"row",
+  radioButtonContainer: {
+    alignItems: "center",
+    flexDirection: "row",
   },
   submitButton: {
     position: "relative",
