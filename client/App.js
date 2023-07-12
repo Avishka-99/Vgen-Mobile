@@ -22,7 +22,9 @@ const AppWrapper = () => {
   const [ipAddress, setIpAddress] = useState('');
   let [fontsLoaded] = useFonts({
     "Poppins-light": require('./assets/fonts/Poppins-Light.ttf'),
-    "Poppins-medium": require('./assets/fonts/Poppins-Medium.ttf')
+    "Poppins-medium": require('./assets/fonts/Poppins-Medium.ttf'),
+    "Poppins-regular": require('./assets/fonts/Poppins-Regular.ttf'),
+    "Poppins-semibold": require('./assets/fonts/Poppins-SemiBold.ttf')
   });
   useEffect(() => {
     async function prepare() {

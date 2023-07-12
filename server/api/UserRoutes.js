@@ -12,8 +12,9 @@ router.post("/signinuser", (req, res) => {
         }
     }).then(result => {
         bcrypt.compare(password, result.toJSON().password, (err, result_2) => {
+            
             if (err) {
-                res.send(err);
+                res.send("er");
             }
             if (result_2) {
                 console.log(result.toJSON().userRole)
@@ -29,7 +30,7 @@ router.post("/signinuser", (req, res) => {
                 const response = { type, token };
                 res.send(response);
             } else {
-                res.send(200);
+                res.send("200");
             }
         });
 
@@ -48,7 +49,7 @@ router.post("/registeruser", (req, res) => {
     // const profilePicture=req.body.profilePicture;
     bcrypt.hash(password, 10, (err, hash) => {
         if (err) {
-            res.send("unsuccessful");
+            res.sendStatus("unsuccessful");
         } else {
             User.create({ 
                 email: email,
@@ -59,7 +60,7 @@ router.post("/registeruser", (req, res) => {
                 userRole:userRole,
                 contactNo:contactNo});
                    
-            res.send("successful");
+            res.sendStatus("successful");
           
                 
 }

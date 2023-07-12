@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, Touchable, TextInput } from 'react-native'
+import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform,TextInput, Touchable } from 'react-native'
 import React, { useState } from 'react'
 import { Image } from 'expo-image';
 import { Feather } from '@expo/vector-icons';
@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUserAction } from '../../actions/UserAction';
 import Axios from '../../api/Axios';
 import * as API_ENDPOINTS from '../../api/ApiEndpoints';
-import { LinearGradient } from 'expo-linear-gradient';
+import RoundedButton from '../../components/RoundedButton';
+import TextInputField from '../../components/TextInputField';
 export default function SignIn({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +28,7 @@ export default function SignIn({ navigation }) {
       } else if (response.data.type == 'Delivery') {
         dispatch(setUserAction('delivery'))
       }
-      console.log(response.data.type)
+      console.log(response.data)
     })
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
@@ -51,42 +52,12 @@ export default function SignIn({ navigation }) {
                 source={require('../../assets/vf-bg.png')}
 
               />
-              <View style={styles.textInputRow}>
-                <Feather name="user" size={25} color="white" />
-                <TextInput
-                  style={styles.textInput}
-                  placeholder='Email'
-                  onChangeText={(event) => setEmail(event)}
-                  placeholderTextColor={'white'}
-                  selectionColor={'green'}
-                />
-              </View>
-              <View style={styles.textInputRow}>
-                <Feather name="lock" size={25} color="white" />
-                <TextInput
-                  placeholder='Password'
-                  style={styles.textInput}
-                  onChangeText={(event) => setPassword(event)}
-                  secureTextEntry={true}
-                  placeholderTextColor={'white'}
-                  selectionColor={'green'}
-                />
-              </View>
-
-
-              <LinearGradient
-                colors={['#7EB693', '#BEDC7C']}
-                style={styles.submitButtonContainer}
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 1, y: 0.5 }}>
-                <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
-                  <Text style={styles.buttonText}>Log in</Text>
-                </TouchableOpacity>
-              </LinearGradient>
-
-
-
-              <Text style={styles.bottomText}>Not a member? <Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
+              <View style={{ padding: "9%" }} />
+              <TextInputField isSecured={false} iconType={Feather} iconProps={{"name":"user","size":24}} placeholder="Email" function={setEmail}/>
+              <TextInputField isSecured={true} iconType={Feather} iconProps={{"name":"lock","size":24}} placeholder="Password" function={setPassword}/>
+              <View style={styles.forgotPassword}><Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('SignUp')}>Forgot password?</Text></View>
+              <RoundedButton color="#7EB693" function={handleSubmit} text="Log in"/>
+              <Text style={styles.bottomText}>New to VGen?<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
             </View>
           </View>
         </View>
@@ -124,7 +95,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
-    opacity: 0.2
+    opacity: 0.2,
 
   },
   logo: {
@@ -173,20 +144,40 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: "2%",
     height: "12%",
-    backgroundColor: "#7EB694",
+    backgroundColor: "white",
+    borderColor: "#7EB693",
+    borderWidth: 1,
     alignItems: "center",
     padding: 3,
-    borderRadius: 8
+    borderRadius: 8,
+    color: "#393E46",
+
   },
   textInput: {
     width: "80%",
-    backgroundColor: "#7EB694",
-    color: "white",
-    paddingLeft: 10
+    color: "#393E46",
+    paddingLeft: 10,
+
+  },
+  forgotPassword: {
+    display: "flex",
+    width: "80%",
+    position: "relative",
+    top: "5%",
+    fontFamily: "Poppins-medium",
+    textAlign: "right"
+  },
+  forgotPasswordText: {
+    color: "#ADACAA",
+    textDecorationLine: "underline",
+    fontFamily: "Poppins-medium",
+    textAlign: "right",
+    marginBottom: "2%",
+
   },
   submitButtonContainer: {
     position: "relative",
-    backgroundColor: "dodgerblue",
+    backgroundColor: "#7EB693",
     color: "white",
     borderRadius: 50,
     width: "70%",
@@ -212,12 +203,15 @@ const styles = StyleSheet.create({
   bottomText: {
     position: "relative",
     top: "5%",
-    fontFamily: "Poppins-medium",
+    fontFamily: "Poppins-regular",
+    color: "#7D7D7D",
   },
   signUptext: {
-    color: "royalblue",
+    color: "#7EB693",
     textDecorationLine: "underline",
-    fontFamily: "Poppins-medium",
+    fontFamily: "Poppins-semibold",
+    fontSize: 14,
+    marginLeft:10,
   }
 
 
