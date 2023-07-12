@@ -1,6 +1,7 @@
 import { StyleSheet, TextInput, View } from 'react-native'
 import React from 'react'
 import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 export default function TextInputField(props) {
     const styles = StyleSheet.create({
         textInputRow: {
@@ -8,7 +9,7 @@ export default function TextInputField(props) {
             width: "80%",
             flexDirection: "row",
             marginBottom: "2%",
-            height: "12%",
+            height: props.height?props.height:"12%",
             backgroundColor: "white",
             borderColor: "#7EB693",
             borderWidth: 1,
