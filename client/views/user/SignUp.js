@@ -27,7 +27,6 @@ export default function SignUp({ navigation }) {
             value="first"
             status={checked === 'first' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('first')}
-
           />
           <Text style={{ marginRight: "4%", fontFamily: "Poppins-medium", }}>Customer</Text>
           <RadioButton

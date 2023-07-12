@@ -7,32 +7,33 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-import CustermuizHeader from '../../components/CustermuizHeader';
 export default function CustomerMain() {
     const Tab = createBottomTabNavigator();
     return (
      
         <Tab.Navigator  screenOptions={{tabBarStyle:{
             position:'absolute',
-            height:70,
+            height:80,
             borderTopStartRadius:30,
             borderTopEndRadius:30,
             left:10,
             right:10,
             elevation:7,
             shadowColor:'black',
+            shadowOffset:{width:3,height:3},
             backgroundColor:'#fff',
             bottom:0,
             
         }}}>
             <Tab.Screen name="Delivery" component={Delivery} 
+                 
                 options={{
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
                     tabBarActiveTintColor: 'dodgerblue',
-                    tabBarShowLabel: true,
+                    tabBarShowLabel:false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialIcons name="delivery-dining" size={24} color={focused ? "dodgerblue" : "black"} />
+                        <MaterialIcons name="delivery-dining" size={34} color={focused ? "dodgerblue" : "black"} />
                     ),
                 }} />
             <Tab.Screen name="Account" component={Account}
@@ -40,9 +41,9 @@ export default function CustomerMain() {
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
                     tabBarActiveTintColor: 'dodgerblue',
-                    tabBarShowLabel: true,
+                    tabBarShowLabel:false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialCommunityIcons  name="account" size={24} color={focused ? "dodgerblue" : "black"} />
+                        <MaterialCommunityIcons  name="account" size={34} color={focused ? "dodgerblue" : "black"} />
                     ),
                 }}
             />
