@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, Touchable, TextInput } from 'react-native'
+import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform,TextInput, Touchable } from 'react-native'
 import React, { useState } from 'react'
 import { Image } from 'expo-image';
 import { Feather } from '@expo/vector-icons';
@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUserAction } from '../../actions/UserAction';
 import Axios from '../../api/Axios';
 import * as API_ENDPOINTS from '../../api/ApiEndpoints';
-import { LinearGradient } from 'expo-linear-gradient';
+import RoundedButton from '../../components/RoundedButton';
+import TextInputField from '../../components/TextInputField';
 export default function SignIn({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -52,37 +53,10 @@ export default function SignIn({ navigation }) {
 
               />
               <View style={{ padding: "9%" }} />
-              <View style={styles.textInputRow}>
-                <Feather name="user" size={25} color="#393E46" style={{ paddingLeft: 3 }} />
-                <TextInput
-                  style={styles.textInput}
-                  placeholder='Email'
-                  onChangeText={(event) => setEmail(event)}
-                  placeholderTextColor={'#393E46'}
-                  selectionColor={'green'}
-                />
-              </View>
-              <View style={styles.textInputRow}>
-                <Feather name="lock" size={25} color="#393E46" style={{ paddingLeft: 3 }} />
-                <TextInput
-                  placeholder='Password'
-                  style={styles.textInput}
-                  onChangeText={(event) => setPassword(event)}
-                  secureTextEntry={true}
-                  placeholderTextColor={'#393E46'}
-                  selectionColor={'green'}
-                />
-              </View>
+              <TextInputField isSecured={false} iconType={Feather} iconProps={{"name":"user","size":24}} placeholder="Email" function={setEmail}/>
+              <TextInputField isSecured={true} iconType={Feather} iconProps={{"name":"lock","size":24}} placeholder="Password" function={setPassword}/>
               <View style={styles.forgotPassword}><Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('SignUp')}>Forgot password?</Text></View>
-
-              <View style={styles.submitButtonContainer}>
-                <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
-                  <Text style={styles.buttonText}>Log in</Text>
-                </TouchableOpacity>
-              </View>
-
-
-
+              <RoundedButton color="#7EB693" function={handleSubmit} text="Log in"/>
               <Text style={styles.bottomText}>New to VGen?<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
             </View>
           </View>
