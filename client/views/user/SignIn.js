@@ -51,42 +51,39 @@ export default function SignIn({ navigation }) {
                 source={require('../../assets/vf-bg.png')}
 
               />
+              <View style={{ padding: "9%" }} />
               <View style={styles.textInputRow}>
-                <Feather name="user" size={25} color="white" />
+                <Feather name="user" size={25} color="#393E46" style={{ paddingLeft: 3 }} />
                 <TextInput
                   style={styles.textInput}
                   placeholder='Email'
                   onChangeText={(event) => setEmail(event)}
-                  placeholderTextColor={'white'}
+                  placeholderTextColor={'#393E46'}
                   selectionColor={'green'}
                 />
               </View>
               <View style={styles.textInputRow}>
-                <Feather name="lock" size={25} color="white" />
+                <Feather name="lock" size={25} color="#393E46" style={{ paddingLeft: 3 }} />
                 <TextInput
                   placeholder='Password'
                   style={styles.textInput}
                   onChangeText={(event) => setPassword(event)}
                   secureTextEntry={true}
-                  placeholderTextColor={'white'}
+                  placeholderTextColor={'#393E46'}
                   selectionColor={'green'}
                 />
               </View>
+              <View style={styles.forgotPassword}><Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('SignUp')}>Forgot password?</Text></View>
 
-
-              <LinearGradient
-                colors={['#7EB693', '#BEDC7C']}
-                style={styles.submitButtonContainer}
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 1, y: 0.5 }}>
+              <View style={styles.submitButtonContainer}>
                 <TouchableOpacity style={styles.submitButton} activeOpacity={.9} onPress={() => handleSubmit()}>
                   <Text style={styles.buttonText}>Log in</Text>
                 </TouchableOpacity>
-              </LinearGradient>
+              </View>
 
 
 
-              <Text style={styles.bottomText}>Not a member? <Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
+              <Text style={styles.bottomText}>New to VGen?<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
             </View>
           </View>
         </View>
@@ -124,7 +121,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
-    opacity: 0.2
+    opacity: 0.2,
 
   },
   logo: {
@@ -173,20 +170,40 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: "2%",
     height: "12%",
-    backgroundColor: "#7EB694",
+    backgroundColor: "white",
+    borderColor: "#7EB693",
+    borderWidth: 1,
     alignItems: "center",
     padding: 3,
-    borderRadius: 8
+    borderRadius: 8,
+    color: "#393E46",
+
   },
   textInput: {
     width: "80%",
-    backgroundColor: "#7EB694",
-    color: "white",
-    paddingLeft: 10
+    color: "#393E46",
+    paddingLeft: 10,
+
+  },
+  forgotPassword: {
+    display: "flex",
+    width: "80%",
+    position: "relative",
+    top: "5%",
+    fontFamily: "Poppins-medium",
+    textAlign: "right"
+  },
+  forgotPasswordText: {
+    color: "#ADACAA",
+    textDecorationLine: "underline",
+    fontFamily: "Poppins-medium",
+    textAlign: "right",
+    marginBottom: "2%",
+
   },
   submitButtonContainer: {
     position: "relative",
-    backgroundColor: "dodgerblue",
+    backgroundColor: "#7EB693",
     color: "white",
     borderRadius: 50,
     width: "70%",
@@ -212,12 +229,15 @@ const styles = StyleSheet.create({
   bottomText: {
     position: "relative",
     top: "5%",
-    fontFamily: "Poppins-medium",
+    fontFamily: "Poppins-regular",
+    color: "#7D7D7D",
   },
   signUptext: {
-    color: "royalblue",
+    color: "#7EB693",
     textDecorationLine: "underline",
-    fontFamily: "Poppins-medium",
+    fontFamily: "Poppins-semibold",
+    fontSize: 14,
+    marginLeft:10,
   }
 
 

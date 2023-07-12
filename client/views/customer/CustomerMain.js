@@ -10,6 +10,7 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+
 export default function CustomerMain() {
     const Tab = createBottomTabNavigator();
     return (
@@ -19,9 +20,9 @@ export default function CustomerMain() {
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
                     tabBarActiveTintColor: 'dodgerblue',
-                    tabBarShowLabel: true,
+                    tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <Feather name="home" size={24} color={focused ? "dodgerblue" : "black"} />
+                        <Feather name="home" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }} />
             <Tab.Screen name="Categories" component={Categories}
@@ -29,9 +30,9 @@ export default function CustomerMain() {
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
                     tabBarActiveTintColor: 'dodgerblue',
-                    tabBarShowLabel: true,
+                    tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <Feather name="search" size={24} color={focused ? "dodgerblue" : "black"} />
+                        <Feather name="search" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
@@ -40,9 +41,9 @@ export default function CustomerMain() {
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
                     tabBarActiveTintColor: 'dodgerblue',
-                    tabBarShowLabel: true,
+                    tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <FontAwesome5 name="users" size={24} color={focused ? "dodgerblue" : "black"} />
+                        <FontAwesome5 name="users" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
@@ -51,9 +52,9 @@ export default function CustomerMain() {
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
                     tabBarActiveTintColor: 'dodgerblue',
-                    tabBarShowLabel: true,
+                    tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialIcons  name="dynamic-feed" size={24} color={focused ? "dodgerblue" : "black"} />
+                        <MaterialIcons  name="dynamic-feed" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
@@ -62,9 +63,9 @@ export default function CustomerMain() {
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
                     tabBarActiveTintColor: 'dodgerblue',
-                    tabBarShowLabel: true,
+                    tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialCommunityIcons  name="account" size={24} color={focused ? "dodgerblue" : "black"} />
+                        <MaterialCommunityIcons  name="account" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
