@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
-    marginTop: Constants.deviceName == "iPhone" ? 0 : Constants.statusBarHeight,
+    // marginTop: Constants.deviceName == "iPhone" ? 0 : Constants.statusBarHeight,
   },
   image_2: {
     flex: 1,
