@@ -28,6 +28,7 @@ export default function SignUp({navigation}) {
             style={styles.textInput}
             selectionColor="red"
             underlineColor='blue'
+            
           />
           <TextInput
             mode='outlined'
