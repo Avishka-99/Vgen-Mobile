@@ -1,4 +1,4 @@
 import Axios from 'axios';
 export default Axios.create({
-    baseURL: 'http://172.20.10.3:5001'
+    baseURL: 'http://10.22.164.207:5001'
 });

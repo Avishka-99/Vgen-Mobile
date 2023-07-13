@@ -11,9 +11,6 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "androidNavigationBar": {
-      "visible": "sticky-immersive"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
