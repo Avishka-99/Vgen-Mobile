@@ -14,7 +14,23 @@ import { FontAwesome5 } from '@expo/vector-icons';
 export default function CustomerMain() {
     const Tab = createBottomTabNavigator();
     return (
-        <Tab.Navigator>
+        <Tab.Navigator screenOptions={
+            {
+                tabBarStyle: {
+                    position: 'absolute',
+                    height: 80,
+                    borderRadius: 30,
+                    left: 10,
+                    right: 10,
+                    elevation: 7,
+                    shadowColor: 'black',
+                    shadowOffset: { width: 3, height: 3 },
+                    backgroundColor: '#fff',
+                    bottom: 10,
+                    
+
+                }
+            }}>
             <Tab.Screen name="Home" component={Home}
                 options={{
                     headerShown: false,
@@ -54,7 +70,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialIcons  name="dynamic-feed" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
+                        <MaterialIcons name="dynamic-feed" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
@@ -65,7 +81,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialCommunityIcons  name="account" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
+                        <MaterialCommunityIcons name="account" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
