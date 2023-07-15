@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform,TextInput, Touchable } from 'react-native'
+import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, TextInput, Touchable } from 'react-native'
 import React, { useState } from 'react'
 import { Image } from 'expo-image';
 import { Feather } from '@expo/vector-icons';
@@ -28,7 +28,7 @@ export default function SignIn({ navigation }) {
       } else if (response.data.type == 'Delivery') {
         dispatch(setUserAction('delivery'))
       }
-      console.log(response.data)
+      //console.log(response.data.type)
     })
     /*Axios.get("http://192.168.1.219:5000/api/get").then((response) => {
       console.log(response.data);
@@ -53,10 +53,10 @@ export default function SignIn({ navigation }) {
 
               />
               <View style={{ padding: "9%" }} />
-              <TextInputField isSecured={false} iconType={Feather} iconProps={{"name":"user","size":24}} placeholder="Email" function={setEmail}/>
-              <TextInputField isSecured={true} iconType={Feather} iconProps={{"name":"lock","size":24}} placeholder="Password" function={setPassword}/>
-              <View style={styles.forgotPassword}><Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('FrogetPassword')}>Forgot password?</Text></View>
-              <RoundedButton color="#7EB693" function={handleSubmit} text="Log in"/>
+              <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} placeholder="Email" function={setEmail} />
+              <TextInputField isSecured={true} iconType={Feather} iconProps={{ "name": "lock", "size": 24 }} placeholder="Password" function={setPassword} />
+              <View style={styles.forgotPassword}><Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('SignUp')}>Forgot password?</Text></View>
+              <RoundedButton color="#7EB693" function={handleSubmit} text="Log in" />
               <Text style={styles.bottomText}>New to VGen?<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
             </View>
           </View>
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     fontFamily: "Poppins-semibold",
     fontSize: 14,
-    marginLeft:10,
+    marginLeft: 10,
   }
 
 

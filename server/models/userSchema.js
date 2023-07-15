@@ -4,26 +4,23 @@ const sequelize = require('./db');
 
 
 // Define the User model
-const User = sequelize.define('user',{
+const User = sequelize.define('user', {
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
-        autoIncrement:true,
+        autoIncrement: true,
         foriegnKey: true,
 
     },
-    age:{
-        type: DataTypes.INTEGER,
-        allowNull: true
-    },password: {
+    password: {
         type: DataTypes.STRING,
         allowNull: false
     },
     firstName: {
         type: DataTypes.STRING,
         allowNull: true
-    },lastName: {
+    }, lastName: {
         type: DataTypes.STRING,
         allowNull: true
     },
@@ -31,11 +28,11 @@ const User = sequelize.define('user',{
         type: DataTypes.STRING,
         allowNull: false
     },
-    
+
     userRole: {
         type: DataTypes.STRING,
         allowNull: true
-    },contactNo:{
+    }, contactNo: {
         type: DataTypes.INTEGER,
         allowNull: true
     }
@@ -43,10 +40,10 @@ const User = sequelize.define('user',{
     //     type: DataTypes.STRING,
     //     allowNull: true
     // },
-  
+
 }, {
-   timestamps:false,
-   
+    timestamps: false,
+
 });
 
 
