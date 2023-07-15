@@ -14,15 +14,14 @@ export default function CustomerMain() {
         <Tab.Navigator  screenOptions={{tabBarStyle:{
             position:'absolute',
             height:80,
-            borderTopStartRadius:30,
-            borderTopEndRadius:30,
-            left:10,
-            right:10,
+            borderRadius:30,
+            left:20,
+            right:20,
             elevation:7,
             shadowColor:'black',
             shadowOffset:{width:3,height:3},
             backgroundColor:'#fff',
-            bottom:0,
+            bottom:10,
             
         }}}>
             <Tab.Screen name="Delivery" component={Delivery} 

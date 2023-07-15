@@ -15,6 +15,7 @@ import { isLoaded, useFonts } from 'expo-font';
 import * as Network from 'expo-network';
 import * as SplashScreen from 'expo-splash-screen'
 
+
 //config my new redux
 
 const AppWrapper = () => {
@@ -76,6 +77,8 @@ const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
+
+        {/* <Header/> */}
       <NavigationContainer>
         {user == 'customer' ?
           <PaperProvider>
@@ -88,14 +91,7 @@ const App = () => {
                 <DeliveryMain />
               </PaperProvider> :
               <Landing />}
-
-        {/*<StatusBar barStyle={'dark-content'} />
-          <View style={styles.topBar} ></View>
-          <View style={styles.content}>
-            <MyButton/>
-          </View>
-          <View style={styles.bottomBar}></View>*/}
-      </NavigationContainer>
+       </NavigationContainer>
     </SafeAreaView>
   );
 }
