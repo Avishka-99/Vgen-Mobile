@@ -53,22 +53,22 @@ export default function Home() {
       position: 'absolute',
       width: Dimensions.get("window").width,
       height: Dimensions.get("window").height,
-      opacity: 0.8,
-      marginTop:80
+      opacity: 0.2,
+
       // marginTop: Constants.deviceName == "iPhone" ? 0 : Constants.statusBarHeight,
     },
   })
   return (
     <View style={styles.container}>
-    <SearchBar/>
-      <Image
+      <SearchBar />
+      {/* <Image
         style={styles.image}
         source={require('../../../assets/vf-bg.png')}
 
-      />
+      /> */}
       <FlatList
         data={imageNames}
-        renderItem={({ item }) => <Card text={item.id} image={item.image}/>}
+        renderItem={({ item }) => <Card text={item.id} image={item.image} />}
         keyExtractor={item => item.id}
       />
     </View>
