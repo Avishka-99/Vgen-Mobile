@@ -17,12 +17,15 @@ export default function TextInputField(props) {
             padding: 3,
             borderRadius: 8,
             color: "#393E46",
+            height:props.textInputStyles.height?props.textInputStyles.height:10,
+            flexDirection:props.textInputStyles.reverse?"row-reverse":"row"
 
         },
         textInput: {
-            width: "80%",
+            width: "90%",
             color: "#393E46",
-            paddingLeft: 10,
+            paddingLeft:10
+
 
         },
     })
