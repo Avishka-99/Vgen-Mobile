@@ -53,8 +53,8 @@ export default function SignIn({ navigation }) {
 
               />
               <View style={{ padding: "9%" }} />
-              <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} placeholder="Email" function={setEmail} />
-              <TextInputField isSecured={true} iconType={Feather} iconProps={{ "name": "lock", "size": 24 }} placeholder="Password" function={setPassword} />
+              <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} placeholder="Email" function={setEmail} textInputStyles={{height:"15%"}} />
+              <TextInputField isSecured={true} iconType={Feather} iconProps={{ "name": "lock", "size": 24 }} placeholder="Password" function={setPassword} textInputStyles={{height:"15%"}} />
               <View style={styles.forgotPassword}><Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('SignUp')}>Forgot password?</Text></View>
               <RoundedButton color="#7EB693" function={handleSubmit} text="Log in" />
               <Text style={styles.bottomText}>New to VGen?<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
