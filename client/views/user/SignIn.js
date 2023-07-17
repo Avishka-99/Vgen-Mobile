@@ -35,9 +35,10 @@ export default function SignIn({ navigation }) {
     });*/
   }
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.avoidingView}>
+    // <KeyboardAvoidingView
+    //   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    //   keyboardVerticalOffset={0}
+    //   style={styles.avoidingView}>
       <View style={styles.container}>
         <Image
           style={styles.image}
@@ -63,7 +64,7 @@ export default function SignIn({ navigation }) {
         </View>
 
       </View>
-    </KeyboardAvoidingView>
+    // </KeyboardAvoidingView>
   )
 }
 const styles = StyleSheet.create({
