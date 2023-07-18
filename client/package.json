@@ -41,15 +41,16 @@
     "react-native-toggle-input": "^1.0.12",
     "react-native-vector-icons": "^9.2.0",
     "react-redux": "^8.1.0",
-
-
+<<<<<<<<< Temporary merge branch 1
     "redux": "^4.2.1",
     "expo-network": "~5.2.1",
     "expo-splash-screen": "~0.18.2",
     "expo-linear-gradient": "~12.1.2",
     "@shopify/flash-list": "1.4.0",
     "expo-device": "~5.2.1"
-
+=========
+    "redux": "^4.2.1"
+>>>>>>>>> Temporary merge branch 2
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
