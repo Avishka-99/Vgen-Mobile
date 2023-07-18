@@ -31,7 +31,7 @@ function FrogetPassword({navigation}) {
                       <View style={{width:Dimensions.get('window').width,height:400,marginTop:0,alignItems:'center'}}>
                           <Text style={{fontSize:10,marginTop:50,fontWeight:400}}>Please enter the email address used to register your account</Text>
                           <Text style={{fontSize:10,fontWeight:400,fontWeight:400}}> and we will email you an OTP to reset password.</Text>
-                          <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} stl={{width:350,height:60,marginTop:15,backgroundColor:'#EFF6F1'}}/>
+                          <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} />
                           <Button navotp={otpview}/>
                       </View>
              </ImageBackground>
