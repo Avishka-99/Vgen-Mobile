@@ -4,10 +4,10 @@ import * as Device from 'expo-device';
 import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 export default function TextInputField(props) {
-    console.log(Device)
     const styles = StyleSheet.create({
         Container: {
             top: props.textInputRow? props.textInputRow.top?props.textInputRow.top : 0:0,
+            marginBottom:props.textInputRow? props.textInputRow.marginBottom?props.textInputRow.marginBottom : 0:5,
             width: "90%",
             flexDirection: "row",
             height: props.textInputRow ?props.textInputRow.height ? props.textInputRow.height : 60:60,
