@@ -10,7 +10,6 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-
 export default function CustomerMain() {
     const Tab = createBottomTabNavigator();
     return (

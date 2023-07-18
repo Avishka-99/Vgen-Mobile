@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 const Card = (props) => {
   return (
     <View style={styles.container}>
-      {/* <Image style={styles.image} source={require('../assets/products/1.jpeg')}></Image> */}
+      <Image style={styles.image} source={{uri:props.image}}></Image>
       <Text style={styles.productText}>{props.text}</Text>
     </View>
   )
@@ -17,11 +17,14 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 30,
     marginTop: "2%",
-    height: 200,
-    width: "87%",
+    height: 180,
+    width: "90%",
     flexDirection: "row",
     shadowColor: 3,
-    backgroundColor: "white"
+    backgroundColor: "royalblue",
+    marginLeft:"5%",
+    elevation:8
+    
   },
   image: {
     width: "50%",

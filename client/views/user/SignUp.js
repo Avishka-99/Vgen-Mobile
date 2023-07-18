@@ -11,9 +11,6 @@ export default function SignUp({ navigation }) {
   const [checked, setChecked] = useState('first');
   const [email, setEmail] = useState('');
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'height' : 'height'}
-      style={styles.avoidingView}>
       <View style={styles.loginContainer}>
         <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="First name" function={setEmail} />
         <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Last name" function={setEmail} />
@@ -43,7 +40,6 @@ export default function SignUp({ navigation }) {
         </TouchableOpacity>
         <Text style={styles.bottomText}>Already a member? <Text style={styles.signUptext} onPress={() => navigation.navigate('SignIn')}>Sign in</Text></Text>
       </View>
-    </KeyboardAvoidingView>
   )
 }
 const styles = StyleSheet.create({
