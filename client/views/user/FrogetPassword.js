@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { View,Text,KeyboardAvoidingView,ImageBackground,TouchableOpacity, Dimensions,StyleSheet } from 'react-native';
+import { View,Text,KeyboardAvoidingView,ImageBackground,TouchableOpacity, Dimensions,StyleSheet,StatusBar } from 'react-native';
 import { Image } from 'expo-image';
 import Header from '../../components/Header';
 import TextInputField from '../../components/TextInputField';
@@ -13,11 +13,15 @@ function FrogetPassword({navigation}) {
         // console.log(name)
         navigation.navigate('SignIn');
      }
-    return (
-        <KeyboardAvoidingView style={{flex:1}}> 
 
+    const otpview=()=>{
+        navigation.navigate('Otpcode')
+    } 
+    return (
+        <KeyboardAvoidingView style={{flex:1,marginTop:StatusBar.currentHeight}}> 
+                 <StatusBar/>
              <ImageBackground source={require('../../assets/back.png')}  style={{flex:1,}}>
-                    <View><Header  func={signin}/></View> 
+                    <View><Header  func={signin} name={''}/></View> 
                     <View style={{width:Dimensions.get('window').width,height:'35%',alignItems:'center',opacity:9}}>
                         <Text  style={{fontSize:25,marginTop:40,color:'black',fontFamily:"Poppins-light",fontWeight:600}}>Forgot  Password</Text>
                         <View style={{width:200,height:200,paddingLeft:20,backgroundColor:'white',marginTop:30,borderRadius:100,elevation:10}}>
@@ -28,7 +32,7 @@ function FrogetPassword({navigation}) {
                           <Text style={{fontSize:10,marginTop:50,fontWeight:400}}>Please enter the email address used to register your account</Text>
                           <Text style={{fontSize:10,fontWeight:400,fontWeight:400}}> and we will email you an OTP to reset password.</Text>
                           <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} stl={{width:350,height:60,marginTop:15,backgroundColor:'#EFF6F1'}}/>
-                          <Button/>
+                          <Button navotp={otpview}/>
                       </View>
              </ImageBackground>
 

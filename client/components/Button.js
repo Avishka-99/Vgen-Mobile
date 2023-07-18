@@ -3,7 +3,7 @@ import { TouchableOpacity,Text,StyleSheet } from 'react-native';
 
 function Button(props) {
     return (
-        <TouchableOpacity style={[styles.button]}>
+        <TouchableOpacity style={[styles.button]}  onPress={()=>props.navotp()}>
             <Text style={{color:'white',fontWeight:500,fontSize:20}}>Get OTP</Text>
         </TouchableOpacity>
     );
