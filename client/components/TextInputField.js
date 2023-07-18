@@ -41,11 +41,10 @@ export default function TextInputField(props) {
         }
     })
     return (
-        <View style={styles.Container}>
-        
-            <View style={styles.iconBackground}>
-                {props.iconType ? <props.iconType name={props.iconProps.name} size={props.iconProps.size ? props.iconProps.size : 25} color={props.iconProps.color ? props.iconProps.color : "#393E46"} /> : <View></View>}
-            </View>
+
+        <View style={[styles.textInputRow,props.stl]}>
+        {props.iconType?<props.iconType name={props.iconProps.name} size={props.iconProps.size?props.iconProps.size:25} color={props.iconProps.color?props.iconProps.color:"#393E46"} style={{ paddingLeft: 3 }} />:<View></View>}   
+
             <TextInput
                 placeholder={props.placeholder}
                 style={styles.textInput}
