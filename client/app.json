@@ -11,6 +11,9 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
+    "androidNavigationBar": {
+      "visible": "sticky-immersive"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -21,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"

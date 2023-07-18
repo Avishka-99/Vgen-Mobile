@@ -35,9 +35,10 @@ export default function SignIn({ navigation }) {
     });*/
   }
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.avoidingView}>
+    // <KeyboardAvoidingView
+    //   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    //   keyboardVerticalOffset={0}
+    //   style={styles.avoidingView}>
       <View style={styles.container}>
         <Image
           style={styles.image}
@@ -53,9 +54,11 @@ export default function SignIn({ navigation }) {
 
               />
               <View style={{ padding: "9%" }} />
+
               <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} placeholder="Email" function={setEmail} />
               <TextInputField isSecured={true} iconType={Feather} iconProps={{ "name": "lock", "size": 24 }} placeholder="Password" function={setPassword} />
               <View style={styles.forgotPassword}><Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('FrogetPassword')}>Forgot password?</Text></View>
+
               <RoundedButton color="#7EB693" function={handleSubmit} text="Log in" />
               <Text style={styles.bottomText}>New to VGen?<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
             </View>
@@ -63,7 +66,7 @@ export default function SignIn({ navigation }) {
         </View>
 
       </View>
-    </KeyboardAvoidingView>
+    // </KeyboardAvoidingView>
   )
 }
 const styles = StyleSheet.create({
