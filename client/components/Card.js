@@ -16,7 +16,7 @@ export default Card
 const styles = StyleSheet.create({
   container: {
     borderRadius: 30,
-    marginTop: "2%",
+
     height: 180,
     width: "90%",
     flexDirection: "row",

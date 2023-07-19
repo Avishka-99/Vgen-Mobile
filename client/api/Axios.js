@@ -1,6 +1,8 @@
 import Axios from 'axios';
+import { BASE_URL } from '../constants/Constants';
+import { PORT } from '../constants/Constants';
 export default Axios.create({
 
-    baseURL: 'http://172.20.10.3:5001'
+    baseURL: 'http://'+BASE_URL+':'+PORT
 
 });

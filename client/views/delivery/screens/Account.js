@@ -2,9 +2,9 @@ import { View, Text, StyleSheet, Button,StatusBar, ImageBackground, Dimensions,I
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserAction } from '../../../actions/UserAction';
-import SwitchSelector from 'react-native-switch-selector';
+// import SwitchSelector from 'react-native-switch-selector';
 import Header from '../../../components/Header';
-import Switchbutton from '../../../components/Switchbutton';
+// import Switchbutton from '../../../components/Switchbutton';
 import { Feather } from '@expo/vector-icons';
 export default function Account() {
   //const dispatch = useDispatch();
