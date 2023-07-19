@@ -30,9 +30,6 @@ export default function Account() {
      //dispatch(setUserAction('Signin'))
   }
 
-  val=1
-
-  if(val==1){
   return (
     
     <View style={styles.container}>
@@ -79,7 +76,7 @@ export default function Account() {
     </View>
   )
   }
-}
+
 
 const styles = StyleSheet.create({
   container: {
