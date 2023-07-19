@@ -38,7 +38,7 @@ function Otpcode({navigation}) {
                  <Text style={{fontSize:12,marginTop:50,fontWeight:400}}>Please enter 6 digit OTP code that sent to,</Text>
                  <Text style={{fontSize:12,fontWeight:400,fontWeight:400}}> daweendrihimasha98@gmail.com.</Text>
                  <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} />
-                 <Button navotp={changeView}/>
+                 <Button func={changeView}/>
              </View>
     </ImageBackground>
 
