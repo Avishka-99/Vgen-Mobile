@@ -16,7 +16,7 @@ import * as Network from 'expo-network';
 import * as SplashScreen from 'expo-splash-screen'
 
 
-import OtpInputs from 'react-native-otp-inputs';
+// import OtpInputs from 'react-native-otp-inputs';
 
 
 //config my new redux

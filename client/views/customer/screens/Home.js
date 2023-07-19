@@ -4,6 +4,7 @@ import Card from '../../../components/Card'
 import { Image } from 'expo-image';
 import { FlashList } from "@shopify/flash-list";
 import SearchBar from '../../../components/SearchBar';
+import PopularProducts from '../segments/PopularProducts';
 export default function Home() {
   const imageNames = [
     {
@@ -48,6 +49,12 @@ export default function Home() {
       flex: 1,
       paddingTop: 0
     },
+    container_2:{
+      flex:1,
+      justifyContent:"center",
+      alignItems:"center"
+
+    },
     image: {
       resizeMode: "cover",
       position: 'absolute',
@@ -61,16 +68,26 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <SearchBar />
+      <View style={styles.container_2}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1 }}>
+          <PopularProducts />
+          
+          
+        </ScrollView>
+      </View>
+
+
+
       {/* <Image
         style={styles.image}
         source={require('../../../assets/vf-bg.png')}
 
       /> */}
-      <FlatList
+      {/* <FlatList
         data={imageNames}
         renderItem={({ item }) => <Card text={item.id} image={item.image} />}
         keyExtractor={item => item.id}
-      />
+      /> */}
     </View>
   )
 }
