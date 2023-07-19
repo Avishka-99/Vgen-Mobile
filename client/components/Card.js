@@ -4,8 +4,10 @@ import { Image } from 'expo-image';
 const Card = (props) => {
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={{uri:props.image}}></Image>
-      <Text style={styles.productText}>{props.text}</Text>
+      <Text>Outer</Text>
+      <View styles={styles.imageContainer}>
+        <Text>Inner</Text>
+      </View>
     </View>
   )
 }
@@ -16,24 +18,18 @@ export default Card
 const styles = StyleSheet.create({
   container: {
     borderRadius: 30,
-
-    height: 180,
-    width: "90%",
-    flexDirection: "row",
-    shadowColor: 3,
-    backgroundColor: "royalblue",
-    marginLeft:"5%",
-    elevation:8
-    
+    height: 200,
+    width: 140,
+    flexDirection: "column",
+    marginLeft: "5%",
+    backgroundColor: "yellow",
+    justifyContent:"center",
+    alignItems:"center",
+    position:"absolute"
   },
-  image: {
-    width: "50%",
-    height: "100%",
-    borderRadius: 30,
-  }
-  , productText: {
-    paddingLeft: 12,
-    fontSize: 34,
-    fontFamily: "Poppins-semibold"
-  }
+  imageContainer: {
+    width: 140,
+    height: 100,
+    backgroundColor: "green"
+  },
 })
