@@ -7,10 +7,10 @@ export default function PopularProducts() {
       <View style={styles.Row1}>
         <Text style={styles.title}>Most Popular Meals</Text>
       </View>
-      <View>
-        <Card image="http://10.22.164.207/Vgen-Server/uploads/1689663179295.jpeg" />
+      <View style={styles.Row2}>
+        <Card  />
       </View>
-
+      {/* image="http://10.22.164.207/Vgen-Server/uploads/products/1689663179295.jpeg" */}
     </View>
   )
 }
@@ -24,8 +24,14 @@ const styles = StyleSheet.create({
   },
   Row1: {
     width: "100%",
-    height: "20%",
+    height: "15%",
     backgroundColor: "dodgerblue",
+    justifyContent: "center"
+  },
+  Row2: {
+    width: "100%",
+    height: "85%",
+    backgroundColor: "tomato",
     justifyContent: "center"
   },
   title: {
