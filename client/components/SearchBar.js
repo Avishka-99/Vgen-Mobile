@@ -36,7 +36,7 @@ export default SearchBar
 
 const styles = StyleSheet.create({
     Container: {
-        height: "10%",
+        height: 80,
         backgroundColor: "white",
         width: "100%",
         alignItems: "center",
