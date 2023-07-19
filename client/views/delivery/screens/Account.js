@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Button,StatusBar, ImageBackground, Dimensions,Image ,Switch,Alert,TextInput} from 'react-native'
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { setUserAction } from '../../../actions/UserAction';
 import SwitchSelector from 'react-native-switch-selector';
 import Header from '../../../components/Header';
@@ -22,6 +22,7 @@ export default function Account() {
   }
   const back=()=>{
      // accont back button
+     //dispatch(setUserAction('Signin'))
   }
 
   val=1
@@ -53,10 +54,11 @@ export default function Account() {
                           <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Feather name='map-pin' size={25} color={"#7EB693"}/><Text style={{color:'black',fontSize:15,marginTop:3,marginLeft:10}}>:colombo</Text></View>
                           <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Feather name='phone' size={25}  color={"#7EB693"}/><Text style={{color:'black',fontSize:13,marginTop:3,marginLeft:10}}>:077-1780073</Text></View>
                           */}
-                            <View style={{justifyContent:'center',alignItems:'center',marginTop:20}}><TextInput style={{width:'80%',height:50,borderColor:'green',borderWidth:1,borderRadius:15,paddingLeft:20}} selectionColor={'green'} /></View>
-                            <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Text style={{color:'#7EB693',fontSize:15,marginTop:4}}>Vehicle No :</Text><TextInput style={{width:'70%',height:30 ,borderColor:'green',borderRadius:5,borderWidth:1,paddingLeft:15}}/></View>
-                            <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Text style={{color:'#7EB693',fontSize:15,marginTop:4}}>Available Time :</Text><TextInput style={{width:'62%',height:30 ,borderColor:'green',borderRadius:5,borderWidth:1,paddingLeft:15}}/></View> 
-                            <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Feather name='map-pin' size={25} color={"#7EB693"}/><TextInput style={{width:'50%',height:30 ,borderColor:'green',borderRadius:5,borderWidth:1,paddingLeft:15,marginLeft:10}}/></View>
+                            <View style={{justifyContent:'center',alignItems:'center',marginTop:20}}><TextInput style={{width:'80%',height:50,borderColor:'green',borderWidth:1,borderRadius:15,paddingLeft:20,color:'black'}} selectionColor={'green'} placeholder='discription' /></View>
+                            <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Text style={{color:'#7EB693',fontSize:15,marginTop:4}}>Vehicle No :</Text><TextInput style={{width:'70%',height:30 ,borderColor:'green',borderRadius:5,borderWidth:1,paddingLeft:15}} placeholder='ASD-2344'/></View>
+                            <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Text style={{color:'#7EB693',fontSize:15,marginTop:4}}>Available Time :</Text><TextInput style={{width:'62%',height:30 ,borderColor:'green',borderRadius:5,borderWidth:1,paddingLeft:15}} placeholder='8.00am-7.00pm'/></View> 
+                            <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Feather name='map-pin' size={25} color={"#7EB693"}/><TextInput style={{width:'50%',height:30 ,borderColor:'green',borderRadius:5,borderWidth:1,paddingLeft:15,marginLeft:10}} placeholder='colombo'/></View>
+                            <View style={{marginStart:29,marginTop:25,flexDirection:'row'}}><Feather name='phone' size={25} color={"#7EB693"}/><TextInput style={{width:'50%',height:30 ,borderColor:'green',borderRadius:5,borderWidth:1,paddingLeft:15,marginLeft:10}} placeholder='077-1780073'/></View>
                       </View>
                </View>
            </View>
