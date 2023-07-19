@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet, ScrollView, Dimensions, FlatList, StatusBar } from 'react-native'
 import React from 'react'
-import Card from '../../../components/Card'
+import Card from '../../../components/VerticalCard'
 import { Image } from 'expo-image';
 import { FlashList } from "@shopify/flash-list";
 import SearchBar from '../../../components/SearchBar';
 import PopularProducts from '../segments/PopularProducts';
+import HorizonalCard from '../../../components/HorizonalCard';
 export default function Home() {
   const imageNames = [
     {
@@ -49,10 +50,10 @@ export default function Home() {
       flex: 1,
       paddingTop: 0
     },
-    container_2:{
-      flex:1,
-      justifyContent:"center",
-      alignItems:"center"
+    container_2: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
 
     },
     image: {
@@ -61,6 +62,7 @@ export default function Home() {
       width: Dimensions.get("window").width,
       height: Dimensions.get("window").height,
       opacity: 0.2,
+      marginTop: 80,
 
       // marginTop: Constants.deviceName == "iPhone" ? 0 : Constants.statusBarHeight,
     },
@@ -68,11 +70,22 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <SearchBar />
+      <Image
+        style={styles.image}
+        source={require('../../../assets/vf-bg.png')}
+
+      />
       <View style={styles.container_2}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flex: 1 }}>
-          <PopularProducts />
-          
-          
+        <ScrollView contentContainerStyle={{ flexGrow: 1,justifyContent:"center",alignItems:"center" }} style={{ flex: 1,width:"100%" }}>
+          <HorizonalCard/>
+          <HorizonalCard/>
+          <HorizonalCard/>
+          <HorizonalCard/>
+          <HorizonalCard/>
+          <HorizonalCard/>
+          <HorizonalCard/>
+
+
         </ScrollView>
       </View>
 
