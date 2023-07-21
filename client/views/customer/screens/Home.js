@@ -67,7 +67,8 @@ export default function Home({ navigation }) {
     container_2: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      backgroundColor:"white"
 
     },
     image: {
@@ -103,13 +104,13 @@ export default function Home({ navigation }) {
           scrollEventThrottle={16}
           contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <HorizonalCard />
-          <HorizonalCard />
-          <HorizonalCard />
-          <HorizonalCard />
-          <HorizonalCard />
-          <HorizonalCard />
-          <HorizonalCard />
+          <HorizonalCard type="food" />
+          <HorizonalCard type="store" />
+          <HorizonalCard type="food"/>
+          <HorizonalCard type="food"/>
+          <HorizonalCard type="food"/>
+          <HorizonalCard type="food"/>
+          <HorizonalCard type="food"/>
 
 
         </Animated.ScrollView>

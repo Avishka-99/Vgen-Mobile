@@ -7,6 +7,8 @@ const SearchBar = () => {
     return (
         <View style={styles.Container}>
             <TextInputField
+                boderWidth={2}
+                backgroundColor="#E6E6E6"
                 isSecured={false}
                 iconType={Feather}
                 iconProps={{
@@ -26,7 +28,7 @@ const SearchBar = () => {
                 }}
                 textInput={{
                     width: "90%",
-                    ioswidth:"85%"
+                    ioswidth: "85%"
                 }} />
         </View>
     )
@@ -40,9 +42,9 @@ const styles = StyleSheet.create({
         backgroundColor: "transparent",
         width: "98%",
         alignItems: "center",
-        justifyContent:"center",
-        borderRadius:40,
-        marginLeft:"1%",
+        justifyContent: "center",
+        borderRadius: 40,
+        marginLeft: "1%",
         // marginTop:"1%"
     },
     searchBox: {
