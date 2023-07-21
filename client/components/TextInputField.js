@@ -8,7 +8,7 @@ export default function TextInputField(props) {
         Container: {
             top: props.textInputRow ? props.textInputRow.top ? props.textInputRow.top : 0 : 0,
             marginBottom: props.textInputRow ? props.textInputRow.marginBottom ? props.textInputRow.marginBottom : 0 : 5,
-            width: "90%",
+            width: "95%",
             flexDirection: "row",
             height: props.textInputRow ? props.textInputRow.height ? props.textInputRow.height : 60 : 60,
             backgroundColor: "white",

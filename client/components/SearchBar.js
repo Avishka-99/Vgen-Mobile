@@ -25,7 +25,7 @@ const SearchBar = () => {
                     borderRadius: 30,
                 }}
                 textInput={{
-                    width: "83%",
+                    width: "90%",
                     ioswidth:"85%"
                 }} />
         </View>
@@ -37,10 +37,13 @@ export default SearchBar
 const styles = StyleSheet.create({
     Container: {
         height: 80,
-        backgroundColor: "white",
-        width: "100%",
+        backgroundColor: "transparent",
+        width: "98%",
         alignItems: "center",
-        justifyContent:"center"
+        justifyContent:"center",
+        borderRadius:40,
+        marginLeft:"1%",
+        // marginTop:"1%"
     },
     searchBox: {
         height: "100%",
