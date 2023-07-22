@@ -36,70 +36,70 @@ export default function Home({ navigation }) {
     },
     {
       id: 3,
-      image: 'barista.png',
+      image: 'srivihar.jpg',
       name: 'Sri Vihar',
       location: 'Thunmulla',
       rating: 4.6
     },
     {
       id: 4,
-      image: 'barista.png',
+      image: 'nelumkole.jpg',
       name: 'Nelum kole',
       location: 'Thimbirigasyaya',
       rating: 4.3
     },
     {
       id: 5,
-      image: 'barista.png',
+      image: 'savinra.jpg',
       name: 'Savinra',
       location: 'Nugegoda',
       rating: 4.5
     },
     {
       id: 6,
-      image: 'barista.png',
-      name: 'Barista',
+      image: 'mcdonalds.png',
+      name: 'McDonalds',
       location: 'Reid Avenue',
       rating: 4.5
     },
     {
       id: 7,
-      image: 'barista.png',
+      image: 'mayumi.jpg',
       name: 'Mayumi Home Foods',
       location: 'Nawala',
       rating: 4.7
     },
     {
       id: 8,
-      image: 'barista.png',
+      image: 'kfc.jpg',
       name: 'KFC',
       location: 'Nugegoda',
       rating: 4.2
     },
     {
       id: 9,
-      image: 'barista.png',
+      image: 'elite.jpg',
       name: 'Elite',
       location: 'Bambalapitiya',
       rating: 4.4
     },
     {
       id: 10,
-      image: 'barista.png',
+      image: 'elina.webp',
       name: 'Elina Foods',
       location: 'Kirulapone',
       rating: 4.8
     },
     {
       id: 11,
-      image: 'barista.png',
+      image: 'saveira.jpg',
       name: 'Saveira',
       location: 'Kohuwala',
       rating: 4.9
     },
     {
       id: 12,
-      image: 'barista.png',
+      image: 'gogreen.jpg',
       name: 'Go Green',
       location: 'Townhall',
       rating: 4.7
