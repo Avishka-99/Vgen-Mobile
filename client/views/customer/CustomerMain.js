@@ -19,14 +19,17 @@ export default function CustomerMain() {
                     position: 'absolute',
                     height: 80,
                     borderRadius: 30,
-                    left: 10,
-                    right: 10,
-                    elevation: 7,
+                    elevation: 5,
                     shadowColor: 'black',
-                    shadowOffset: { width: 3, height: 3 },
+                    shadowOffset: { width: 5, height: 5 },
                     backgroundColor: '#fff',
                     bottom: 10,
-                    
+                    borderWidth: 3,
+                    borderTopWidth: 3,
+                    borderColor: "#76B693",
+                    borderTopColor: "#76B693",
+                    width:"98%",
+                    left:"1%",
 
                 }
             }}>
@@ -37,7 +40,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <Feather name="home" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
+                        <Feather name="home" size={30} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }} />
             <Tab.Screen name="Categories" component={Categories}
@@ -47,7 +50,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <Feather name="search" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
+                        <Feather name="search" size={30} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
@@ -58,7 +61,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <FontAwesome5 name="users" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
+                        <FontAwesome5 name="users" size={30} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
@@ -69,7 +72,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialIcons name="dynamic-feed" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
+                        <MaterialIcons name="dynamic-feed" size={30} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
@@ -80,7 +83,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialCommunityIcons name="account" size={24} color={focused ? "#76B693" : "#8B8B8B"} />
+                        <MaterialCommunityIcons name="account" size={30} color={focused ? "#76B693" : "#8B8B8B"} />
                     ),
                 }}
             />
