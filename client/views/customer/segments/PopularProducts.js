@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native'
 import React from 'react'
 import VerticalCard from '../../../components/VerticalCard'
-import HorizonalCard from '../../../components/HorizonalCard'
+import HorizonalCard from '../../../components/Card'
 export default function PopularProducts() {
   return (
     <View style={styles.ProductContainer}>
@@ -9,7 +9,7 @@ export default function PopularProducts() {
         <Text style={styles.title}>Most Popular Meals</Text>
       </View>
       <ScrollView horizontal={true} contentContainerStyle={{ alignItems: "center", justifyContent: "center", }} style={styles.ProductContainerRow2}>
-        <HorizonalCard/>
+        <HorizonalCard />
       </ScrollView>
       {/* image="http://10.22.164.207/Vgen-Server/uploads/products/1689663179295.jpeg" */}
     </View>
