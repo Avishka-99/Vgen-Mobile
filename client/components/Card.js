@@ -1,35 +1,16 @@
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native'
+// import { Image } from 'expo-image';
 import React, { useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { RESTAURANT_IMG_PATH } from '../constants/Constants';
 import { BASE_URL } from '../constants/Constants';
 import Axios from '../api/Axios';
 export default function Card(props) {
-    // useEffect(() => {
-    //     // Replace 'http://your-server-ip-address:5000/images/image.jpg' with the actual URL of your image on the server
-    //     const serverUrl = 'http://your-server-ip-address:5000/images/image.jpg';
-
-    //     Axios
-    //       .get(serverUrl, { responseType: 'blob' })
-    //       .then((response) => {
-    //         // Convert the blob response to a data URL
-    //         const imageUrl = URL.createObjectURL(response.data);
-    //         setImageUrl(imageUrl);
-    //       })
-    //       .catch((error) => {
-    //         console.error('Error fetching image:', error);
-    //       });
-    //   }, []);
-
-
-
-
-    //console.log('https://ec21-112-134-251-231.ngrok-free.app' + RESTAURANT_IMG_PATH + props.image)
     if (props.type == "store") {
         return (
             <View style={styles.StoreCardContainer}>
                 <View style={styles.StoreCardContainerRow1}>
-                    <Image style={{ height: "100%", width: "100%" }} source={{ uri: ' https://reactjs.org/logo-og.png' }} />
+                    <Image style={{ height: "100%", width: "100%",borderTopLeftRadius:15,borderTopRightRadius:15 }} source={{uri:'https://02e0-112-134-251-231.ngrok-free.app/uploads/restaurants/'+props.image}} />
                 </View>
                 <View style={styles.StoreCardContainerRow2}>
                     <View style={styles.StoreCardContainerRow2Col}>
@@ -78,7 +59,6 @@ const styles = StyleSheet.create({
         height: "75%",
         borderRadius: 14,
         justifyContent: "center",
-
 
     },
     StoreCardContainerRow2: {
