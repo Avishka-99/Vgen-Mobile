@@ -1,5 +1,5 @@
-export const BASE_URL = 'http://192.168.1.219';
+export const BASE_URL = 'http://10.22.54.178';
 export const PORT = '5001';
-export const PRODUCT_IMG_PATH = '/Vgen-Server/uploads/products/';
+export const PRODUCT_IMG_PATH = '/uploads/products/';
 export const RESTAURANT_IMG_PATH = '/uploads/restaurants/';
-export const NGROK_URL ='';
+export const NGROK_URL = 'https://3bde-192-248-22-102.ngrok-free.app';

@@ -27,13 +27,14 @@ export default function TextInputField(props) {
             // width: Device.brand=="Apple"?props.textInput ?props.textInput.width ? props.textInput.width :"90%":"90%":9,
             color: "#393E46",
             paddingLeft: 10,
-            width: Device.brand == "Apple" ? props.textInput ? props.textInput.ioswidth ? props.textInput.ioswidth : "90%" : "90%" : "83%"
+            width: Device.brand == "Apple" ? props.textInput ? props.textInput.ioswidth ? props.textInput.ioswidth : "90%" : "90%" : "89%",
+    
 
 
         },
         iconBackground: {
-            height: Device.brand == "Apple" ? Dimensions.get("screen").width / 9 : Dimensions.get("screen").width / 8,
-            width: Device.brand == "Apple" ? Dimensions.get("screen").width / 9 : Dimensions.get("screen").width / 8,
+            height: Device.brand == "Apple" ? Dimensions.get("screen").width / 9 : Dimensions.get("screen").width / 10,
+            width: Device.brand == "Apple" ? Dimensions.get("screen").width / 9 : Dimensions.get("screen").width / 10,
             backgroundColor: props.iconProps ? props.iconProps.iconBg ? props.iconProps.iconBg : "transparent" : "transparent",
             justifyContent: "center",
             alignItems: "center",

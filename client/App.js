@@ -14,7 +14,8 @@ import { useSelector } from 'react-redux'
 import { isLoaded, useFonts } from 'expo-font';
 import * as Network from 'expo-network';
 import * as SplashScreen from 'expo-splash-screen'
-
+import "react-native-gesture-handler";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // import OtpInputs from 'react-native-otp-inputs';
 
@@ -38,12 +39,15 @@ const AppWrapper = () => {
   }, [])
   if (!fontsLoaded) {
     return undefined
-  }else{
+  } else {
     SplashScreen.hideAsync();
   }
   return (
     <Provider store={store}>
-      <App />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <App />
+      </GestureHandlerRootView>
+
     </Provider>
   )
 
@@ -81,7 +85,7 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />
 
-        {/* <Header/> */}
+      {/* <Header/> */}
       <NavigationContainer>
         {user == 'customer' ?
           <PaperProvider>
@@ -94,7 +98,7 @@ const App = () => {
                 <DeliveryMain />
               </PaperProvider> :
               <Landing />}
-       </NavigationContainer>
+      </NavigationContainer>
     </SafeAreaView>
   );
 }

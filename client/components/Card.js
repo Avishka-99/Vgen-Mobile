@@ -4,13 +4,14 @@ import React, { useEffect } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import { RESTAURANT_IMG_PATH } from '../constants/Constants';
 import { BASE_URL } from '../constants/Constants';
+import { NGROK_URL } from '../constants/Constants';
 import Axios from '../api/Axios';
 export default function Card(props) {
     if (props.type == "store") {
         return (
             <View style={styles.StoreCardContainer}>
                 <View style={styles.StoreCardContainerRow1}>
-                    <Image style={{ height: "100%", width: "100%",borderTopLeftRadius:15,borderTopRightRadius:15 }} source={{uri:'https://02e0-112-134-251-231.ngrok-free.app/uploads/restaurants/'+props.image}} />
+                    <Image style={{ height: "100%", width: "100%", borderTopLeftRadius: 15, borderTopRightRadius: 15 }} source={{ uri: NGROK_URL + RESTAURANT_IMG_PATH + props.image }} />
                 </View>
                 <View style={styles.StoreCardContainerRow2}>
                     <View style={styles.StoreCardContainerRow2Col}>

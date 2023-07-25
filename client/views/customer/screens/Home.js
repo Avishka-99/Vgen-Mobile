@@ -8,6 +8,7 @@ import Card from '../../../components/Card';
 import DeliverAddress from '../segments/DeliverAddress';
 import { Animated } from 'react-native';
 import * as Device from 'expo-device';
+import Bottomsheet from '../../../components/Bottomsheet';
 const { diffClamp } = Animated;
 export default function Home({ navigation }) {
   const [scrollY, setScrollY] = useState(new Animated.Value(0));
@@ -107,6 +108,7 @@ export default function Home({ navigation }) {
   ]
   const styles = StyleSheet.create({
     container: {
+      flex: 1,
       paddingTop: 0,
       backgroundColor: "#E6E6E6",
       height: Dimensions.get("screen").height / 0.9
@@ -154,7 +156,7 @@ export default function Home({ navigation }) {
           {restaurants.map((item) => (
             <Card key={item.id} type="store" name={item.name} location={item.location} rating={item.rating} image={item.image} />
           ))}
-          <Card type="empty"/>
+          <Card type="empty" />
 
 
           {/* <Card type="food" />
@@ -180,6 +182,8 @@ export default function Home({ navigation }) {
         renderItem={({ item }) => <Card text={item.id} image={item.image} />}
         keyExtractor={item => item.id}
       /> */}
+      <Bottomsheet />
+
     </View>
 
   )

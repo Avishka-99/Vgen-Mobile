@@ -8,7 +8,7 @@ const SearchBar = () => {
         <View style={styles.Container}>
             <TextInputField
                 boderWidth={2}
-                backgroundColor="#E6E6E6"
+                backgroundColor="#FDFFFC"
                 isSecured={false}
                 iconType={Feather}
                 iconProps={{
@@ -38,7 +38,7 @@ export default SearchBar
 
 const styles = StyleSheet.create({
     Container: {
-        height: 80,
+        height: 60,
         backgroundColor: "transparent",
         width: "98%",
         alignItems: "center",
