@@ -3,6 +3,7 @@ import React from 'react'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 import FrogetPassword from './FrogetPassword'
+import Otpcode from './Otpcode'
 // import OtpInputs from 'react-native-otp-inputs'
 import Header from '../../components/Header'
 import { createStackNavigator } from '@react-navigation/stack';
@@ -18,7 +19,7 @@ export default function Landing() {
                 <Stack.Screen name='SignIn' component={SignIn}></Stack.Screen>
                 <Stack.Screen name='SignUp' component={SignUp}></Stack.Screen>
                 <Stack.Screen name='FrogetPassword' component={FrogetPassword}></Stack.Screen>
-                {/* <Stack.Screen name='Otpcode' component={Otpcode}></Stack.Screen> */}
+                <Stack.Screen name='Otpcode'component={Otpcode}></Stack.Screen>
                
                 
             </Stack.Navigator>

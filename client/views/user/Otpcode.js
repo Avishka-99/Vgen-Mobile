@@ -25,7 +25,7 @@ function Otpcode({navigation}) {
 
     return (
  <KeyboardAvoidingView style={{flex:1,marginTop:StatusBar.currentHeight}}> 
-        <StatusBar/>
+      
     <ImageBackground source={require('../../assets/back.png')}  style={{flex:1,}}>
            <View><Header  func={FrogetPasswordView}/></View> 
            <View style={{width:Dimensions.get('window').width,height:'35%',alignItems:'center',opacity:9}}>
@@ -37,8 +37,8 @@ function Otpcode({navigation}) {
              <View style={{width:Dimensions.get('window').width,height:400,marginTop:0,alignItems:'center'}}>
                  <Text style={{fontSize:12,marginTop:50,fontWeight:400}}>Please enter 6 digit OTP code that sent to,</Text>
                  <Text style={{fontSize:12,fontWeight:400,fontWeight:400}}> daweendrihimasha98@gmail.com.</Text>
-                 <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} />
-                 <Button func={changeView}/>
+                 <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} styMargin={{marginTop:20}} />
+                 <Button func={changeView} butname={"Next"}/>
              </View>
     </ImageBackground>
 

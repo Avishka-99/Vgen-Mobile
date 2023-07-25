@@ -17,6 +17,7 @@ export default function TextInputField(props) {
             alignItems: "center",
             justifyContent: "center",
             padding: 3,
+            //marginTop:16,
             borderRadius: props.textInputRow ? props.textInputRow.borderRadius ? props.textInputRow.borderRadius : 8 : 8,
             color: "#393E46",
             // height: props.textInputRow.height ? props.textInputRow.height : 10,
@@ -42,7 +43,7 @@ export default function TextInputField(props) {
         }
     })
     return (
-        <View style={styles.Container}>
+        <View style={[styles.Container,props.styMargin]}>
             <View style={styles.iconBackground}>
                 {props.iconType ? <props.iconType name={props.iconProps.name} size={props.iconProps.size ? props.iconProps.size : 25} color={props.iconProps.color ? props.iconProps.color : "#393E46"} /> : <View></View>}
             </View>
