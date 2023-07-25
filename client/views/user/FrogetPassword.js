@@ -19,7 +19,7 @@ function FrogetPassword({navigation}) {
     } 
     return (
         <KeyboardAvoidingView style={{flex:1,marginTop:StatusBar.currentHeight}}> 
-                 <StatusBar/>
+                
              <ImageBackground source={require('../../assets/back.png')}  style={{flex:1,}}>
                     <View><Header  func={signin} name={''}/></View> 
                     <View style={{width:Dimensions.get('window').width,height:'35%',alignItems:'center',opacity:9}}>
@@ -31,8 +31,8 @@ function FrogetPassword({navigation}) {
                       <View style={{width:Dimensions.get('window').width,height:400,marginTop:0,alignItems:'center'}}>
                           <Text style={{fontSize:10,marginTop:50,fontWeight:400}}>Please enter the email address used to register your account</Text>
                           <Text style={{fontSize:10,fontWeight:400,fontWeight:400}}> and we will email you an OTP to reset password.</Text>
-                          <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} />
-                          <Button navotp={otpview}/>
+                          <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} height="8%" placeholder="Email" function={setEmail} styMargin={{marginTop:20}} />
+                          <Button func={otpview} butname={"Get Otp"} />
                       </View>
              </ImageBackground>
 
