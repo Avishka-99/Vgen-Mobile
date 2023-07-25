@@ -1,59 +1,121 @@
-import { View, Text, StyleSheet, ScrollView, Dimensions, FlatList, StatusBar } from 'react-native'
-import React from 'react'
-import Card from '../../../components/VerticalCard'
+import { View, Text, StyleSheet, ScrollView, Dimensions, FlatList, StatusBar, NativeEventEmitter } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { Image } from 'expo-image';
 import { FlashList } from "@shopify/flash-list";
 import SearchBar from '../../../components/SearchBar';
 import PopularProducts from '../segments/PopularProducts';
-import HorizonalCard from '../../../components/HorizonalCard';
-export default function Home() {
-  const imageNames = [
+import Card from '../../../components/Card';
+import DeliverAddress from '../segments/DeliverAddress';
+import { Animated } from 'react-native';
+import * as Device from 'expo-device';
+const { diffClamp } = Animated;
+export default function Home({ navigation }) {
+  const [scrollY, setScrollY] = useState(new Animated.Value(0));
+
+  const HEADER_HEIGHT = Dimensions.get("screen").height / 14;
+  const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
+  const headerTranslateY = diffClamp.interpolate({
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [0, -HEADER_HEIGHT],
+    extrapolate: 'clamp',
+  });
+  const restaurants = [
     {
-      id: 1, image: '../assets/products/1.jpeg'
+      id: 1,
+      image: 'barista.png',
+      name: 'Barista',
+      location: 'Reid Aveue',
+      rating: 4.5
     },
     {
-      id: 2, image: '../assets/products/2.jpeg'
+      id: 2,
+      image: 'pizzahut.png',
+      name: 'Pizza hut',
+      location: 'Havlock',
+      rating: 4.2
     },
     {
-      id: 3, image: '../assets/products/3.jpeg'
+      id: 3,
+      image: 'srivihar.jpg',
+      name: 'Sri Vihar',
+      location: 'Thunmulla',
+      rating: 4.6
     },
     {
-      id: 4, image: '../assets/products/3.jpeg'
+      id: 4,
+      image: 'nelumkole.jpg',
+      name: 'Nelum kole',
+      location: 'Thimbirigasyaya',
+      rating: 4.3
     },
     {
-      id: 5, image: '../assets/products/3.jpeg'
+      id: 5,
+      image: 'savinra.jpg',
+      name: 'Savinra',
+      location: 'Nugegoda',
+      rating: 4.5
     },
     {
-      id: 6, image: '../assets/products/3.jpeg'
+      id: 6,
+      image: 'mcdonalds.png',
+      name: 'McDonalds',
+      location: 'Reid Avenue',
+      rating: 4.5
     },
     {
-      id: 7, image: '../assets/products/3.jpeg'
+      id: 7,
+      image: 'mayumi.jpg',
+      name: 'Mayumi Home Foods',
+      location: 'Nawala',
+      rating: 4.7
     },
     {
-      id: 8, image: '../assets/products/3.jpeg'
+      id: 8,
+      image: 'kfc.jpg',
+      name: 'KFC',
+      location: 'Nugegoda',
+      rating: 4.2
     },
     {
-      id: 9, image: '../assets/products/3.jpeg'
+      id: 9,
+      image: 'elite.jpg',
+      name: 'Elite',
+      location: 'Bambalapitiya',
+      rating: 4.4
     },
     {
-      id: 10, image: '../assets/products/3.jpeg'
+      id: 10,
+      image: 'elina.webp',
+      name: 'Elina Foods',
+      location: 'Kirulapone',
+      rating: 4.8
     },
     {
-      id: 11, image: '../assets/products/3.jpeg'
+      id: 11,
+      image: 'saveira.jpg',
+      name: 'Saveira',
+      location: 'Kohuwala',
+      rating: 4.9
     },
     {
-      id: 12, image: '../assets/products/3.jpeg'
+      id: 12,
+      image: 'gogreen.jpg',
+      name: 'Go Green',
+      location: 'Townhall',
+      rating: 4.7
     },
   ]
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      paddingTop: 0
+      paddingTop: 0,
+      backgroundColor: "#E6E6E6",
+      height: Dimensions.get("screen").height / 0.9
     },
     container_2: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      backgroundColor: "white"
 
     },
     image: {
@@ -69,26 +131,43 @@ export default function Home() {
   })
   return (
     <View style={styles.container}>
-      <SearchBar />
-      <Image
+      <Animated.View style={[{ transform: [{ translateY: headerTranslateY }] }]} >
+        <DeliverAddress />
+      </Animated.View>
+      <Animated.View style={[styles.container_2, { transform: [{ translateY: headerTranslateY }] }]}>
+        <SearchBar />
+        {/* <Image
         style={styles.image}
         source={require('../../../assets/vf-bg.png')}
 
-      />
-      <View style={styles.container_2}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1,justifyContent:"center",alignItems:"center" }} style={{ flex: 1,width:"100%" }}>
-          <HorizonalCard/>
-          <HorizonalCard/>
-          <HorizonalCard/>
-          <HorizonalCard/>
-          <HorizonalCard/>
-          <HorizonalCard/>
-          <HorizonalCard/>
+      /> */}
+
+        <Animated.ScrollView
+          style={{ flex: 1, width: "100%" }}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: false }
+          )}
+          scrollEventThrottle={16}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          {restaurants.map((item) => (
+            <Card key={item.id} type="store" name={item.name} location={item.location} rating={item.rating} image={item.image} />
+          ))}
+          <Card type="empty"/>
 
 
-        </ScrollView>
-      </View>
+          {/* <Card type="food" />
+          <Card type="store" />
+          <Card type="food" />
+          <Card type="food" />
+          <Card type="food" />
+          <Card type="food" />
+          <Card type="food" /> */}
 
+
+        </Animated.ScrollView>
+      </Animated.View>
 
 
       {/* <Image
@@ -102,5 +181,6 @@ export default function Home() {
         keyExtractor={item => item.id}
       /> */}
     </View>
+
   )
 }

@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import React from 'react'
 import { Image } from 'expo-image';
 const VerticalCard = (props) => {
+  
   return (
     <View style={styles.CardContainer}>
       <View style={styles.CardContainerRow1}></View>
