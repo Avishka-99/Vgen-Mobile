@@ -1,9 +1,20 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity,Image } from "react-native";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
-export default function Bottomsheet() {
+import { NGROK_URL,RESTAURANT_IMG_PATH } from "../constants/Constants";
+export default function Bottomsheet(props) {
   return (
     <View style={styles.container}>
-      <Text>Hello</Text>
+      <View style={styles.StoreBottomSheetRow1}>
+        <Image
+          style={{
+            height: "100%",
+            width: "100%",
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+          }}
+          source={{ uri: NGROK_URL + RESTAURANT_IMG_PATH + props.info.image }}
+        />
+      </View>
     </View>
   );
 }
@@ -11,29 +22,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  openButton: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "blue",
-    textAlign: "center",
-    padding: 10,
-  },
-  sheetContent: {
-    backgroundColor: "#fff",
-    padding: 16,
-  },
-  sheetText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  closeButton: {
-    fontSize: 18,
-    color: "red",
-    textAlign: "right",
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
+  StoreBottomSheetRow1:{
+    height:"20%",
+    width:"100%"
+  }
 });

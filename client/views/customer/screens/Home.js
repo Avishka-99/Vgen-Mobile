@@ -26,7 +26,7 @@ import { Portal, PortalHost } from "@gorhom/portal";
 const { diffClamp } = Animated;
 export default function Home({ navigation }) {
   const [scrollY, setScrollY] = useState(new Animated.Value(0));
-
+  const [storeInfo, setstoreInfo] = useState(null);
   const HEADER_HEIGHT = Dimensions.get("screen").height / 14;
   const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
   const headerTranslateY = diffClamp.interpolate({
@@ -153,56 +153,57 @@ export default function Home({ navigation }) {
   const bottomSheetModalRef = useRef(null);
 
   // variables
-  const snapPoints = useMemo(() => ["50%"], []);
+  const snapPoints = useMemo(() => ["20%","50%","80%"], []);
 
-  const openModal = () => {
+  const openModal = (data) => {
+    //console.log(data)
+    setstoreInfo(data)
     //setHouseDataModal(item);
     bottomSheetModalRef.current.present();
   };
 
   return (
-    <BottomSheetModalProvider>
-      <View style={styles.container}>
-        <Animated.View
-          style={[{ transform: [{ translateY: headerTranslateY }] }]}
+    <View style={styles.container}>
+      <Animated.View
+        style={[{ transform: [{ translateY: headerTranslateY }] }]}
+      >
+        <DeliverAddress />
+      </Animated.View>
+      <Animated.View
+        style={[
+          styles.container_2,
+          { transform: [{ translateY: headerTranslateY }] },
+        ]}
+      >
+        <SearchBar />
+        <Animated.ScrollView
+          style={{ flex: 1, width: "100%" }}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+            { useNativeDriver: false }
+          )}
+          scrollEventThrottle={16}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <DeliverAddress />
-        </Animated.View>
-        <Animated.View
-          style={[
-            styles.container_2,
-            { transform: [{ translateY: headerTranslateY }] },
-          ]}
-        >
-          <SearchBar />
-          <Animated.ScrollView
-            style={{ flex: 1, width: "100%" }}
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-              { useNativeDriver: false }
-            )}
-            scrollEventThrottle={16}
-            contentContainerStyle={{
-              flexGrow: 1,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {restaurants.map((item) => (
-              <Card
-                onPress={openModal}
-                key={item.id}
-                type="store"
-                name={item.name}
-                location={item.location}
-                rating={item.rating}
-                image={item.image}
-              />
-            ))}
-            <Card type="empty" />
-          </Animated.ScrollView>
-        </Animated.View>
-      </View>
+          {restaurants.map((item) => (
+            <Card
+              onPress={openModal}
+              key={item.id}
+              details={item}
+              type="store"
+              name={item.name}
+              location={item.location}
+              rating={item.rating}
+              image={item.image}
+            />
+          ))}
+          <Card type="empty" />
+        </Animated.ScrollView>
+      </Animated.View>
       <Portal>
         <BottomSheetModal
           ref={bottomSheetModalRef}
@@ -210,13 +211,13 @@ export default function Home({ navigation }) {
           snapPoints={snapPoints}
           style={styles.bottomSheet}
         >
-          <Bottomsheet />
+          <Bottomsheet info={storeInfo} />
           {/* <View style={styles.contentContainer}>
           <Text>Awesome 🎉</Text>
         </View> */}
         </BottomSheetModal>
       </Portal>
       <PortalHost name="customer_main" />
-    </BottomSheetModalProvider>
+    </View>
   );
 }

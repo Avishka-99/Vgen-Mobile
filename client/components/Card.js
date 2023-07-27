@@ -16,7 +16,7 @@ import Axios from "../api/Axios";
 export default function Card(props) {
   if (props.type == "store") {
     return (
-      <TouchableWithoutFeedback onPress={props.onPress}>
+      <TouchableWithoutFeedback onPress={() => props.onPress(props.details)}>
         <View style={styles.StoreCardContainer}>
           <View style={styles.StoreCardContainerRow1}>
             <Image
@@ -66,7 +66,7 @@ export default function Card(props) {
       <View
         style={{
           width: "100%",
-          height: Dimensions.get("screen").height / 12,
+          height: Dimensions.get("screen").height / 30,
         }}
       >
         <View style={styles.FoodCardContainerRow1}></View>
