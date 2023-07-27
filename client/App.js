@@ -17,7 +17,10 @@ import * as SplashScreen from "expo-splash-screen";
 import "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalProvider } from "@gorhom/portal";
-
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
 // import OtpInputs from 'react-native-otp-inputs';
 
 //config my new redux
@@ -85,23 +88,25 @@ const App = () => {
         <StatusBar style="dark" />
 
         {/* <Header/> */}
-        <NavigationContainer>
-          {user == "customer" ? (
-            <PaperProvider>
-              <CustomerMain />
-            </PaperProvider>
-          ) : user == "eventorganizer" ? (
-            <PaperProvider>
-              <EventOrganizerMain />
-            </PaperProvider>
-          ) : user == "delivery" ? (
-            <PaperProvider>
-              <DeliveryMain />
-            </PaperProvider>
-          ) : (
-            <Landing />
-          )}
-        </NavigationContainer>
+        <BottomSheetModalProvider>
+          <NavigationContainer>
+            {user == "customer" ? (
+              <PaperProvider>
+                <CustomerMain />
+              </PaperProvider>
+            ) : user == "eventorganizer" ? (
+              <PaperProvider>
+                <EventOrganizerMain />
+              </PaperProvider>
+            ) : user == "delivery" ? (
+              <PaperProvider>
+                <DeliveryMain />
+              </PaperProvider>
+            ) : (
+              <Landing />
+            )}
+          </NavigationContainer>
+        </BottomSheetModalProvider>
       </SafeAreaView>
     </PortalProvider>
   );
