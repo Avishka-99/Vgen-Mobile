@@ -5,14 +5,12 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 
 function Dropdwon(props) {
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState('');
     const [isFocus, setIsFocus] = useState(false);
-    const data = props.data
     
-   
     return (
      <Dropdown
-      data={data}
+      data={props.data}
       valueField="value"
       labelField="label"
       value={value}
@@ -20,6 +18,8 @@ function Dropdwon(props) {
       onBlur={() => setIsFocus(false)}
           onChange={item => {
             setValue(item.value);
+           (item)=>props.getdata(item.value)
+           // setValue(item.lable)
             console.log(value)
             setIsFocus(false);
           }}

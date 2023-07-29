@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Dimensions, Image, Switch, Alert, TextInput } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Dimensions, Image, Switch, Alert, TextInput,ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,27 +15,26 @@ export default function Account() {
   const [iconName, seticonName] = useState('')
   const [ico, setico] = useState('')
   const [myview, setmyview] = useState(true)
-  const [image, setImage] = useState(null);
+  const [value,setvalu]=useState('')
   const [Name,setName]=useState('')
+  const [datobj,setdataobj]=useState({})
   const switchChanges = (value) => {
     if (value.val === '1') {
       seticonName('chevron-right')
       setico('')
       setName('')
       setmyview(true)
+      setdataobj({})
     } else {
       setico('chevron-left')
       setName('edit')
       setmyview(false)
       seticonName('')
+      setdataobj(dataObject)
       
     }
   }
-  const back = () => {
-    // accont back button
-    //dispatch(setUserAction('Signin'))
-    console.log("hellow click me")
-  }
+ 
   // drop dwon data filed
   const val = [
     { label: 'Colombo', value: '1' },
@@ -48,15 +47,27 @@ export default function Account() {
     { label: 'Kegalla', value: '8' },
   ];
 
-  //image picker function
-  const picimage = async () => {
+ 
+
+  //sen validate data for backend
+  //inputfild data get for usestate 
+  const[password,setpassword]=useState('')
+  const[comfromePass,setcomfromepass]=useState('')
+  const[usernaem,setusername]=useState('')
+  const[avalebletime,setavalebletime]=useState('')
+  const[AccountNo,setAccountNo]=useState('')
+  const[address,setaddress]=useState('')
+  const[distric,setdistric]=useState('')
+  const [image, setImage] = useState(null);
+  const[phoneNO,setphoneNo]=useState('')
+
+   //image picker function
+   const picimage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-      
-    
     }).then((result)=>{
 
       console.log(result);
@@ -66,9 +77,58 @@ export default function Account() {
       }
 
     })
-
-   
   }
+  
+  const dataObject={
+    password:password,
+    comfromePass:comfromePass,
+    usernaem:usernaem,
+    avalebletime:avalebletime,
+    AccountNo:AccountNo,
+    address:address,
+    distric:val[Number(value)].label,
+    phoneNO:phoneNO,
+    profil:image
+
+  };
+
+  
+//validat data send back end
+  const back = () => {
+    const upercase=/[A-Z]/;
+    const lowercase=/[a-z]/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const timePattern =  /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+  //  if(dataObject.password.length<6){
+  //     console.log(dataObject.password)
+  //     Alert.alert("password should be mor than 6 digit")
+  //  }
+  //  else if(!upercase.test(dataObject.password)){
+  //    Alert.alert("password has at least one upper case letar")
+  //  }
+  //  else if(!lowercase.test(dataObject.password)){
+  //   Alert.alert("password has at least one lower case letar")
+  // }
+
+  // if(dataObject.password!==dataObject.comfromePass){
+  //   Alert.alert('password does not match')
+  // }
+  // if(dataObject.usernaem.length==0){
+  //    Alert.alert('user name is empty')
+  // }
+  // else if(!emailPattern.test(dataObject.usernaem)){
+  //   Alert.alert('user name pattern is invalid')
+  // }
+  // if(dataObject.avalebletime.length==0){
+  //   Alert.alert('Enter avilable  time')
+  // }
+    console.log("hellow click me")
+    console.log(datobj)
+  }
+ 
+  
+
+
 
   return (
 
@@ -95,15 +155,21 @@ export default function Account() {
                 <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15 }}>Available Time :</Text><Text style={{ fontSize: 15 }}> 8.00 a.m - 7.00 p.m</Text></View>
                 <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Feather name='map-pin' size={25} color={"#7EB693"} /><Text style={{ color: 'black', fontSize: 15, marginTop: 3, marginLeft: 10 }}>:colombo</Text></View>
                 <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Feather name='phone' size={25} color={"#7EB693"} /><Text style={{ color: 'black', fontSize: 13, marginTop: 3, marginLeft: 10 }}>:077-1780073</Text></View>
-              </View> : <View>
-                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}><TextInput style={{ width: '80%', height: 50, borderColor: 'green', borderWidth: 1, borderRadius: 15, paddingLeft: 20, color: 'black' }} selectionColor={'green'} placeholder='discription' /></View>
-                <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15, marginTop: 4 }}>Vehicle No :</Text><TextInput style={{ width: '70%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15 }} placeholder='user name' /></View>
-                <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15, marginTop: 4 }}>Available Time :</Text><TextInput style={{ width: '62%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15 }} placeholder='8.00am-7.00pm' /></View>
-                <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Feather name='map-pin' size={25} color={"#7EB693"} /><Dropdwon data={val}/></View>
-                <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Feather name='phone' size={25} color={"#7EB693"} /><TextInput style={{ width: '85%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15, marginLeft: 10 }} placeholder='077-1780073' /></View>
-                <View style={{ marginStart: 29, marginTop: 25, justifyContent: 'center', alignItems: 'center' }}><Button custermize={styles.but} func={back} sty={{ fontSize:13 }} butname={"Update"} /></View>
-
-              </View>}
+              </View> :
+              <ScrollView>
+               <View>
+                <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row',marginBottom:5 }}><Text style={{ color: '#7EB693', fontSize: 15, marginTop: 4 }}>Password :</Text><TextInput style={{ width: '70%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15 }} placeholder='Password' secureTextEntry={true} onChangeText={(val)=>setpassword(val)} /></View>
+                <View style={{ marginStart: 29, marginTop: 20, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15, marginTop: 4 }}>comfrome:</Text><TextInput style={{ width: '70%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15 }} placeholder='comrome password' secureTextEntry={true} onChangeText={(val)=>setcomfromepass(val)}/></View>
+                <View style={{ marginStart: 29, marginTop: 20, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15, marginTop: 4 }}>user name :</Text><TextInput style={{ width: '70%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15 }} placeholder='user name' onChangeText={(val)=>setusername(val)}/></View>
+                <View style={{ marginStart: 29, marginTop: 20, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15, marginTop: 4 }}>Available Time :</Text><TextInput style={{ width: '62%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15 }} placeholder='8.00am-7.00pm' onChangeText={(val)=>setavalebletime(val)} /></View>
+                <View style={{ marginStart: 29, marginTop: 20, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15, marginTop: 4 }}>Account NO:</Text><TextInput style={{ width: '70%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15 }} placeholder='Account NO' onChangeText={(val)=>setAccountNo(val)} /></View>
+                <View style={{ marginStart: 29, marginTop: 20, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15, marginTop: 4 }}>Address:</Text><TextInput style={{ width: '70%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15 }} placeholder='Address' onChangeText={(val)=>setaddress(val)} /></View>
+                <View style={{ marginStart: 29, marginTop: 20, flexDirection: 'row' }}><Feather name='map-pin' size={25} color={"#7EB693"} /><Dropdwon data={val} getdata={setvalu} /></View>
+                <View style={{ marginStart: 29, marginTop: 20, flexDirection: 'row' }}><Feather name='phone' size={25} color={"#7EB693"} /><TextInput style={{ width: '85%', height: 30, borderColor: 'green', borderRadius: 15, borderWidth: 1, paddingLeft: 15, marginLeft: 10 }} placeholder='077-1780073' onChangeText={(val)=>setphoneNo(val)} /></View>
+                <View style={{ marginStart: 29, marginTop: 20, justifyContent: 'center', alignItems: 'center' }}><Button custermize={styles.but} func={back} sty={{ fontSize:13 }} butname={"Update"} /></View>
+              </View>
+              </ScrollView>
+              }
 
 
             </View>
@@ -162,7 +228,7 @@ const styles = StyleSheet.create({
   but: {
     width: 100,
     marginEnd:25,
-    marginTop:0,
+    marginBottom:15
     //marginLeft:100
   }
 })
@@ -174,3 +240,5 @@ const styles = StyleSheet.create({
 // <Button title='Log out' onPress={() => {
 //   dispatch(setUserAction(''))
 // }}></Button>
+
+//   <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}><TextInput style={{ width: '80%', height: 50, borderColor: 'green', borderWidth: 1, borderRadius: 15, paddingLeft: 20, color: 'black' }} selectionColor={'green'} placeholder='discription' onChangeText={(val)=>console.log(val)}/></View>
