@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, TextInput, Touchable } from 'react-native'
 import React, { useState } from 'react'
 import { Image } from 'expo-image';
-import { Feather } from '@expo/vector-icons';
+import * as Icons from '../../constants/Icons';
 import Constants from 'expo-constants';
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserAction } from '../../actions/UserAction';
@@ -35,37 +35,37 @@ export default function SignIn({ navigation }) {
     });*/
   }
   return (
-    // <KeyboardAvoidingView
-    //   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    //   keyboardVerticalOffset={0}
-    //   style={styles.avoidingView}>
-      <View style={styles.container}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/vgen.png')}
-          contentFit="cover"
-        />
-        <View style={styles.loginOuter2}>
-          <View style={styles.loginOuter}>
-            <View style={styles.loginContainer}>
-              <Image
-                style={styles.image_2}
-                source={require('../../assets/vf-bg.png')}
-
-              />
-              <View style={{ padding: "9%" }} />
-              <TextInputField isSecured={false} iconType={Feather} iconProps={{ "name": "user", "size": 24 }} placeholder="Email" function={setEmail} textInputStyles={{height:"15%"}} />
-              <TextInputField isSecured={true} iconType={Feather} iconProps={{ "name": "lock", "size": 24 }} placeholder="Password" function={setPassword} textInputStyles={{height:"15%"}} />
-              <View style={styles.forgotPassword}><Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('FrogetPassword')}>Forgot password?</Text></View>
-              <RoundedButton color="#7EB693" function={handleSubmit} text="Log in" />
-              <Text style={styles.bottomText}>New to VGen?<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>Sign up</Text></Text>
-            </View>
-          </View>
-        </View>
-
-      </View>
-    // </KeyboardAvoidingView>
-  )
+		// <KeyboardAvoidingView
+		//   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+		//   keyboardVerticalOffset={0}
+		//   style={styles.avoidingView}>
+		<View style={styles.container}>
+			<Image style={styles.image} source={require('../../assets/vgen.png')} contentFit='cover' />
+			<View style={styles.loginOuter2}>
+				<View style={styles.loginOuter}>
+					<View style={styles.loginContainer}>
+						<Image style={styles.image_2} source={require('../../assets/vf-bg.png')} />
+						<View style={{padding: '9%'}} />
+						<TextInputField isSecured={false} iconType={Icons.Feather} iconProps={{name: 'user', size: 24}} placeholder='Email' function={setEmail} textInputStyles={{height: '15%'}} />
+						<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} placeholder='Password' function={setPassword} textInputStyles={{height: '15%'}} />
+						<View style={styles.forgotPassword}>
+							<Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('FrogetPassword')}>
+								Forgot password?
+							</Text>
+						</View>
+						<RoundedButton color='#7EB693' function={handleSubmit} text='Log in' />
+						<Text style={styles.bottomText}>
+							New to VGen?
+							<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>
+								Sign up
+							</Text>
+						</Text>
+					</View>
+				</View>
+			</View>
+		</View>
+		// </KeyboardAvoidingView>
+	);
 }
 const styles = StyleSheet.create({
   avoidingView: {
