@@ -19,11 +19,14 @@ export default function Bottomsheet(props) {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  StoreBottomSheetRow1:{
-    height:"20%",
-    width:"100%"
-  }
+	container: {
+		flex: 1,
+		backgroundColor: 'tomato',
+		borderTopLeftRadius: 15,
+		borderTopRightRadius: 15,
+	},
+	StoreBottomSheetRow1: {
+		height: '30%',
+		width: '100%',
+	},
 });
