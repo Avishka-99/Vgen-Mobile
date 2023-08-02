@@ -28,7 +28,7 @@ const SearchBar = () => {
                 }}
                 textInput={{
                     width: "90%",
-                    ioswidth: "85%"
+                    ioswidth: "89%"
                 }} />
         </View>
     )

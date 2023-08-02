@@ -8,24 +8,24 @@ import * as Icons from '../../constants/Icons';
 import RoundedButton from '../../components/RoundedButton';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import Axios from '../../api/Axios';
+import * as API_ENDPOINTS from '../../api/ApiEndpoints';
+import {useDispatch, useSelector} from 'react-redux';
+import {setOtpEmail} from '../../actions/UserAction';
 export default function SignUp({navigation}) {
 	const [checked, setChecked] = useState('first');
-	const [email, setEmail] = useState('');
-	const [nic, setNic] = useState('');
+	const [email, setEmail] = useState('avishkaprabha360@gmail.com');
+	const [nic, setNic] = useState('992653787V');
 	const [name, setName] = useState('');
-	const [firstName, setfirstName] = useState('');
-	const [lastName, setlastName] = useState('');
+	const [firstName, setfirstName] = useState('Avishka');
+	const [lastName, setlastName] = useState('Jayasekara');
 	const [userRole, setuserRole] = useState('Customer');
 	const [profilePicture, setProfilePicture] = useState('');
-	const [password, setPassword] = useState('');
-	const [confirmpassword, setConfirmPassword] = useState('');
-	const [contactNo, setContactNo] = useState('');
+	const [password, setPassword] = useState('Avi6656pj@');
+	const [confirmpassword, setConfirmPassword] = useState('Avi6656pj@');
+	const [contactNo, setContactNo] = useState('0710168655');
+	const dispatch = useDispatch();
 	console.log(password);
 	const toastConfig = {
-		/*
-    Overwrite 'success' type,
-    by modifying the existing `BaseToast` component
-  */
 		success: (props) => (
 			<BaseToast
 				{...props}
@@ -40,13 +40,11 @@ export default function SignUp({navigation}) {
 				}}
 			/>
 		),
-		/*
-    Overwrite 'error' type,
-    by modifying the existing `ErrorToast` component
-  */
 		error: (props) => (
 			<ErrorToast
 				{...props}
+				// style={{borderLeftColor: 'red'}}
+				// contentContainerStyle={{backgroundColor: '#2B2730'}}
 				text1Style={{
 					fontSize: 12,
 					fontWeight: '400',
@@ -58,13 +56,6 @@ export default function SignUp({navigation}) {
 				}}
 			/>
 		),
-		/*
-    Or create a completely new type - `tomatoToast`,
-    building the layout from scratch.
-
-    I can consume any custom `props` I want.
-    They will be passed when calling the `show` method (see below)
-  */
 		warning: ({text1, props}) => (
 			<View style={{height: 60, width: '100%', backgroundColor: 'tomato'}}>
 				<Text>{text1}</Text>
@@ -150,8 +141,12 @@ export default function SignUp({navigation}) {
 				contactNo: contactNo,
 				// profilePicture:profilePicture
 			}).then((response) => {
-				console.log(response.data);
-				showToast(response.data);
+				if (response.data.type == 'error') {
+					showToast(response.data.type, response.data.message, '', 2000);
+				} else {
+					dispatch(setOtpEmail(email));
+					navigation.navigate('Otpcode');
+				}
 			});
 		}
 	};
@@ -176,6 +171,7 @@ export default function SignUp({navigation}) {
 					height='8%'
 					placeholder='First name'
 					function={setfirstName}
+					value={firstName}
 				/>
 				<TextInputField
 					isSecured={false}
@@ -190,13 +186,14 @@ export default function SignUp({navigation}) {
 					height='8%'
 					placeholder='Last name'
 					function={setlastName}
+					value={lastName}
 				/>
 			</View>
-			<TextInputField isSecured={false} iconType={Icons.FontAwesome} iconProps={{name: 'id-badge', size: 24}} height='8%' placeholder='NIC' function={setNic} />
-			<TextInputField isSecured={false} iconType={Icons.Feather} iconProps={{name: 'phone', size: 24}} height='8%' placeholder='Contact no' function={setContactNo} />
-			<TextInputField isSecured={false} iconType={Icons.MaterialCommunityIcons} iconProps={{name: 'email-outline', size: 24}} height='8%' placeholder='Email' function={setEmail} />
-			<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder='Password' function={setPassword} />
-			<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder='Confirm password' function={setConfirmPassword} />
+			<TextInputField isSecured={false} iconType={Icons.FontAwesome} iconProps={{name: 'id-badge', size: 24}} height='8%' placeholder='NIC' function={setNic} value={nic} />
+			<TextInputField isSecured={false} iconType={Icons.Feather} iconProps={{name: 'phone', size: 24}} height='8%' placeholder='Contact no' function={setContactNo} value={contactNo} />
+			<TextInputField isSecured={false} iconType={Icons.MaterialCommunityIcons} iconProps={{name: 'email-outline', size: 24}} height='8%' placeholder='Email' function={setEmail} value={email} />
+			<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder='Password' function={setPassword} value={password} />
+			<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder='Confirm password' function={setConfirmPassword} value={confirmpassword} />
 
 			<View style={styles.radioButtonContainer}>
 				<RadioButton value='first' status={checked === 'first' ? 'checked' : 'unchecked'} onPress={() => setChecked('first')} />
