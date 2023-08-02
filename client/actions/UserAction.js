@@ -1,12 +1,13 @@
-import { SET_USER } from '../constants/counterActionTypes.js';
+import {SET_OTP_EMAIL, SET_USER} from '../constants/ActionTypes.js';
 export const setUserAction = (parameter) => {
-    return {
-        type: SET_USER,
-        payload: parameter
-    }
-}
-export const decrementCounterAction = () => {
-    return {
-        type: DECREMENT_COUNTER
-    }
-}
+	return {
+		type: SET_USER,
+		payload: parameter,
+	};
+};
+export const setOtpEmail = (parameter) => {
+	return {
+		type: SET_OTP_EMAIL,
+        payload:parameter,
+	};
+};

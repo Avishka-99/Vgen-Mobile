@@ -34,11 +34,11 @@ export default function TextInputField(props) {
 				justifyContent: 'center',
 				alignItems: 'center',
 				borderRadius: props.iconProps ? (props.iconProps.radius ? props.iconProps.radius : 5) : 5,
-				paddingLeft: props.iconProps ? (props.iconProps.paddingleft ? props.iconProps.paddingleft : 0) : 0,
+				paddingLeft: props.iconProps ? (props.iconProps.paddingleft ? props.iconProps.paddingleft : 2) : 0,
 			},
 		});
     return (
-        <View style={[styles.Container,props.styMargin]}>
+        <View style={[styles.Container]}>
             <View style={styles.iconBackground}>
                 {props.iconType ? <props.iconType name={props.iconProps.name} size={props.iconProps.size ? props.iconProps.size : 25} color={props.iconProps.color ? props.iconProps.color : "#393E46"} /> : <View></View>}
             </View>
@@ -49,6 +49,7 @@ export default function TextInputField(props) {
                 secureTextEntry={props.isSecured}
                 placeholderTextColor={'#393E46'}
                 selectionColor={'green'}
+				value={props.value?props.value:''}
             />
         </View>
     )

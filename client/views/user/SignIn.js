@@ -46,8 +46,8 @@ export default function SignIn({ navigation }) {
 					<View style={styles.loginContainer}>
 						<Image style={styles.image_2} source={require('../../assets/vf-bg.png')} />
 						<View style={{padding: '9%'}} />
-						<TextInputField isSecured={false} iconType={Icons.Feather} iconProps={{name: 'user', size: 24}} placeholder='Email' function={setEmail} textInputStyles={{height: '15%'}} />
-						<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} placeholder='Password' function={setPassword} textInputStyles={{height: '15%'}} />
+						<TextInputField isSecured={false} iconType={Icons.Feather} iconProps={{name: 'user', size: 24}} placeholder='Email' function={setEmail} value={email} textInputStyles={{height: '15%'}} />
+						<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} placeholder='Password' function={setPassword} value={password} textInputStyles={{height: '15%'}} />
 						<View style={styles.forgotPassword}>
 							<Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('FrogetPassword')}>
 								Forgot password?
