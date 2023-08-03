@@ -153,7 +153,7 @@ export default function Home({ navigation }) {
   const bottomSheetModalRef = useRef(null);
 
   // variables
-  const snapPoints = useMemo(() => ["20%","50%","80%"], []);
+  const snapPoints = useMemo(() => ["98%"], []);
 
   const openModal = (data) => {
     //console.log(data)

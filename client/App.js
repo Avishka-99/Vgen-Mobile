@@ -29,11 +29,14 @@ const AppWrapper = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [ipAddress, setIpAddress] = useState("");
   let [fontsLoaded] = useFonts({
-    "Poppins-light": require("./assets/fonts/Poppins-Light.ttf"),
-    "Poppins-medium": require("./assets/fonts/Poppins-Medium.ttf"),
-    "Poppins-regular": require("./assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-semibold": require("./assets/fonts/Poppins-SemiBold.ttf"),
-  });
+		'Poppins-light': require('./assets/fonts/Poppins-Light.ttf'),
+		'Poppins-medium': require('./assets/fonts/Poppins-Medium.ttf'),
+		'Poppins-regular': require('./assets/fonts/Poppins-Regular.ttf'),
+		'Poppins-semibold': require('./assets/fonts/Poppins-SemiBold.ttf'),
+		'Poppins-ExtraBold': require('./assets/fonts/Poppins-ExtraBold.ttf'),
+		'Yellowtail-Regular': require('./assets/fonts/Yellowtail-Regular.ttf'),
+		'RammettoOne-Regular': require('./assets/fonts/RammettoOne-Regular.ttf'),
+	});
   useEffect(() => {
     async function prepare() {
       SplashScreen.preventAutoHideAsync();
