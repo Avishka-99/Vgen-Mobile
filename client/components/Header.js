@@ -29,7 +29,7 @@ const  styles=StyleSheet.create({
        flexDirection:'row',
        shadowOffset:{width:4,height:4},
        shadowColor:'#EFF6F1',
-       marginTop:0
+       
       // backgroundColor:'red'
     },
     imageBacbutton:{
