@@ -93,7 +93,7 @@ const App = () => {
         {/* <Header/> */}
         <BottomSheetModalProvider>
           <NavigationContainer>
-            {user == "customer" ? (
+            {user == "Customer" ? (
               <PaperProvider>
                 <CustomerMain />
               </PaperProvider>
@@ -101,7 +101,7 @@ const App = () => {
               <PaperProvider>
                 <EventOrganizerMain />
               </PaperProvider>
-            ) : user == "delivery" ? (
+            ) : user == "Delivery" ? (
               <PaperProvider>
                 <DeliveryMain />
               </PaperProvider>
