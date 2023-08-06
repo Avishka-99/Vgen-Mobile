@@ -20,11 +20,10 @@ export default function SignUp({navigation}) {
 	const [lastName, setlastName] = useState('Jayasekara');
 	const [userRole, setuserRole] = useState('Customer');
 	const [profilePicture, setProfilePicture] = useState('');
-	const [password, setPassword] = useState('Avi6656pj@');
-	const [confirmpassword, setConfirmPassword] = useState('Avi6656pj@');
+	const [password, setPassword] = useState('Avi990921pj@');
+	const [confirmpassword, setConfirmPassword] = useState('Avi990921pj@');
 	const [contactNo, setContactNo] = useState('0710168655');
 	const dispatch = useDispatch();
-	console.log(password);
 	const toastConfig = {
 		success: (props) => (
 			<BaseToast
@@ -196,9 +195,9 @@ export default function SignUp({navigation}) {
 			<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder='Confirm password' function={setConfirmPassword} value={confirmpassword} />
 
 			<View style={styles.radioButtonContainer}>
-				<RadioButton value='first' status={checked === 'first' ? 'checked' : 'unchecked'} onPress={() => setChecked('first')} />
+				<RadioButton value='first' status={userRole === 'Customer' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Customer')} />
 				<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Customer</Text>
-				<RadioButton value='second' status={checked === 'second' ? 'checked' : 'unchecked'} onPress={() => setChecked('second')} />
+				<RadioButton value='second' status={userRole === 'Delivery' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Delivery')} />
 				<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Delivery</Text>
 			</View>
 
