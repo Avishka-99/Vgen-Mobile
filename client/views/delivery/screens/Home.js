@@ -1,11 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Dimensions, Image, Switch, Alert, TextInput,ScrollView } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, ImageBackground, Dimensions, Image, Switch, Alert, TextInput,ScrollView,FlatList } from 'react-native'
 import Header from '../../../components/Header';
+import Order from '../../../components/Order';
 import { Feather } from '@expo/vector-icons';
-function Home(props) {
+function Home({navigation}) {
     const back=()=>{
         console.log('back')
     }
+    const data=[
+        {id:'1'},
+        {id:'2'},
+        {id:'3'},
+        {id:'4'},
+        {id:'5'},
+        {id:'6'}
+    ]
+   const Accsept=(id)=>{
+    navigation.navigate('Delivery')
+   }
     return (
         <View style={{flex:1}}>
             <ImageBackground source={require('../../../assets/back.png')} style={{flex:1}}>
@@ -28,7 +40,33 @@ function Home(props) {
                      </View>
                  </View>
                    <View style={styles.Revenue}>
-                       
+                       <View style={styles.count}>
+                         <Text style={{color:'#4D5959',fontSize:20,fontWeight:600}}>Count</Text>
+                         <Text style={{fontSize:18,fontWeight:300}}>05</Text>
+                         <View style={{width:60,height:60,borderRadius:50,position:'absolute',top:100}}>
+                            <Image style={{width:60,height:60,borderRadius:50,borderWidth:1,borderColor:'#EFD373'}} source={require('../../../assets/count1.jpg')}/>
+                         </View>
+                       </View>
+                       <View style={styles.profite}>
+                          <Text style={{color:'#4D5959',fontSize:20,fontWeight:600}}>Revenue</Text>
+                          <Text style={{fontSize:15,fontWeight:300}}>Rs:100,000</Text>
+                          <View style={{width:60,height:60,borderRadius:50,position:'absolute',top:100}}>
+                            <Image style={{width:60,height:60,borderRadius:50,borderWidth:1,borderColor:'#EFD373'}} source={require('../../../assets/th1.jpg')}/>
+                          </View>
+                       </View>
+                   </View>
+                   <View style={styles.recvest}>
+                    <FlatList
+                      data={data}
+                      renderItem={({item})=>(
+                        <Order funcname={Accsept}/>
+                      )}
+                      keyExtractor={item=>item.id}
+                      contentContainerStyle={styles.flatlist}
+                      disableVirtualization={true}
+                      ListFooterComponent={<View style={{marginBottom:100}}></View>}
+                    />
+                      
                    </View>
             </ImageBackground>
 
@@ -50,10 +88,52 @@ const styles=StyleSheet.create({
     Revenue:{
         width:Dimensions.get('window').width,
         height:150,
-        backgroundColor:'red',
-        marginTop:20,
+        //backgroundColor:'red',
+        marginTop:30,
         alignItems:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        flexDirection:'row'
+    },
+    count:{
+        width:130,
+        height:'90%',
+        marginLeft:2,
+        borderRadius:20,
+        backgroundColor:'#ffff',
+        alignItems:'center',
+        justifyContent:'center',
+        elevation:7,
+        borderWidth:1,
+        borderColor:'#EFD373'
+        
+    },
+    profite:{
+       width:180,
+       height:"90%",
+       borderRadius:20,
+       backgroundColor:'#ffff',
+       marginLeft:30,elevation:7,
+       alignItems:'center',
+       justifyContent:'center',
+       borderWidth:1,
+       borderColor:'#EFD373'
+    },
+    recvest:{
+        width:Dimensions.get('window').width,
+        height:Dimensions.get('window').height,
+        flex:1,
+        //backgroundColor:'red',
+        marginTop:20,
+        alignItems:'center'
+    },
+    flatlist:{
+        width:Dimensions.get('window').width, 
+        //height:Dimensions.get('window').height-400,
+        alignItems:'center',
+        
+    },
+    last:{
+        marginBottom:70
     }
 })
 

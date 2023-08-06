@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.1.124';
+export const BASE_URL = 'http://192.168.64.56';
 export const PORT = '5001';
 export const PRODUCT_IMG_PATH = '/uploads/products/';
 export const RESTAURANT_IMG_PATH = '/uploads/restaurants/';

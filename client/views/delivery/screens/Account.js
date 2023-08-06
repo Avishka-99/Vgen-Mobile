@@ -199,14 +199,14 @@ const styles = StyleSheet.create({
     height: '30%',
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor:'white'
+   // backgroundColor:'white'
 
   },
   editData: {
-    height: '70%',
+    height:'70%',
     width: '100%',
     alignItems: 'center',
-    //backgroundColor:'green'
+   // backgroundColor:'green'
   },
   profileBackgrund: {
     width: 200,
