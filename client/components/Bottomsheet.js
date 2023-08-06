@@ -6,6 +6,7 @@ import {BaseButton, TouchableWithoutFeedback} from 'react-native-gesture-handler
 import {LinearGradient} from 'expo-linear-gradient';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import MapView from 'react-native-maps';
 export default function Bottomsheet(props) {
 	const Stack = createNativeStackNavigator();
 	const StoreHome = ({navigation}) => {
@@ -16,8 +17,6 @@ export default function Bottomsheet(props) {
 						style={{
 							height: '100%',
 							width: '100%',
-							borderTopLeftRadius: 15,
-							borderTopRightRadius: 15,
 							opacity: 0.9,
 						}}
 						source={{uri: NGROK_URL + RESTAURANT_IMG_PATH + props.info.image}}
@@ -25,11 +24,11 @@ export default function Bottomsheet(props) {
 					<LinearGradient style={styles.gradient} colors={['transparent', 'rgba(0,0,0,0.8)']}>
 						<View style={styles.restaurantDetails}>
 							<View style={{height: '70%'}}>
-								<Text style={{color:'white',fontSize:'24'}}>Shop name</Text>
+								<Text style={{color: 'white', fontSize: 24}}>{props.info.name}</Text>
 							</View>
-							<View style={{top:-20,flexDirection:'row',alignItems:'center'}}>
-								<Icons.AntDesign name='staro' size={24} />
-								<Text>3.5</Text>
+							<View style={{top: -10, flexDirection: 'row', alignItems: 'center'}}>
+								<Icons.AntDesign name='star' size={16} color={'white'} />
+								<Text style={{color: 'white', fontSize: 16,left:4}}>{props.info.rating}</Text>
 							</View>
 						</View>
 					</LinearGradient>
@@ -51,7 +50,20 @@ export default function Bottomsheet(props) {
 	const StoreLocation = ({navigation}) => {
 		return (
 			<View style={styles.mapContainer}>
-				<Text>adbhsbadsahdu</Text>
+				<MapView
+					initialRegion={{
+						latitude: 6.899132,
+						longitude: 79.860762,
+						latitudeDelta: 0.0002,
+						longitudeDelta: 0.0131,
+					}}
+					style={{width: '100%', height: '100%'}}
+				/>
+				<BaseButton style={{position: 'absolute',top: '2%',left:'3%'}} onPress={() => navigation.navigate('StoreHome')}>
+					<View style={[styles.CloseButton,{backgroundColor:'black'}]}>
+						<Icons.Ionicons name='chevron-back' size={30} color={'white'} />
+					</View>
+				</BaseButton>
 			</View>
 		);
 	};
@@ -74,13 +86,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		height: '90%',
 		backgroundColor: '#F5F5F5',
-		borderTopLeftRadius: 15,
-		borderTopRightRadius: 15,
 	},
 	StoreBottomSheetRow1: {
 		flex: 1 / 3,
-		borderTopLeftRadius: 15,
-		borderTopRightRadius: 15,
 	},
 	CloseButton: {
 		width: 40,
@@ -108,6 +116,5 @@ const styles = StyleSheet.create({
 	/*STORE LOCATION */
 	mapContainer: {
 		flex: 1,
-		backgroundColor: 'dodgerblue',
 	},
 });
