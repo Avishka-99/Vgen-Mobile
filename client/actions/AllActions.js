@@ -1,3 +1,3 @@
 import {setOtpEmail,setUserAction} from './UserAction';
-import {setRestaurantAction}from './RestaurantAction';
-export {setOtpEmail,setUserAction,setRestaurantAction};
+import {setRestaurantAction,setFetchedProducts,setModalDetails}from './RestaurantAction';
+export {setOtpEmail, setUserAction, setRestaurantAction, setFetchedProducts, setModalDetails};

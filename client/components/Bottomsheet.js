@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
-import {NGROK_URL, RESTAURANT_IMG_PATH} from '../constants/Constants';
+import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl} from 'react-native';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {NGROK_URL, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
 import * as Icons from '../constants/Icons';
 import {BaseButton, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -9,17 +9,45 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MapView, {Marker} from 'react-native-maps';
 import Axios from '../api/Axios';
 import * as API_ENDPOINTS from '../api/ApiEndpoints';
+import * as ALL_ACTIONS from '../actions/AllActions';
+import {useSelector, useDispatch} from 'react-redux';
+import Card from './Card';
+import {FlashList} from '@shopify/flash-list';
+import {Modal, Portal, Button, PaperProvider} from 'react-native-paper';
+import {Chip} from 'react-native-paper';
 export default function Bottomsheet(props) {
-	console.log(props);
+	const dispatch = useDispatch();
 	const Stack = createNativeStackNavigator();
 	const StoreHome = ({navigation}) => {
-		useEffect(()=>{
-			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_PRODUCTS,{
-				restaurantId:props.info.userId
-			}).then((response)=>{
-				console.log(response.data)
-			})
-		})
+		const [popupDetails, setPopupDetails] = useState(null);
+		const [isModalVisible, setIsModalVisible] = useState(true);
+		const [refreshing, setRefreshing] = useState(false);
+		useEffect(() => {
+			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_PRODUCTS, {
+				restaurantId: props.info.userId,
+			}).then((response) => {
+				dispatch(ALL_ACTIONS.setFetchedProducts(response.data));
+				//console.log(response.data)
+			});
+		}, []);
+		const products = useSelector((state) => state.restaurantReducer.products);
+		const modalDetails = useSelector((state) => state.restaurantReducer.modalDetails);
+		const onRefresh = React.useCallback(() => {
+			setRefreshing(true);
+			setTimeout(() => {
+				Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_PRODUCTS, {
+					restaurantId: props.info.userId,
+				}).then((response) => {
+					dispatch(ALL_ACTIONS.setFetchedProducts(response.data));
+					//console.log(response.data)
+				});
+				setRefreshing(false);
+			}, 2000);
+		}, []);
+		const handleModal = (data) => {
+			dispatch(ALL_ACTIONS.setModalDetails(data));
+		};
+		console.log(modalDetails);
 		return (
 			<View style={styles.container}>
 				<View style={styles.StoreBottomSheetRow1}>
@@ -53,6 +81,59 @@ export default function Bottomsheet(props) {
 						</View>
 					</BaseButton>
 				</View>
+				<View style={styles.StoreBottomSheetContainer}>
+					<FlashList data={products} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={products.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
+				</View>
+
+				<Modal
+					dismissable={false}
+					visible={isModalVisible}
+					// onDismiss={handleModal}
+					contentContainerStyle={{
+						backgroundColor: 'white',
+						width: '90%',
+						justifyContent: 'center',
+						alignItems: 'center',
+						alignSelf: 'center',
+						borderRadius: 10,
+						height: '70%',
+					}}
+				>
+					<View style={{height: '100%', width: '100%'}}>
+						<View style={{width: '100%', height: '11%', alignItems: 'flex-end'}}>
+							<TouchableWithoutFeedback onPress={handleModal} style={{padding: 5}}>
+								<View style={{borderRadius: 40, width: 40, height: 40, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center'}}>
+									<Icons.EvilIcons name='close' size={30} color={'white'} />
+								</View>
+							</TouchableWithoutFeedback>
+						</View>
+						<View style={{width: '100%', height: '60%', flexDirection: 'row'}}>
+							<View style={{width: '50%', height: '100%', backgroundColor: '#7EB693', marginLeft: 10, borderRadius: 10, alignItems: 'center'}}>
+								<Image
+									style={{
+										height: '50%',
+										width: '90%',
+										opacity: 0.9,
+										borderRadius: 10,
+										marginTop: '5%',
+									}}
+									source={{uri: NGROK_URL + PRODUCT_IMG_PATH + modalDetails.productImage}}
+								/>
+								<Chip style={{height: '12%', position: 'absolute', top: '5%', left: '54%'}}>
+									<Text style={{fontSize: 10, fontFamily: 'Poppins-regular'}}>Vegan</Text>
+								</Chip>
+								<View style={{height: '20%'}}>
+									<Text style={{marginTop: '1%', flexShrink: 1, fontFamily: 'Poppins-semibold'}}>{modalDetails.productName}</Text>
+								</View>
+								<View style={{height: '10%'}}>
+									<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#000'}}>Rs.{modalDetails.sell_products[0].price.toFixed(2)}</Text>
+								</View>
+							</View>
+							<View style={{width: '50%', height: '100%'}}></View>
+							{/* 7EB693 */}
+						</View>
+					</View>
+				</Modal>
 			</View>
 		);
 	};
@@ -102,10 +183,18 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		height: '90%',
+		width: '100%',
 		backgroundColor: '#F5F5F5',
 	},
 	StoreBottomSheetRow1: {
 		flex: 1 / 3,
+		height: Dimensions.get('screen').height / 3,
+		marginBottom: '1%',
+	},
+	StoreBottomSheetContainer: {
+		flex: 2 / 3,
+		height: (Dimensions.get('screen').height / 3) * 2,
+		width: '100%',
 	},
 	CloseButton: {
 		width: 40,

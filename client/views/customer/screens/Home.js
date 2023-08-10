@@ -157,7 +157,7 @@ export default function Home({navigation}) {
 	const bottomSheetModalRef = useRef(null);
 
 	// variables
-	const snapPoints = useMemo(() => ['60%', '90%'], []);
+	const snapPoints = useMemo(() => ['98%'], []);
 
 	const openModal = (data) => {
 		setstoreInfo(data);
@@ -192,6 +192,7 @@ export default function Home({navigation}) {
 		});
 	},[]);
 	return (
+		
 		<View style={styles.container}>
 			<Animated.View style={[{transform: [{translateY: headerTranslateY}]}]}>
 				<DeliverAddress />
