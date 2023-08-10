@@ -6,10 +6,20 @@ import {BaseButton, TouchableWithoutFeedback} from 'react-native-gesture-handler
 import {LinearGradient} from 'expo-linear-gradient';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
+import Axios from '../api/Axios';
+import * as API_ENDPOINTS from '../api/ApiEndpoints';
 export default function Bottomsheet(props) {
+	console.log(props);
 	const Stack = createNativeStackNavigator();
 	const StoreHome = ({navigation}) => {
+		useEffect(()=>{
+			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_PRODUCTS,{
+				restaurantId:props.info.userId
+			}).then((response)=>{
+				console.log(response.data)
+			})
+		})
 		return (
 			<View style={styles.container}>
 				<View style={styles.StoreBottomSheetRow1}>
@@ -19,16 +29,16 @@ export default function Bottomsheet(props) {
 							width: '100%',
 							opacity: 0.9,
 						}}
-						source={{uri: NGROK_URL + RESTAURANT_IMG_PATH + props.info.image}}
+						source={{uri: NGROK_URL + RESTAURANT_IMG_PATH + props.info.restaurant_manager.image}}
 					/>
 					<LinearGradient style={styles.gradient} colors={['transparent', 'rgba(0,0,0,0.8)']}>
 						<View style={styles.restaurantDetails}>
 							<View style={{height: '70%'}}>
-								<Text style={{color: 'white', fontSize: 24}}>{props.info.name}</Text>
+								<Text style={{color: 'white', fontSize: 24}}>{props.info.restaurant_manager.resturantName}</Text>
 							</View>
 							<View style={{top: -10, flexDirection: 'row', alignItems: 'center'}}>
 								<Icons.AntDesign name='star' size={16} color={'white'} />
-								<Text style={{color: 'white', fontSize: 16,left:4}}>{props.info.rating}</Text>
+								<Text style={{color: 'white', fontSize: 16, left: 4}}>{props.info.rating}</Text>
 							</View>
 						</View>
 					</LinearGradient>
@@ -52,15 +62,22 @@ export default function Bottomsheet(props) {
 			<View style={styles.mapContainer}>
 				<MapView
 					initialRegion={{
-						latitude: 6.899132,
-						longitude: 79.860762,
+						latitude: props.info.restaurant_manager.latitude,
+						longitude: props.info.restaurant_manager.longitude,
 						latitudeDelta: 0.0002,
 						longitudeDelta: 0.0131,
 					}}
 					style={{width: '100%', height: '100%'}}
-				/>
-				<BaseButton style={{position: 'absolute',top: '2%',left:'3%'}} onPress={() => navigation.navigate('StoreHome')}>
-					<View style={[styles.CloseButton,{backgroundColor:'black'}]}>
+				>
+					<Marker
+						coordinate={{
+							latitude: props.info.restaurant_manager.latitude,
+							longitude: props.info.restaurant_manager.longitude,
+						}}
+					/>
+				</MapView>
+				<BaseButton style={{position: 'absolute', top: '2%', left: '3%'}} onPress={() => navigation.navigate('StoreHome')}>
+					<View style={[styles.CloseButton, {backgroundColor: 'black'}]}>
 						<Icons.Ionicons name='chevron-back' size={30} color={'white'} />
 					</View>
 				</BaseButton>
