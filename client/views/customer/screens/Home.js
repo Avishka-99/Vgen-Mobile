@@ -129,7 +129,7 @@ export default function Home({navigation}) {
 		},
 	];
 	const restaurantArray = useSelector((state) => state.restaurantReducer.restaurants);
-	console.log(restaurantArray)
+	//console.log(restaurantArray)
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
