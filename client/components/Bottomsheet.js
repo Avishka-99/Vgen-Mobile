@@ -15,13 +15,22 @@ import Card from './Card';
 import {FlashList} from '@shopify/flash-list';
 import {Modal, Portal, Button, PaperProvider} from 'react-native-paper';
 import {Chip} from 'react-native-paper';
+import CounterInput from 'react-native-counter-input';
+import {CardField, confirmPayment, useConfirmPayment} from '@stripe/stripe-react-native';
 export default function Bottomsheet(props) {
+	console.log(props);
 	const dispatch = useDispatch();
 	const Stack = createNativeStackNavigator();
+	const OrderInfo = ({navigation}) => {};
 	const StoreHome = ({navigation}) => {
 		const [popupDetails, setPopupDetails] = useState(null);
 		const [isModalVisible, setIsModalVisible] = useState(true);
+		const [isSecondModalVisible, setIsSecondModalVisible] = useState(true);
 		const [refreshing, setRefreshing] = useState(false);
+		const [restaurantName, setRestaurantName] = useState(props.info.restaurant_manager.resturantName);
+		const [modalProductQuantity, setModalProductQuantity] = useState(1);
+		const [cardDetails, setCardDetails] = useState();
+		const {confirmPayment, loading} = useConfirmPayment();
 		useEffect(() => {
 			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_PRODUCTS, {
 				restaurantId: props.info.userId,
@@ -45,9 +54,16 @@ export default function Bottomsheet(props) {
 			}, 2000);
 		}, []);
 		const handleModal = (data) => {
+			console.log(data);
 			dispatch(ALL_ACTIONS.setModalDetails(data));
+			setIsModalVisible(true);
 		};
-		console.log(modalDetails);
+		const closeModal = () => {
+			dispatch(ALL_ACTIONS.setModalDetails({}));
+			setIsModalVisible(false);
+		};
+		const handlePayment = async () => {};
+		console.log('Modal details ->' + modalDetails);
 		return (
 			<View style={styles.container}>
 				<View style={styles.StoreBottomSheetRow1}>
@@ -81,59 +97,145 @@ export default function Bottomsheet(props) {
 						</View>
 					</BaseButton>
 				</View>
-				<View style={styles.StoreBottomSheetContainer}>
-					<FlashList data={products} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={products.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
-				</View>
+				<View style={styles.StoreBottomSheetContainer}>{products.length > 0 ? <FlashList data={products} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={products.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} /> : <Text>Loading..</Text>}</View>
+				{Object.keys(modalDetails).length > 0 ? (
+					<Modal
+						dismissable={false}
+						visible={isModalVisible}
+						// onDismiss={handleModal}
+						contentContainerStyle={{
+							backgroundColor: 'white',
+							width: '90%',
+							justifyContent: 'center',
+							alignItems: 'center',
+							alignSelf: 'center',
+							borderRadius: 10,
+							height: '70%',
+						}}
+					>
+						<View style={{height: '100%', width: '100%'}}>
+							<View style={{width: '100%', height: '11%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+								<Text style={{left: 12, flexShrink: 1, fontFamily: 'Poppins-semibold'}}>{modalDetails.productName}</Text>
+								<TouchableWithoutFeedback onPress={closeModal} style={{padding: 5}}>
+									<View style={{borderRadius: 40, width: 40, height: 40, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center'}}>
+										<Icons.EvilIcons name='close' size={30} color={'white'} />
+									</View>
+								</TouchableWithoutFeedback>
+							</View>
+							<View style={{width: '100%', height: '43%', flexDirection: 'row'}}>
+								<View style={{width: '50%', height: '100%', backgroundColor: '#7EB693', marginLeft: 10, borderRadius: 10, alignItems: 'center'}}>
+									<Image
+										style={{
+											height: '75%',
+											width: '90%',
+											opacity: 0.9,
+											borderRadius: 10,
+											marginTop: '5%',
+										}}
+										source={{uri: NGROK_URL + PRODUCT_IMG_PATH + modalDetails.productImage}}
+									/>
+									<Chip style={{height: '20%', position: 'absolute', top: '8%', left: '54%'}}>
+										<Text style={{fontSize: 10, fontFamily: 'Poppins-semibold'}}>Vegan</Text>
+									</Chip>
+									<View style={{height: '10%', alignItems: 'center', marginTop: '2%'}}>
+										<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#000'}}>Rs.{modalDetails.sell_products[0].price.toFixed(2)}</Text>
+									</View>
+								</View>
 
-				<Modal
-					dismissable={false}
-					visible={isModalVisible}
-					// onDismiss={handleModal}
-					contentContainerStyle={{
-						backgroundColor: 'white',
-						width: '90%',
-						justifyContent: 'center',
-						alignItems: 'center',
-						alignSelf: 'center',
-						borderRadius: 10,
-						height: '70%',
-					}}
-				>
-					<View style={{height: '100%', width: '100%'}}>
-						<View style={{width: '100%', height: '11%', alignItems: 'flex-end'}}>
-							<TouchableWithoutFeedback onPress={handleModal} style={{padding: 5}}>
-								<View style={{borderRadius: 40, width: 40, height: 40, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center'}}>
-									<Icons.EvilIcons name='close' size={30} color={'white'} />
-								</View>
-							</TouchableWithoutFeedback>
-						</View>
-						<View style={{width: '100%', height: '60%', flexDirection: 'row'}}>
-							<View style={{width: '50%', height: '100%', backgroundColor: '#7EB693', marginLeft: 10, borderRadius: 10, alignItems: 'center'}}>
-								<Image
-									style={{
-										height: '50%',
-										width: '90%',
-										opacity: 0.9,
-										borderRadius: 10,
-										marginTop: '5%',
-									}}
-									source={{uri: NGROK_URL + PRODUCT_IMG_PATH + modalDetails.productImage}}
-								/>
-								<Chip style={{height: '12%', position: 'absolute', top: '5%', left: '54%'}}>
-									<Text style={{fontSize: 10, fontFamily: 'Poppins-regular'}}>Vegan</Text>
-								</Chip>
-								<View style={{height: '20%'}}>
-									<Text style={{marginTop: '1%', flexShrink: 1, fontFamily: 'Poppins-semibold'}}>{modalDetails.productName}</Text>
-								</View>
-								<View style={{height: '10%'}}>
-									<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#000'}}>Rs.{modalDetails.sell_products[0].price.toFixed(2)}</Text>
+								<View style={{width: '47%', height: '100%', left: '3%', justifyContent: 'space-around'}}>
+									<View>
+										<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>From :</Text>
+										<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>{restaurantName}</Text>
+									</View>
+									<View>
+										<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>In Stock :</Text>
+										<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>{modalDetails.sell_products[0].quantity}</Text>
+									</View>
+									<View>
+										<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>Cooking Time :</Text>
+										<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>{parseInt(modalDetails.cooking_time.split(':')[0]) * 60 + parseInt(modalDetails.cooking_time.split(':')[1])} minutes</Text>
+									</View>
 								</View>
 							</View>
-							<View style={{width: '50%', height: '100%'}}></View>
-							{/* 7EB693 */}
+							<View style={{width: '100%', height: '15%', top: '2%', left: '3%'}}>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>Ingredients :</Text>
+								<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>This is ingredients</Text>
+							</View>
+							<View style={{height: '31%', width: '100%', left: '3%', flexDirection: 'row'}}>
+								<View style={{height: '100%', width: '50%', justifyContent: 'space-around'}}>
+									<CounterInput
+										horizontal={true}
+										onChange={(counter) => {
+											setModalProductQuantity(counter);
+										}}
+										initial={1}
+										reverseCounterButtons={true}
+										min={1}
+										max={parseInt(modalDetails.sell_products[0].quantity)}
+										increaseButtonBackgroundColor='#7EB693'
+										decreaseButtonBackgroundColor='#7EB693'
+									/>
+									<View style={{flexDirection: 'row', left: '3%'}}>
+										<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#000'}}>Total : </Text>
+										<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#7EB693'}}>Rs.{(modalProductQuantity * parseInt(modalDetails.sell_products[0].price)).toFixed(2)}</Text>
+									</View>
+								</View>
+								<View style={{height: '100%', width: '50%', justifyContent: 'space-evenly', left: '8%'}}>
+									<TouchableWithoutFeedback style={{width: '70%', height: '60%', borderRadius: 10}} onPress={() => setIsSecondModalVisible(true)}>
+										<View style={{width: '100%', height: '100%', backgroundColor: '#7EB693', alignItems: 'center', justifyContent: 'center', borderRadius: 10}}>
+											<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#fff'}}>Buy now</Text>
+										</View>
+									</TouchableWithoutFeedback>
+									<TouchableWithoutFeedback style={{width: '70%', height: '60%'}}>
+										<View style={{width: '100%', height: '100%', backgroundColor: '#7EB693', alignItems: 'center', justifyContent: 'center', borderRadius: 10}}>
+											<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#fff'}}>Add to Cart</Text>
+										</View>
+									</TouchableWithoutFeedback>
+								</View>
+							</View>
 						</View>
-					</View>
-				</Modal>
+						<Modal
+							dismissable={false}
+							visible={isSecondModalVisible}
+							// onDismiss={handleModal}
+							contentContainerStyle={{
+								backgroundColor: 'white',
+								width: '100%',
+								justifyContent: 'center',
+								alignItems: 'center',
+								alignSelf: 'center',
+								borderRadius: 10,
+								height: '70%',
+							}}
+						>
+							<View style={{height: '100%', width: '100%'}}>
+								<View style={{width: '100%', height: '11%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+									<Text style={{left: 12, flexShrink: 1, fontFamily: 'Poppins-semibold'}}>Payment</Text>
+									<TouchableWithoutFeedback onPress={() => setIsSecondModalVisible(!isSecondModalVisible)}>
+										<View style={{borderRadius: 30, width: 30, height: 30, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center', top: '8%', right: '16%'}}>
+											<Icons.EvilIcons name='close' size={25} color={'white'} />
+										</View>
+									</TouchableWithoutFeedback>
+								</View>
+								<View style={{width: '100%', height: '89%', flexDirection: 'column'}}>
+									<CardField
+										cardStyle={{backgroundColor: '#EFEFEF'}}
+										postalCodeEnabled={true}
+										style={{width: '100%', height: '10%'}}
+										onCardChange={(cardDetails) => {
+											setCardDetails(cardDetails);
+										}}
+									/>
+									<TouchableWithoutFeedback style={{width: 50, height: 20, backgroundColor: 'tomato', marginTop: 30, left: 45}}>
+										<Text>Pay</Text>
+									</TouchableWithoutFeedback>
+								</View>
+							</View>
+						</Modal>
+					</Modal>
+				) : (
+					<View></View>
+				)}
 			</View>
 		);
 	};
