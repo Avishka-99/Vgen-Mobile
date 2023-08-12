@@ -1,38 +1,43 @@
 {
-  "expo": {
-    "name": "RN-Redux",
-    "slug": "RN-Redux",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/vgen.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "androidNavigationBar": {
-      "visible": "sticky-immersive"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "softwareKeyboardLayoutMode": "pan"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra":{
-      "apiKey":"AIzaSyCu5Ifufmv6BQ0gdhrRu7H72690HKuAmtk"
-    }
-    
-  }
+	"expo": {
+		"name": "RN-Redux",
+		"slug": "RN-Redux",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./assets/icon.png",
+		"userInterfaceStyle": "light",
+		"splash": {
+			"image": "./assets/vgen.png",
+			"resizeMode": "cover",
+			"backgroundColor": "#ffffff"
+		},
+		"androidNavigationBar": {
+			"visible": "sticky-immersive"
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/adaptive-icon.png",
+				"backgroundColor": "#ffffff"
+			},
+			"softwareKeyboardLayoutMode": "pan"
+		},
+		"web": {
+			"favicon": "./assets/favicon.png"
+		},
+		"extra": {
+			"apiKey": "AIzaSyCu5Ifufmv6BQ0gdhrRu7H72690HKuAmtk"
+		},
+		"plugins": [
+			[
+				"expo-location",
+				{
+					"locationAlwaysAndWhenInUsePermission": "Allow Vgen to use your location."
+				}
+			]
+		]
+	}
 }

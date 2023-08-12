@@ -39,7 +39,7 @@ export default function Home({navigation}) {
 	}, []);
 	const headerTranslateY = diffClamp.interpolate({
 		inputRange: [0, HEADER_HEIGHT],
-		outputRange: [0, 0],
+		outputRange: [0, -HEADER_HEIGHT],
 		extrapolate: 'clamp',
 	});
 	const restaurants = [
@@ -204,7 +204,7 @@ export default function Home({navigation}) {
 					scrollEventThrottle={16}
 					contentContainerStyle={{
 						flexGrow: 1,
-						justifyContent: 'center',
+						// justifyContent: 'center',
 						alignItems: 'center',
 					}}
 					refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -216,7 +216,7 @@ export default function Home({navigation}) {
 					{/* {restaurants.map((item) => (
 						<Card onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} key={item.id} details={item} type='store' name={item.name} location={item.location} rating={item.rating} image={item.image} />
 					))} */}
-					<Card key={10293} type='empty' />
+					<Card key={1} type='empty' />
 				</Animated.ScrollView>
 			</Animated.View>
 			<Portal>
