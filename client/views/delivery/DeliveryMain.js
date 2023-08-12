@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Delivery from './screens/Delivery';
 import Account from './screens/Account';
 import Home from '../delivery/screens/Home';
+import Complen from './screens/Complen';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -62,6 +63,18 @@ export default function CustomerMain() {
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
                         <MaterialCommunityIcons name="account" size={28} color={focused ? "#7EB693" : "black"} />
+                    ),
+                }}
+            />
+
+            <Tab.Screen name="Complen" component={Complen}
+                options={{
+                    headerShown: false,
+                    tabBarInactiveTintColor: 'black',
+                    tabBarActiveTintColor: 'dodgerblue',
+                    tabBarShowLabel: false,
+                    tabBarIcon: ({ color, focused }) => (
+                        <MaterialCommunityIcons name="book-edit" size={28} color={focused ? "#7EB693" : "black"} />
                     ),
                 }}
             />

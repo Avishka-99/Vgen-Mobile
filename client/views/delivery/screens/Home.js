@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, StatusBar, ImageBackground, Dimensions, Image, Switch, Alert, TextInput,ScrollView,FlatList } from 'react-native'
 import Header from '../../../components/Header';
 import Order from '../../../components/Order';
 import { Feather } from '@expo/vector-icons';
+import Axios from '../../../api/Axios';
+import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
+import SignIn from '../../user/SignIn';
+
 function Home({navigation}) {
+
+    const [details,setDeails]=useState([]);
+    const [order,setorder]=useState([])
+    console.log()
+
+  // const userId=JSON.parse(atob(TOKEN.split('.')[1])).userId;
+   //console.log('my id',userId)
     const back=()=>{
         console.log('back')
     }
@@ -15,13 +26,38 @@ function Home({navigation}) {
         {id:'5'},
         {id:'6'}
     ]
+    //get revanue and count 
+    const getDetails = async ()=>{
+        const res=await Axios.get(API_ENDPOINTS.Delivery_DETAILS_URL); 
+        setDeails(res.data);
+    }
+    //
    const Accsept=(id)=>{
     navigation.navigate('Delivery')
    }
+  //get oder for deliver
+    useEffect(()=>{
+        const intervalTime=setInterval(async()=>{
+            const order= await Axios.get(API_ENDPOINTS.Delivery_Orders_URL);
+            setorder(order.data)
+           // console.log('hiiii')
+        },10000);
+
+        return ()=>{
+           clearInterval(intervalTime);
+        }
+
+    },[]);
+  //   
+
+  //console.log('hiii')
+
+   
     return (
         <View style={{flex:1}}>
             <ImageBackground source={require('../../../assets/back.png')} style={{flex:1}}>
                  <Header func={back} name={'bell'} sty={styles.header}/>
+
                  <View style={styles.deliverDitels}>
                      <View style={{backgroundColor:'#ffff',width:'25%',height:60,borderTopRightRadius:50,borderBottomRightRadius:50,elevation:7,shadowColor:'black',alignItems:'center',justifyContent:'center'}}>
                           <Feather name='truck' color={'#7EB693'} size={30}/>
@@ -42,7 +78,7 @@ function Home({navigation}) {
                    <View style={styles.Revenue}>
                        <View style={styles.count}>
                          <Text style={{color:'#4D5959',fontSize:20,fontWeight:600}}>Count</Text>
-                         <Text style={{fontSize:18,fontWeight:300}}>05</Text>
+                         <Text style={{fontSize:18,fontWeight:300}}></Text>
                          <View style={{width:60,height:60,borderRadius:50,position:'absolute',top:100}}>
                             <Image style={{width:60,height:60,borderRadius:50,borderWidth:1,borderColor:'#EFD373'}} source={require('../../../assets/count1.jpg')}/>
                          </View>

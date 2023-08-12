@@ -10,6 +10,7 @@ import {
 import React from 'react'
 import { useState } from 'react';
 import MapView ,{Marker,Polyline} from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 import { Feather } from '@expo/vector-icons'
 
 
@@ -30,17 +31,19 @@ export default function Delivery() {
       title:"start",
       location:{
         latitude:8.41,
-        longitude:80.8289
+        longitude:80.8289,
+        
       },
       descryption:"shop",
-      Image:require('../../../assets/th.jpg')
+      //Image:require('../../../assets/th.jpg')
       
     },
     {
       title:"end",
       location:{
         latitude:7.41,
-        longitude:80.54
+        longitude:80.54,
+       
       },
       descryption:"custemore home"
     }
@@ -57,12 +60,13 @@ export default function Delivery() {
            title={item.title}
            description={item.descryption}
            image={item.Image}
+           
          />
        )
    })
   }
 
-  const windowHeghit=Dimensions.get('screen').height
+  const windowHeghit=Dimensions.get('screen').height//AIzaSyCu5Ifufmv6BQ0gdhrRu7H72690HKuAmtk
  
   return (
     <SafeAreaView style={[styles.container,]}>
@@ -88,6 +92,13 @@ export default function Delivery() {
                strokeWidth={4}
                strokeColor="green"
             />
+            {/* <MapViewDirections
+               origin={bitweenpoint[0].location}
+               destination={bitweenpoint[1].location}
+               apikey='AIzaSyCu5Ifufmv6BQ0gdhrRu7H72690HKuAmtk'
+               strokeWidth={3}
+               strokeColor='green'
+            /> */}
          </MapView>   
           
       </View>
