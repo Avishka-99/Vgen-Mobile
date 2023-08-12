@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Button, ScrollView, Dimensions, FlatList, StatusBar, NativeEventEmitter,RefreshControl} from 'react-native';
+import {View, Text, StyleSheet, Button, ScrollView, Dimensions, FlatList, StatusBar, NativeEventEmitter, RefreshControl} from 'react-native';
 import React, {useRef, useState, useMemo, useEffect} from 'react';
 import {Image} from 'expo-image';
 import {FlashList} from '@shopify/flash-list';
@@ -15,7 +15,7 @@ import Modal from 'react-native-modal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Backdrop from '../../../components/Backdrop';
 import Axios from '../../../api/Axios';
-import { useSelector,useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
 import * as ALL_ACTIONS from '../../../actions/AllActions';
 const {diffClamp} = Animated;
@@ -27,7 +27,7 @@ export default function Home({navigation}) {
 	const HEADER_HEIGHT = Dimensions.get('screen').height / 14;
 	const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
 	const [refreshing, setRefreshing] = React.useState(false);
-	
+
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
@@ -190,9 +190,8 @@ export default function Home({navigation}) {
 		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
 			dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
 		});
-	},[]);
+	}, []);
 	return (
-		
 		<View style={styles.container}>
 			<Animated.View style={[{transform: [{translateY: headerTranslateY}]}]}>
 				<DeliverAddress />

@@ -1,9 +1,11 @@
-import {SET_OTP_EMAIL, SET_USER} from '../constants/ActionTypes';
+import { useId } from 'react';
+import {SET_OTP_EMAIL, SET_USER,SET_USER_ID} from '../constants/ActionTypes';
 
 //initializing state
 const initialState = {
 	user: '',
 	otpEmail:'',
+	userid:''
 };
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -17,7 +19,12 @@ const userReducer = (state = initialState, action) => {
 			return{
 				...state,
 				otpEmail:action.payload,
-			}
+			};
+		case SET_USER_ID:
+			return {
+				...state,
+				userid: action.payload,
+			};
 		default:
 			return state;
 	}
