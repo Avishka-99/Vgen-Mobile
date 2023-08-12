@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		width: '80%',
 		position: 'relative',
-		top: '5%',
+		top: '1%',
 		fontFamily: 'Poppins-medium',
 		textAlign: 'right',
 	},
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
 	},
 	bottomText: {
 		position: 'relative',
-		top: '5%',
+		top: '1%',
 		fontFamily: 'Poppins-regular',
 		color: '#7D7D7D',
 	},
