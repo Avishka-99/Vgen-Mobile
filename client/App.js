@@ -10,7 +10,7 @@ import Constants from 'expo-constants';
 import CustomerMain from './views/customer/CustomerMain';
 import EventOrganizerMain from './views/customer/EventOrganizerMain';
 import DeliveryMain from './views/delivery/DeliveryMain';
-import {useSelector} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
 import {isLoaded, useFonts} from 'expo-font';
 import * as Network from 'expo-network';
 import * as SplashScreen from 'expo-splash-screen';
@@ -20,6 +20,8 @@ import {PortalProvider} from '@gorhom/portal';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {StripeProvider} from '@stripe/stripe-react-native';
 import {STRIPE_PUBLIC_KEY} from './keys/Keys';
+import * as Location from 'expo-location';
+import * as ALL_ACTIONS from './actions/AllActions';
 // import OtpInputs from 'react-native-otp-inputs';
 
 //config my new redux
@@ -59,8 +61,6 @@ const AppWrapper = () => {
 };
 const App = () => {
 	var user = useSelector((state) => state.userReducer.user);
-	console.log('sdfsdf');
-	console.log(user);
 	//const [user, setUser] = useState('customer');
 	const [index, setIndex] = useState(0);
 	const styles = StyleSheet.create({
