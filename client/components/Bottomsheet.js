@@ -16,21 +16,23 @@ import {FlashList} from '@shopify/flash-list';
 import {Modal, Portal, Button, PaperProvider} from 'react-native-paper';
 import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
-import {CardField, confirmPayment, useConfirmPayment} from '@stripe/stripe-react-native';
+import {CardField, confirmPayment, useConfirmPayment,useStripe} from '@stripe/stripe-react-native';
 export default function Bottomsheet(props) {
-	console.log(props);
+	//console.log(props);
 	const dispatch = useDispatch();
 	const Stack = createNativeStackNavigator();
 	const OrderInfo = ({navigation}) => {};
 	const StoreHome = ({navigation}) => {
 		const [popupDetails, setPopupDetails] = useState(null);
-		const [isModalVisible, setIsModalVisible] = useState(true);
-		const [isSecondModalVisible, setIsSecondModalVisible] = useState(true);
+		const [isModalVisible, setIsModalVisible] = useState(false);
+		const [isSecondModalVisible, setIsSecondModalVisible] = useState(false);
 		const [refreshing, setRefreshing] = useState(false);
 		const [restaurantName, setRestaurantName] = useState(props.info.restaurant_manager.resturantName);
 		const [modalProductQuantity, setModalProductQuantity] = useState(1);
 		const [cardDetails, setCardDetails] = useState();
 		const {confirmPayment, loading} = useConfirmPayment();
+		const [totalCost, setTotalCost] = useState(0);
+		const {initPaymentSheet,presentPaymentSheet}=useStripe();
 		useEffect(() => {
 			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_PRODUCTS, {
 				restaurantId: props.info.userId,
@@ -41,6 +43,7 @@ export default function Bottomsheet(props) {
 		}, []);
 		const products = useSelector((state) => state.restaurantReducer.products);
 		const modalDetails = useSelector((state) => state.restaurantReducer.modalDetails);
+		console.log(useSelector((state) => state.userReducer.userid));
 		const onRefresh = React.useCallback(() => {
 			setRefreshing(true);
 			setTimeout(() => {
@@ -54,16 +57,70 @@ export default function Bottomsheet(props) {
 			}, 2000);
 		}, []);
 		const handleModal = (data) => {
-			console.log(data);
-			dispatch(ALL_ACTIONS.setModalDetails(data));
+			Axios.post('/api/fetchproduct', {
+				id: data.productId,
+				restaurantId: data.sell_products[0].manufactureId,
+			}).then(async (response) => {
+				dispatch(ALL_ACTIONS.setModalDetails(response.data[0]));
+			});
+			//(data);
+			
 			setIsModalVisible(true);
 		};
 		const closeModal = () => {
 			dispatch(ALL_ACTIONS.setModalDetails({}));
 			setIsModalVisible(false);
 		};
-		const handlePayment = async () => {};
-		console.log('Modal details ->' + modalDetails);
+		const updateDb = async () => {
+			await Axios.post('/api/updatedb', {
+				amount: 1,
+				quantity: 1,
+				id: 1,
+			}).then((result) => {
+				//console.log(result.data);
+			});
+		};
+		const makePayment = (amount) => {
+			Axios.post('/api/intents', {
+				amount: amount * 100,
+			}).then(async (response) => {
+				if(response.data=='error'){
+					return
+				}else{
+					console.log(modalDetails);
+					const initResponse = await initPaymentSheet({
+						merchantDisplayName: 'Avishka',
+						paymentIntentClientSecret: response.data.paymentIntent,
+					});
+					if(initResponse.error){
+						return
+					}else{
+						const paymentResponse = await presentPaymentSheet();
+						if(paymentResponse.error){
+							//console.log( paymentResponse.error.message)
+							return
+						}else{
+							await Axios.post('/api/updatedb', {
+								restaurantId: modalDetails.sell_products[0].manufactureId,
+								quantity: modalProductQuantity,
+								id: modalDetails.productId,
+							}).then((result) => {
+								//console.log(result.data);
+							});
+							setIsModalVisible(!isModalVisible);
+							
+						}
+						
+					}
+					
+				}
+				
+			});
+			
+		};
+		
+		// const handlePayment = async () => {};
+		//console.log(modalDetails);
 		return (
 			<View style={styles.container}>
 				<View style={styles.StoreBottomSheetRow1}>
@@ -167,6 +224,7 @@ export default function Bottomsheet(props) {
 										horizontal={true}
 										onChange={(counter) => {
 											setModalProductQuantity(counter);
+											setTotalCost((modalProductQuantity * parseInt(modalDetails.sell_products[0].price)).toFixed(2));
 										}}
 										initial={1}
 										reverseCounterButtons={true}
@@ -181,7 +239,7 @@ export default function Bottomsheet(props) {
 									</View>
 								</View>
 								<View style={{height: '100%', width: '50%', justifyContent: 'space-evenly', left: '8%'}}>
-									<TouchableWithoutFeedback style={{width: '70%', height: '60%', borderRadius: 10}} onPress={() => setIsSecondModalVisible(true)}>
+									<TouchableWithoutFeedback style={{width: '70%', height: '60%', borderRadius: 10}} onPress={() => makePayment((modalProductQuantity * parseInt(modalDetails.sell_products[0].price)).toFixed(2))}>
 										<View style={{width: '100%', height: '100%', backgroundColor: '#7EB693', alignItems: 'center', justifyContent: 'center', borderRadius: 10}}>
 											<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#fff'}}>Buy now</Text>
 										</View>
@@ -194,44 +252,6 @@ export default function Bottomsheet(props) {
 								</View>
 							</View>
 						</View>
-						<Modal
-							dismissable={false}
-							visible={isSecondModalVisible}
-							// onDismiss={handleModal}
-							contentContainerStyle={{
-								backgroundColor: 'white',
-								width: '100%',
-								justifyContent: 'center',
-								alignItems: 'center',
-								alignSelf: 'center',
-								borderRadius: 10,
-								height: '70%',
-							}}
-						>
-							<View style={{height: '100%', width: '100%'}}>
-								<View style={{width: '100%', height: '11%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-									<Text style={{left: 12, flexShrink: 1, fontFamily: 'Poppins-semibold'}}>Payment</Text>
-									<TouchableWithoutFeedback onPress={() => setIsSecondModalVisible(!isSecondModalVisible)}>
-										<View style={{borderRadius: 30, width: 30, height: 30, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center', top: '8%', right: '16%'}}>
-											<Icons.EvilIcons name='close' size={25} color={'white'} />
-										</View>
-									</TouchableWithoutFeedback>
-								</View>
-								<View style={{width: '100%', height: '89%', flexDirection: 'column'}}>
-									<CardField
-										cardStyle={{backgroundColor: '#EFEFEF'}}
-										postalCodeEnabled={true}
-										style={{width: '100%', height: '10%'}}
-										onCardChange={(cardDetails) => {
-											setCardDetails(cardDetails);
-										}}
-									/>
-									<TouchableWithoutFeedback style={{width: 50, height: 20, backgroundColor: 'tomato', marginTop: 30, left: 45}}>
-										<Text>Pay</Text>
-									</TouchableWithoutFeedback>
-								</View>
-							</View>
-						</Modal>
 					</Modal>
 				) : (
 					<View></View>

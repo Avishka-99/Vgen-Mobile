@@ -5,7 +5,7 @@ import * as Icons from '../../constants/Icons';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUserAction} from '../../actions/UserAction';
+import {setUserAction, setUserId} from '../../actions/UserAction';
 import Axios from '../../api/Axios';
 import * as API_ENDPOINTS from '../../api/ApiEndpoints';
 import RoundedButton from '../../components/RoundedButton';
@@ -30,6 +30,7 @@ export default function SignIn({navigation}) {
 			console.log(response.data);
 			if (response.data.type) {
 				dispatch(setUserAction(response.data.type));
+				dispatch(setUserId(response.data.userID));
 			} else if (response.data == 'Not verified') {
 				showToast('error', response.data, '', 2000);
 				// ToastMessages.warning('Please verify your account');

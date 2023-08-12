@@ -18,6 +18,8 @@ import 'react-native-gesture-handler';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {PortalProvider} from '@gorhom/portal';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import {StripeProvider} from '@stripe/stripe-react-native';
+import {STRIPE_PUBLIC_KEY} from './keys/Keys';
 // import OtpInputs from 'react-native-otp-inputs';
 
 //config my new redux
@@ -47,9 +49,11 @@ const AppWrapper = () => {
 	}
 	return (
 		<Provider store={store}>
-			<GestureHandlerRootView style={{flex: 1}}>
-				<App />
-			</GestureHandlerRootView>
+			<StripeProvider publishableKey={STRIPE_PUBLIC_KEY}>
+				<GestureHandlerRootView style={{flex: 1}}>
+					<App />
+				</GestureHandlerRootView>
+			</StripeProvider>
 		</Provider>
 	);
 };
