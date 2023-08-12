@@ -11,11 +11,12 @@ import * as API_ENDPOINTS from '../../api/ApiEndpoints';
 import RoundedButton from '../../components/RoundedButton';
 import TextInputField from '../../components/TextInputField';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
-import { DeviceType } from 'expo-device';
+import {setOtpEmail} from '../../actions/UserAction';
+import {DeviceType} from 'expo-device';
 export default function SignIn({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	
+
 	// let [fontsLoaded] = useFonts({
 	//   "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
 	// })
@@ -33,15 +34,21 @@ export default function SignIn({navigation}) {
 				dispatch(setUserAction(response.data.type));
 				dispatch(setUserId(response.data.userID));
 			} else if (response.data == 'Not verified') {
-				showToast('error', response.data, '', 2000);
-				// ToastMessages.warning('Please verify your account');
-				// ToastMessages.info('Redirectiong to OTP verification');
-				//resetFormData();
-				//setIsDisabled(true);
-				//localStorage.setItem('otpemail', email);
+				setEmail('')
+				setPassword('')
 				// setTimeout(function () {
-				// 	navigate('/otp');
-				// }, 3000);
+				// 	showToast('error', response.data, '', 500);
+				// }, 500);
+				showToast('info', 'Redirectiong to OTP verification', '', 2000);
+
+				// showToast('info','Please verify your account','',1000);
+				// showToast('info', 'Redirectiong to OTP verification','',1000);
+				// resetFormData();
+				// setIsDisabled(true);
+				dispatch(setOtpEmail(email));
+				setTimeout(function () {
+					navigation.navigate('Otpcode');
+				}, 3000);
 			} else {
 				showToast('error', response.data, '', 2000);
 			}
