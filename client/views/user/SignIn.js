@@ -1,15 +1,17 @@
-import {View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, TextInput, Touchable} from 'react-native';
+import {View, Text, StyleSheet, StatusBar, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, TextInput, Touchable} from 'react-native';
 import React, {useState} from 'react';
 import {Image} from 'expo-image';
 import * as Icons from '../../constants/Icons';
 import Constants from 'expo-constants';
+import * as Device from 'expo-device';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUserAction} from '../../actions/UserAction';
+import {setUserAction, setUserId} from '../../actions/UserAction';
 import Axios from '../../api/Axios';
 import * as API_ENDPOINTS from '../../api/ApiEndpoints';
 import RoundedButton from '../../components/RoundedButton';
 import TextInputField from '../../components/TextInputField';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
+import { DeviceType } from 'expo-device';
 export default function SignIn({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -18,6 +20,7 @@ export default function SignIn({navigation}) {
 	//   "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
 	// })
 	//console.log(email)
+	console.log(Device.modelName);
 	const dispatch = useDispatch();
 	const handleSubmit = () => {
 		//dispatch(setUserAction('delivery'))
@@ -28,6 +31,7 @@ export default function SignIn({navigation}) {
 			console.log(response.data);
 			if (response.data.type) {
 				dispatch(setUserAction(response.data.type));
+				dispatch(setUserId(response.data.userID));
 			} else if (response.data == 'Not verified') {
 				showToast('error', response.data, '', 2000);
 				// ToastMessages.warning('Please verify your account');
@@ -159,7 +163,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: '90%',
 		height: '30%',
-		marginTop: Constants.deviceName == 'iPhone' ? 0 : Constants.statusBarHeight,
+		marginTop: Platform.OS == 'ios' ? 0 : StatusBar.currentHeight,
 		left: '5%',
 		top: '12%',
 	},

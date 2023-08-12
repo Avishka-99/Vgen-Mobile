@@ -1,2 +1,6 @@
 export const SET_OTP_EMAIL = 'SET_OTP_EMAIL';
 export const SET_USER='SET_USER';
+export const SET_RESTAURANTS = 'SET_RESTAURANTS';
+export const SET_FETCHED_PRODUCTS = 'SET_PRODUCTS';
+export const SET_MODAL_DETAILS = 'SET_MODAL_DETAILS';
+export const SET_USER_ID = 'SET_USER_ID';

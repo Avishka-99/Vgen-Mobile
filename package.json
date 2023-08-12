@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "@freakycoder/react-native-bounceable": "^1.0.3",
+    "react-native-counter-input": "^2.0.2",
+    "react-native-modal": "^13.0.1",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-switch-selector": "^2.3.0"
   }

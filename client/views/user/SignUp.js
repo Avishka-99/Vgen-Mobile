@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, Touchable} from 'react-native';
+import {View, Text, StyleSheet, StatusBar,KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, Touchable} from 'react-native';
 import React, {useState} from 'react';
 import {Image} from 'expo-image';
 import {RadioButton} from 'react-native-paper';
@@ -13,16 +13,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setOtpEmail} from '../../actions/UserAction';
 export default function SignUp({navigation}) {
 	const [checked, setChecked] = useState('first');
-	const [email, setEmail] = useState('avishkaprabha360@gmail.com');
-	const [nic, setNic] = useState('992653787V');
+	const [email, setEmail] = useState('devindyadewmini@gmail.com');
+	const [nic, setNic] = useState('2042653787V');
 	const [name, setName] = useState('');
-	const [firstName, setfirstName] = useState('Avishka');
-	const [lastName, setlastName] = useState('Jayasekara');
+	const [firstName, setfirstName] = useState('Dewmini');
+	const [lastName, setlastName] = useState('Devindya');
 	const [userRole, setuserRole] = useState('Customer');
 	const [profilePicture, setProfilePicture] = useState('');
-	const [password, setPassword] = useState('Avi990921pj@');
-	const [confirmpassword, setConfirmPassword] = useState('Avi990921pj@');
-	const [contactNo, setContactNo] = useState('0710168655');
+	const [password, setPassword] = useState('Dewmini@2000');
+	const [confirmpassword, setConfirmPassword] = useState('Dewmini@2000');
+	const [contactNo, setContactNo] = useState('0788260366');
 	const dispatch = useDispatch();
 	const toastConfig = {
 		success: (props) => (
@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: Dimensions.get('window').width,
 		height: Dimensions.get('window').height,
-		marginTop: Constants.deviceName == 'iPhone' ? 0 : Constants.statusBarHeight,
+		marginTop: Platform.OS == 'ios' ? 0 : StatusBar.currentHeight,
 	},
 	logo: {
 		flex: 1,
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: '90%',
 		height: '30%',
-		marginTop: Constants.deviceName == 'iPhone' ? 0 : Constants.statusBarHeight,
+		marginTop: Platform.OS == 'ios' ? 0 : StatusBar.currentHeight,
 		left: '5%',
 		top: '3%',
 	},
