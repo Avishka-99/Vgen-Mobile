@@ -15,6 +15,7 @@ import { DeviceType } from 'expo-device';
 export default function SignIn({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	
 	// let [fontsLoaded] = useFonts({
 	//   "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
 	// })

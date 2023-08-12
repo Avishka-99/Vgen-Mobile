@@ -47,8 +47,6 @@ export default function Account() {
     { label: 'Kegalla', value: '8' },
   ];
 
- 
-
   //sen validate data for backend
   //inputfild data get for usestate 
   const[password,setpassword]=useState('')
@@ -173,7 +171,6 @@ export default function Account() {
 
 
             </View>
-
           </View>
         </View>
       </ImageBackground>
@@ -206,7 +203,7 @@ const styles = StyleSheet.create({
     height:'70%',
     width: '100%',
     alignItems: 'center',
-   // backgroundColor:'green'
+    //backgroundColor:'green'    
   },
   profileBackgrund: {
     width: 200,
@@ -218,7 +215,8 @@ const styles = StyleSheet.create({
   profileData: {
     width: '90%',
     height: '67%',
-    marginTop: 30,
+    marginTop:30,
+   // position:'absolute',
     //marginEnd:5,
     elevation: 7,
     // marginLeft:29,
@@ -236,12 +234,3 @@ const styles = StyleSheet.create({
   }
 })
 
-
-
-
-
-// <Button title='Log out' onPress={() => {
-//   dispatch(setUserAction(''))
-// }}></Button>
-
-//   <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}><TextInput style={{ width: '80%', height: 50, borderColor: 'green', borderWidth: 1, borderRadius: 15, paddingLeft: 20, color: 'black' }} selectionColor={'green'} placeholder='discription' onChangeText={(val)=>console.log(val)}/></View>
