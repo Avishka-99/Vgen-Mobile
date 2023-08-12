@@ -12,7 +12,6 @@ export default function RoundedButton(props) {
 				height: props.height ? props.height : '12%',
 				justifyContent: 'center',
 				alignItems: 'center',
-				top: '5%',
 			},
 			Button: {
 				position: 'relative',
