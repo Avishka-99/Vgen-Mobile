@@ -104,6 +104,8 @@ export default function Bottomsheet(props) {
 								restaurantId: modalDetails.sell_products[0].manufactureId,
 								quantity: modalProductQuantity,
 								id: modalDetails.productId,
+								lang: useSelector((state) => state.userReducer.userLocation.lang),
+								long: useSelector((state) => state.userReducer.userLocation.lang),
 							}).then((result) => {
 								//console.log(result.data);
 							});
