@@ -123,6 +123,7 @@ function Otpcode({navigation}) {
 					/>
 					<Button func={handleSubmit} butname={'Verify'} />
 				</View>
+				<Toast config={toastConfig} />
 			</View>
 		</TouchableNativeFeedback>
 	);
