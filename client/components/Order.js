@@ -8,17 +8,20 @@ function Order(props) {
     return (
        <View style={[styles.card,props.cardstyle]}>
           <View style={styles.oderimage}>
-             <View style={{width:100,height:100,backgroundColor:'#fff',marginTop:7}}>
-                <Image style={{width:100,height:100,borderRadius:10,}} source={require('../assets/food1.png')}/>
+             <Text style={{fontSize:8,color:'black',marginTop:15,fontFamily:'Poppins-semibold'}}>custemore Name:{props.fname}</Text>
+             <Text style={{fontSize:8,color:'black',marginTop:0,fontFamily:'Poppins-semibold'}}>custemore No:{props.contact}</Text>
+             <Text style={{fontSize:8,color:'black',marginTop:0,fontFamily:'Poppins-semibold'}}>Address:{props.address}</Text>
+             <View style={{marginTop:10,marginLeft:4}}>
+             <Text style={{fontSize:11,color:'black',marginTop:0,fontFamily:'Poppins-semibold',color:'green'}}>Total Quntity x {props.quntity}</Text>
+             <Text style={{fontSize:11,fontWeight:500,fontFamily:'Poppins-semibold',color:'green'}}>Total Amout:{props.amount}</Text>
+             <Text style={{fontSize:11,fontWeight:500,fontFamily:'Poppins-semibold',color:'green'}}>Delivery Free:{props.free}</Text>
              </View>
-             <Text style={{fontSize:13,color:'black',marginTop:10,fontFamily:'Poppins-semibold'}}>1 x One Pot Pasta</Text>
-             <Text style={{fontSize:12,fontWeight:500,fontFamily:'Poppins-semibold'}}>Rs:1000</Text>
           </View>
           <View style={styles.orderditels}>
-             <Text style={{fontFamily:'Poppins-semibold',color:'black',marginTop:7}}>Danu shop</Text>
-             <Text style={{fontFamily:'Poppins-semibold',fontSize:7,color:'black'}}>235 Galle Rd, Wallawatte, Colombo</Text>
-             <Text style={{fontSize:10,marginTop:3}}>custemore name-Dhanush</Text>
-             <View style={{flexDirection:'row',marginTop:10}}><Feather name='map-pin' size={15} color={'green'}/><Text style={{fontFamily:'Poppins-semibold',color:'green',fontSize:10}}> 500m away</Text></View>
+             <Text style={{fontFamily:'Poppins-semibold',color:'black',marginTop:7}}>{props.shopname}</Text>
+             <Text style={{fontFamily:'Poppins-semibold',fontSize:7,color:'black'}}>{props.shopAddress}</Text>
+             <Text style={{fontSize:10,marginTop:0,fontWeight:500}}>shop NO-{props.shopNo}</Text>
+             <View style={{flexDirection:'row',marginTop:10}}><Feather name='map-pin' size={15} color={'green'}/><Text style={{fontFamily:'Poppins-semibold',color:'green',fontSize:10}}> {props.distance} away</Text></View>
              <View style={{flexDirection:'row'}}>
                 <Button butname={'Accsept'} custermize={styles.buttonstyle} sty={styles.buttextStyle} func={()=>props.funcname()}/>
                 <Button butname={'Reject'} custermize={styles.buttonstyle} sty={styles.buttextStyle}  func={()=>console.log('Reject')}/>
@@ -46,8 +49,8 @@ const styles=StyleSheet.create({
         height:160,
         //backgroundColor:'#ffff',
         borderRadius:20,
-        alignItems:'center',
-        justifyContent:'center',
+        //alignItems:'center',
+        //justifyContent:'center',
         //elevation:7
     },
     orderditels:{
@@ -64,7 +67,7 @@ const styles=StyleSheet.create({
         width:70,
         height:30,
         marginLeft:15,
-        marginTop:20
+        marginTop:12
     },
     buttextStyle:{
         fontSize:10

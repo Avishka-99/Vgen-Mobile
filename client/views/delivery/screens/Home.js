@@ -5,54 +5,62 @@ import Order from '../../../components/Order';
 import { Feather } from '@expo/vector-icons';
 import Axios from '../../../api/Axios';
 import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
-import SignIn from '../../user/SignIn';
+import {useDispatch, useSelector} from 'react-redux';
+
+
+
 
 function Home({navigation}) {
 
     const [details,setDeails]=useState([]);
-    const [order,setorder]=useState([])
-    console.log()
+    const [orders,setorders]=useState([])
+    const [deliver,setdeliver]=useState([])
+    const userID = useSelector((state) => state.userReducer.userid)
+   // console.log(userID)
 
   // const userId=JSON.parse(atob(TOKEN.split('.')[1])).userId;
    //console.log('my id',userId)
     const back=()=>{
         console.log('back')
+        
     }
-    const data=[
-        {id:'1'},
-        {id:'2'},
-        {id:'3'},
-        {id:'4'},
-        {id:'5'},
-        {id:'6'}
-    ]
-    //get revanue and count 
-    const getDetails = async ()=>{
-        const res=await Axios.get(API_ENDPOINTS.Delivery_DETAILS_URL); 
-        setDeails(res.data);
-    }
-    //
+
+    
+   const value=[]
+       
    const Accsept=(id)=>{
     navigation.navigate('Delivery')
    }
   //get oder for deliver
-    useEffect(()=>{
+   useEffect(()=>{
+      
         const intervalTime=setInterval(async()=>{
-            const order= await Axios.get(API_ENDPOINTS.Delivery_Orders_URL);
-            setorder(order.data)
-           // console.log('hiiii')
+            try{
+                const order= await Axios.get(API_ENDPOINTS.Delivery_Orders_URL,{
+                    params:{userid:userID}
+                }
+                );
+             
+                setorders(order.data) 
+
+            }catch(error){
+                console.error(error)
+            }
+
         },10000);
+       
+         return ()=>{
+            clearInterval(intervalTime);
+         }
 
-        return ()=>{
-           clearInterval(intervalTime);
-        }
+    },[userID]);
 
-    },[]);
-  //   
+   orders.map((data)=>{
+     value.push(data)
+   })
 
-  //console.log('hiii')
-
-   
+   console.log(value)
+    
     return (
         <View style={{flex:1}}>
             <ImageBackground source={require('../../../assets/back.png')} style={{flex:1}}>
@@ -93,11 +101,23 @@ function Home({navigation}) {
                    </View>
                    <View style={styles.recvest}>
                     <FlatList
-                      data={data}
+                      data={value}
                       renderItem={({item})=>(
-                        <Order funcname={Accsept}/>
+                          <Order 
+                          funcname={Accsept} 
+                          quntity={item.quantity} 
+                          fname={item.firstName} 
+                          contact={item.cust_contact}
+                          address={item.cust_Address}
+                          amount={item.amount}
+                          free={300}
+                          shopname={item.resturantName}
+                          shopAddress={item.rest_Address}
+                          shopNo={item.rest_contact}
+                          
+                          />
                       )}
-                      keyExtractor={item=>item.id}
+                      //keyExtractor={item=>item.orderId}
                       contentContainerStyle={styles.flatlist}
                       disableVirtualization={true}
                       ListFooterComponent={<View style={{marginBottom:100}}></View>}
