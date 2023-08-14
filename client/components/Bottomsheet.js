@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshCont
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {NGROK_URL, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
 import * as Icons from '../constants/Icons';
-import {BaseButton, TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {BaseButton, ScrollView, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {LinearGradient} from 'expo-linear-gradient';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -16,7 +16,7 @@ import {FlashList} from '@shopify/flash-list';
 import {Modal, Portal, Button, PaperProvider} from 'react-native-paper';
 import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
-import {CardField, confirmPayment, useConfirmPayment,useStripe} from '@stripe/stripe-react-native';
+import {CardField, confirmPayment, useConfirmPayment, useStripe} from '@stripe/stripe-react-native';
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -32,7 +32,11 @@ export default function Bottomsheet(props) {
 		const [cardDetails, setCardDetails] = useState();
 		const {confirmPayment, loading} = useConfirmPayment();
 		const [totalCost, setTotalCost] = useState(0);
-		const {initPaymentSheet,presentPaymentSheet}=useStripe();
+		const {initPaymentSheet, presentPaymentSheet} = useStripe();
+		const langitude = useSelector((state) => state.userReducer.userLocation.lang);
+		const longitude = useSelector((state) => state.userReducer.userLocation.lang);
+		const userID = useSelector((state) => state.userReducer.userid);
+
 		useEffect(() => {
 			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_PRODUCTS, {
 				restaurantId: props.info.userId,
@@ -56,6 +60,7 @@ export default function Bottomsheet(props) {
 				setRefreshing(false);
 			}, 2000);
 		}, []);
+		console.log(modalDetails);
 		const handleModal = (data) => {
 			Axios.post('/api/fetchproduct', {
 				id: data.productId,
@@ -64,7 +69,7 @@ export default function Bottomsheet(props) {
 				dispatch(ALL_ACTIONS.setModalDetails(response.data[0]));
 			});
 			//(data);
-			
+
 			setIsModalVisible(true);
 		};
 		const closeModal = () => {
@@ -84,43 +89,43 @@ export default function Bottomsheet(props) {
 			Axios.post('/api/intents', {
 				amount: amount * 100,
 			}).then(async (response) => {
-				if(response.data=='error'){
-					return
-				}else{
+				if (response.data == 'error') {
+					return;
+				} else {
 					console.log(modalDetails);
 					const initResponse = await initPaymentSheet({
 						merchantDisplayName: 'Avishka',
 						paymentIntentClientSecret: response.data.paymentIntent,
 					});
-					if(initResponse.error){
-						return
-					}else{
+					if (initResponse.error) {
+						return;
+					} else {
 						const paymentResponse = await presentPaymentSheet();
-						if(paymentResponse.error){
+						if (paymentResponse.error) {
 							//console.log( paymentResponse.error.message)
-							return
-						}else{
+							return;
+						} else {
 							await Axios.post('/api/updatedb', {
 								restaurantId: modalDetails.sell_products[0].manufactureId,
 								quantity: modalProductQuantity,
 								id: modalDetails.productId,
-								lang: useSelector((state) => state.userReducer.userLocation.lang),
-								long: useSelector((state) => state.userReducer.userLocation.lang),
+								lang: langitude,
+								long: longitude,
+								userId: userID,
+								amount: amount,
+								date: new Date().toLocaleDateString(),
+								time: new Date().toLocaleTimeString(),
+								status: 'Delivery,',
 							}).then((result) => {
 								//console.log(result.data);
 							});
 							setIsModalVisible(!isModalVisible);
-							
 						}
-						
 					}
-					
 				}
-				
 			});
-			
 		};
-		
+
 		// const handlePayment = async () => {};
 		//console.log(modalDetails);
 		return (
@@ -169,7 +174,7 @@ export default function Bottomsheet(props) {
 							alignItems: 'center',
 							alignSelf: 'center',
 							borderRadius: 10,
-							height: '70%',
+							height: '80%',
 						}}
 					>
 						<View style={{height: '100%', width: '100%'}}>
@@ -216,11 +221,13 @@ export default function Bottomsheet(props) {
 									</View>
 								</View>
 							</View>
-							<View style={{width: '100%', height: '15%', top: '2%', left: '3%'}}>
+							<View style={{width: '100%', height: '17%', left: '3%'}}>
 								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>Ingredients :</Text>
-								<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>This is ingredients</Text>
+								<ScrollView style={{width: '90%', height: '90%'}}>
+									<Text style={{fontFamily: 'Poppins-regular', fontSize: 14, flexWrap: 'wrap'}}>{modalDetails.ingredient}</Text>
+								</ScrollView>
 							</View>
-							<View style={{height: '31%', width: '100%', left: '3%', flexDirection: 'row'}}>
+							<View style={{height: '31%', width: '100%', left: '3%', flexDirection: 'row', top: '2%'}}>
 								<View style={{height: '100%', width: '50%', justifyContent: 'space-around'}}>
 									<CounterInput
 										horizontal={true}
