@@ -1,5 +1,5 @@
-export const BASE_URL = 'http://192.168.75.56';
+export const BASE_URL = 'http://172.20.10.2';
 export const PORT = '5001';
 export const PRODUCT_IMG_PATH = '/uploads/products/';
 export const RESTAURANT_IMG_PATH = '/uploads/restaurants/';
-export const NGROK_URL = 'https://6ece-2402-d000-8124-17c2-20c0-f586-ea5e-d1ab.ngrok-free.app';
+export const NGROK_URL = 'https://58f7-212-104-237-99.ngrok-free.app';

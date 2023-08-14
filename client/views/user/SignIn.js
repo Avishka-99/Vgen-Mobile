@@ -13,6 +13,7 @@ import TextInputField from '../../components/TextInputField';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import {setOtpEmail} from '../../actions/UserAction';
 import {DeviceType} from 'expo-device';
+import { setUserLocation } from '../../actions/UserAction';
 export default function SignIn({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -33,9 +34,12 @@ export default function SignIn({navigation}) {
 			if (response.data.type) {
 				dispatch(setUserAction(response.data.type));
 				dispatch(setUserId(response.data.userID));
+				dispatch(setUserLocation({lang: response.data.lang, long: response.data.long}));
+				// console.log(response.data.lang);
+				// console.log(response.data.long);
 			} else if (response.data == 'Not verified') {
-				setEmail('')
-				setPassword('')
+				setEmail('');
+				setPassword('');
 				// setTimeout(function () {
 				// 	showToast('error', response.data, '', 500);
 				// }, 500);
