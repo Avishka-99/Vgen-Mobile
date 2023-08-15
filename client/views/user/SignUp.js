@@ -17,7 +17,7 @@ import * as Location from 'expo-location';
 import MapView, {Marker} from 'react-native-maps';
 export default function SignUp({navigation}) {
 	const [checked, setChecked] = useState('first');
-	const [email, setEmail] = useState('avishkaprabha360@gmail.com');
+	const [email, setEmail] = useState('avishkaasdjaya4@gmail.com');
 	const [nic, setNic] = useState('992653787V');
 	const [name, setName] = useState('');
 	const [firstName, setfirstName] = useState('Avishka');
@@ -31,7 +31,7 @@ export default function SignUp({navigation}) {
 	const [location, setLocation] = useState(null);
 	const [region, setRegion] = useState();
 	var currentLocation = useSelector((state) => state.userReducer.userLocation);
-	console.log(currentLocation)
+	console.log(currentLocation);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		(async () => {
@@ -127,23 +127,23 @@ export default function SignUp({navigation}) {
 		}
 	};
 	const handleSubmit = async () => {
-		console.log(location)
+		console.log(location);
 		var isClean = true;
-		var lat=0
-		var long=0
-		if(region){
+		var lat = 0;
+		var long = 0;
+		if (region) {
 			lat = region.latitude;
-			long=region.longitude;
-		}else if(location){
+			long = region.longitude;
+		} else if (location) {
 			lat = location.coords.latitude;
 			long = location.coords.longitude;
-		}else{
+		} else {
 			showToast('info', 'Please wait until location is fetched', '', 2000);
-			isClean=false;
-			return
+			isClean = false;
+			return;
 		}
-		console.log(lat)
-		console.log(long)
+		console.log(lat);
+		console.log(long);
 		if (firstName == '' || lastName == '' || nic == '' || contactNo == '' || email == '') {
 			isClean = false;
 			showToast('error', 'Please fill required fields');
@@ -174,6 +174,8 @@ export default function SignUp({navigation}) {
 				lastName: lastName,
 				userRole: userRole,
 				contactNo: contactNo,
+				latitude: lat,
+				longitude: long,
 				// profilePicture:profilePicture
 			}).then((response) => {
 				if (response.data.type == 'error') {
@@ -190,7 +192,7 @@ export default function SignUp({navigation}) {
 		setIsModalVisible(!isModalVisible);
 	};
 	//console.log(location);
-	
+
 	return (
 		<View style={styles.loginContainer}>
 			<View style={{height: '15%'}}>
