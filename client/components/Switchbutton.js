@@ -6,7 +6,7 @@ import { View,StyleSheet,Text } from 'react-native';
 function Switchbutton(props) {
     const options = [
         { value: '1',customIcon: <View style={{justifyContent:'center',alignItems:'center',flexDirection:'row'}}><Text style={{marginBottom:0,fontFamily:'Poppins-regular',marginStart:10}}>profile info</Text><Feather  name={props.icon} size={29} color={'red'} /></View>},
-        { value: '2',customIcon: <View style={{justifyContent:'center',alignItems:'center',flexDirection:'row'}}><Feather  name={props.icon2} size={29} color={'red'} /><Text style={{marginBottom:0,fontFamily:'Poppins-regular',marginEnd:10}}>Edite profile</Text></View> }
+        { value: '2',customIcon: <View style={{justifyContent:'center',alignItems:'center',flexDirection:'row'}}><Feather  name={props.icon2} size={29} color={'red'} /><Text style={{marginBottom:0,fontFamily:'Poppins-regular',marginEnd:10}}>Edit profile</Text></View> }
        ];
     return (
         <View  style={styles.togelButton} >

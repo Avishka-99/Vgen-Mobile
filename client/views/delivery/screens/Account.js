@@ -132,7 +132,7 @@ export default function Account() {
 
     <View style={styles.container}>
       <ImageBackground style={{ flex: 1 }} source={require('../../../assets/back.png')}>
-        <View><Header func={back} name={'bell'} sty={styles.Header} /></View>
+        {/* <View><Header func={back} name={'bell'} sty={styles.Header} /></View> */}
         <View style={styles.content}>
           <View style={styles.profile}>
             <View style={styles.profileBackgrund}>
@@ -215,7 +215,8 @@ const styles = StyleSheet.create({
   profileData: {
     width: '90%',
     height: '67%',
-    marginTop:30,
+    marginTop:'13%',
+    marginBottom:'10%',
    // position:'absolute',
     //marginEnd:5,
     elevation: 7,
