@@ -6,6 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import Axios from '../../../api/Axios';
 import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
 import {useDispatch, useSelector} from 'react-redux';
+import * as Location from 'expo-location';
 
 
 
@@ -15,33 +16,60 @@ function Home({navigation}) {
     const [details,setDeails]=useState([]);
     const [orders,setorders]=useState([])
     const [deliver,setdeliver]=useState([])
-    const userID = useSelector((state) => state.userReducer.userid)
-   // console.log(userID)
-
-  // const userId=JSON.parse(atob(TOKEN.split('.')[1])).userId;
-   //console.log('my id',userId)
-    const back=()=>{
-        console.log('back')
-        
-    }
-
+    const [lati,setlati]=useState()
+    const [longi,setlongi]=useState()
+    const [errorMsg, setErrorMsg] = useState('');
+    const userID =useSelector((state) => state.userReducer.userid)
+    console.log(userID)
     
-   const value=[]
-       
+
+  
+   const back = async () => {
+    
+    try {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      setlati(currentLocation.coords.latitude)
+      setlongi(currentLocation.coords.longitude)
+    } catch (error) {
+      setErrorMsg('Error fetching location: ' + error.message);
+    }
+  };
+
+ 
+
+   const value=[] // push card data
+
    const Accsept=(id)=>{
     navigation.navigate('Delivery')
    }
+
+   
+ 
+ // console.log(errorMsg)
+
   //get oder for deliver
    useEffect(()=>{
-      
+         
+          
         const intervalTime=setInterval(async()=>{
+          console.log("time")
             try{
                 const order= await Axios.get(API_ENDPOINTS.Delivery_Orders_URL,{
-                    params:{userid:userID}
+                    params:{userid:userID,
+                             lat:lati,
+                             lon:longi
+                           }
                 }
                 );
              
-                setorders(order.data) 
+                setorders(order.data)  
 
             }catch(error){
                 console.error(error)
@@ -59,12 +87,14 @@ function Home({navigation}) {
      value.push(data)
    })
 
-   console.log(value)
+  
+  //console.log("lati",lati)
+  //console.log("long",longi)
     
     return (
         <View style={{flex:1}}>
             <ImageBackground source={require('../../../assets/back.png')} style={{flex:1}}>
-                 <Header func={back} name={'bell'} sty={styles.header}/>
+                 {/* <Header func={back} name={'bell'} sty={styles.header}/> */}
 
                  <View style={styles.deliverDitels}>
                      <View style={{backgroundColor:'#ffff',width:'25%',height:60,borderTopRightRadius:50,borderBottomRightRadius:50,elevation:7,shadowColor:'black',alignItems:'center',justifyContent:'center'}}>
@@ -86,7 +116,7 @@ function Home({navigation}) {
                    <View style={styles.Revenue}>
                        <View style={styles.count}>
                          <Text style={{color:'#4D5959',fontSize:20,fontWeight:600}}>Count</Text>
-                         <Text style={{fontSize:18,fontWeight:300}}></Text>
+                         <Text style={{fontSize:18,fontWeight:300}}>05</Text>
                          <View style={{width:60,height:60,borderRadius:50,position:'absolute',top:100}}>
                             <Image style={{width:60,height:60,borderRadius:50,borderWidth:1,borderColor:'#EFD373'}} source={require('../../../assets/count1.jpg')}/>
                          </View>
@@ -105,7 +135,7 @@ function Home({navigation}) {
                       renderItem={({item})=>(
                           <Order 
                           funcname={Accsept} 
-                          quntity={item.quantity} 
+                          quntity={item.totalQuantity} 
                           fname={item.firstName} 
                           contact={item.cust_contact}
                           address={item.cust_Address}
@@ -114,6 +144,7 @@ function Home({navigation}) {
                           shopname={item.resturantName}
                           shopAddress={item.rest_Address}
                           shopNo={item.rest_contact}
+                          distance={300}
                           
                           />
                       )}
@@ -137,7 +168,7 @@ const styles=StyleSheet.create({
     deliverDitels:{
        width:Dimensions.get('window').width,
        height:60,
-       marginTop:15,
+       marginTop:35,
        //backgroundColor:'red',
        flexDirection:'row'
     },
@@ -145,7 +176,7 @@ const styles=StyleSheet.create({
         width:Dimensions.get('window').width,
         height:150,
         //backgroundColor:'red',
-        marginTop:30,
+        marginTop:'10%',
         alignItems:'center',
         justifyContent:'center',
         flexDirection:'row'
@@ -179,7 +210,7 @@ const styles=StyleSheet.create({
         height:Dimensions.get('window').height,
         flex:1,
         //backgroundColor:'red',
-        marginTop:20,
+        marginTop:'2%',
         alignItems:'center'
     },
     flatlist:{

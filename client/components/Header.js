@@ -9,9 +9,11 @@ function Header(props) {
        <View  style={[styles.HeaderView,props.sty]} >
           <ImageBackground style={{width:Dimensions.get('window').width,height:70}}>
               <View style={styles.imageBacbutton} >
-                <TouchableOpacity onPress={()=>props.func()}><Feather style={{marginTop:16,marginLeft:10}} name='arrow-left'size={35}/></TouchableOpacity>
+                <TouchableOpacity onPress={()=>props.func()}>
+                    {/* <Feather style={{marginTop:16,marginLeft:10}} name='arrow-left'size={35}/> */}
+                </TouchableOpacity>
                   <Image style={{width:100,height:70,marginLeft:20,marginTop:4}} source={require('../assets/vgfen.png')}/>
-                 <View ><Feather style={{width:20,height:20,marginLeft:170,marginTop:24,borderRadius:100}} name={props.name} size={20} color={"black"} /></View> 
+                 <View ><Feather style={{width:20,height:20,marginLeft:200,marginTop:24,borderRadius:100}} name={props.name} size={20} color={"black"} /></View> 
               </View>
           </ImageBackground>
 
@@ -25,7 +27,7 @@ const  styles=StyleSheet.create({
        width:Dimensions.get('window').width,
        height:70,
        elevation:27,
-       marginLeft:15,
+       marginLeft:10,
        flexDirection:'row',
        shadowOffset:{width:4,height:4},
        shadowColor:'#EFF6F1',
