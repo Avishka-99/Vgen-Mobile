@@ -17,16 +17,19 @@ export default function CustomerMain() {
             {
                 tabBarStyle: {
                     position: 'absolute',
-                    height: 70,
-                    borderTopLeftRadius: 30,
-                    borderTopRightRadius:30,
-                    left: 5,
-                    right: 5,
-                    elevation: 7,
+                    height: 80,
+                    borderRadius: 30,
+                    elevation: 5,
                     shadowColor: 'black',
-                    shadowOffset: { width: 3, height: 3 },
+                    shadowOffset: { width: 5, height: 5 },
                     backgroundColor: '#fff',
-                    bottom: 0,
+                    bottom:-2,
+                    borderWidth: 3,
+                    borderTopWidth: 3,
+                    borderColor: "#76B693",
+                    borderTopColor: "#76B693",
+                    width:"98%",
+                    left:"1%",
 
                 }
             }}>
@@ -39,7 +42,7 @@ export default function CustomerMain() {
                         tabBarActiveTintColor: 'dodgerblue',
                         tabBarShowLabel: false,
                         tabBarIcon: ({ color, focused }) => (
-                            <MaterialIcons name="home" size={28} color={focused ? "#7EB693" : "black"} />
+                            <MaterialIcons name="home" size={30} color={focused ? "#7EB693" : "black"} />
                         ),
                 }} />       
 
@@ -52,7 +55,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialIcons name="delivery-dining" size={28} color={focused ? "#7EB693" : "black"} />
+                        <MaterialIcons name="delivery-dining" size={30} color={focused ? "#7EB693" : "black"} />
                     ),
                 }} />
             <Tab.Screen name="Account" component={Account}
@@ -62,7 +65,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialCommunityIcons name="account" size={28} color={focused ? "#7EB693" : "black"} />
+                        <MaterialCommunityIcons name="account" size={30} color={focused ? "#7EB693" : "black"} />
                     ),
                 }}
             />
@@ -74,7 +77,7 @@ export default function CustomerMain() {
                     tabBarActiveTintColor: 'dodgerblue',
                     tabBarShowLabel: false,
                     tabBarIcon: ({ color, focused }) => (
-                        <MaterialCommunityIcons name="book-edit" size={28} color={focused ? "#7EB693" : "black"} />
+                        <MaterialCommunityIcons name="book-edit" size={30} color={focused ? "#7EB693" : "black"} />
                     ),
                 }}
             />
