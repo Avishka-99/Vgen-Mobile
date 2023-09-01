@@ -13,7 +13,7 @@ import * as ALL_ACTIONS from '../actions/AllActions';
 import {useSelector, useDispatch} from 'react-redux';
 import Card from './Card';
 import {FlashList} from '@shopify/flash-list';
-import {Modal, Portal, Button, PaperProvider} from 'react-native-paper';
+import {Modal, Portal, Button, PaperProvider, IconButton,MD3Colors} from 'react-native-paper';
 import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
 import {CardField, confirmPayment, useConfirmPayment, useStripe} from '@stripe/stripe-react-native';
@@ -150,6 +150,7 @@ export default function Bottomsheet(props) {
 							</View>
 						</View>
 					</LinearGradient>
+					{/* <IconButton icon='camera' iconColor={MD3Colors.error50} size={20} onPress={() => console.log('Pressed')} /> */}
 					<BaseButton style={{position: 'absolute', left: '88%', top: '3%'}} onPress={props.closeFun}>
 						<View style={styles.CloseButton}>
 							<Icons.EvilIcons name='close' size={30} color={'black'} />
