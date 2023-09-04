@@ -7,6 +7,7 @@ import {BASE_URL} from '../constants/Constants';
 import {NGROK_URL} from '../constants/Constants';
 import {Chip} from 'react-native-paper';
 import Axios from '../api/Axios';
+import {ScrollView} from 'react-native-gesture-handler';
 export default function Card(props) {
 	if (props.type == 'store') {
 		return (
@@ -48,9 +49,9 @@ export default function Card(props) {
 			</View>
 		);
 	} else if (props.type == 'food') {
-		console.log(props.data.sell_products[0].price)
+		console.log(props.data.sell_products[0].price);
 		return (
-			<TouchableWithoutFeedback onPress={()=>props.openModal(props.data)}>
+			<TouchableWithoutFeedback onPress={() => props.openModal(props.data)}>
 				<View style={styles.FoodCardContainer}>
 					<View style={styles.FoodCardContainerCol1}>
 						<Image
@@ -87,6 +88,24 @@ export default function Card(props) {
 					height: Dimensions.get('screen').height / 30,
 				}}
 			></View>
+		);
+	} else if (props.type == 'community') {
+		return (
+			<View
+				style={{
+					width: '96%',
+					height: Dimensions.get('screen').height / 5,
+					marginBottom: 5,
+					padding: 4,
+					marginLeft: '2%',
+					borderRadius: 8,
+					marginTop: '1%',
+					borderColor: '#76B693',
+					borderWidth: 2,
+				}}
+			>
+				<Text>Hello</Text>
+			</View>
 		);
 	}
 }
