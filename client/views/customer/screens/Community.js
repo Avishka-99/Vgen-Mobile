@@ -122,7 +122,7 @@ export default function Community() {
 		return (
 			<View style={{flex: 1, justifyContent: 'center'}}>
 				<FlashList data={restaurants} renderItem={({item}) => <Card type='community' />} estimatedItemSize={restaurants.length} />
-				<FAB title='Create' style={{position: 'absolute', left: '74%', top: '80%'}} />
+				{/* <FAB title='Create' style={{position: 'absolute', left: '74%', top: '80%'}} /> */}
 			</View>
 		);
 	};
@@ -141,8 +141,8 @@ export default function Community() {
 				tabBarStyle: {borderBottomColor: 'yellow', shadowColor: 'red'},
 			}}
 		>
-			<Tab.Screen name='My Communities' component={MyCommunities} />
 			<Tab.Screen name='Explore' component={ExploreCommunities} />
+			<Tab.Screen name='My Communities' component={MyCommunities} />
 		</Tab.Navigator>
 	);
 }

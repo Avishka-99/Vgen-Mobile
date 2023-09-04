@@ -19,6 +19,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
 import * as ALL_ACTIONS from '../../../actions/AllActions';
 const {diffClamp} = Animated;
+
 export default function Home({navigation}) {
 	const dispatch = useDispatch();
 	const [scrollY, setScrollY] = useState(new Animated.Value(0));
@@ -27,6 +28,7 @@ export default function Home({navigation}) {
 	const HEADER_HEIGHT = Dimensions.get('screen').height / 14;
 	const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
 	const [refreshing, setRefreshing] = React.useState(false);
+	const [focused, setFocused] = useState(false);
 
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -186,6 +188,14 @@ export default function Home({navigation}) {
 		// setFavRestaurants(array);
 		// console.log(array);
 	};
+	const onFocusFun = () => {
+		console.log('focused');
+		setFocused(true);
+	};
+	const onBlurFun = () => {
+		console.log('focus lost');
+		setFocused(false);
+	};
 	useEffect(() => {
 		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
 			dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
@@ -193,31 +203,40 @@ export default function Home({navigation}) {
 	}, []);
 	return (
 		<View style={styles.container}>
-			<Animated.View style={[{transform: [{translateY: headerTranslateY}]}]}>
-				<DeliverAddress />
-			</Animated.View>
-			<Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}>
-				<SearchBar />
-				<Animated.ScrollView
-					style={{flex: 1, width: '100%'}}
-					onScroll={Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {useNativeDriver: false})}
-					scrollEventThrottle={16}
-					contentContainerStyle={{
-						flexGrow: 1,
-						// justifyContent: 'center',
-						alignItems: 'center',
-					}}
-					refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-				>
-					{restaurantArray.map((item) => (
-						<Card key={item.userId} onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} details={item} type='store' name={item.restaurant_manager.resturantName} location={item.city} rating={item.rating} image={item.restaurant_manager.image} />
-					))}
+			{!focused && (
+				<Animated.View style={[{transform: [{translateY: headerTranslateY}]}]}>
+					<DeliverAddress />
+				</Animated.View>
+			)}
 
-					{/* {restaurants.map((item) => (
+			<Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}>
+				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} />
+				{!focused ? (
+					<Animated.ScrollView
+						style={{flex: 1, width: '100%'}}
+						onScroll={Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {useNativeDriver: false})}
+						scrollEventThrottle={16}
+						contentContainerStyle={{
+							flexGrow: 1,
+							// justifyContent: 'center',
+							alignItems: 'center',
+						}}
+						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+					>
+						{restaurantArray.map((item) => (
+							<Card key={item.userId} onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} details={item} type='store' name={item.restaurant_manager.resturantName} location={item.city} rating={item.rating} image={item.restaurant_manager.image} />
+						))}
+
+						{/* {restaurants.map((item) => (
 						<Card onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} key={item.id} details={item} type='store' name={item.name} location={item.location} rating={item.rating} image={item.image} />
 					))} */}
-					<Card key={1} type='empty' />
-				</Animated.ScrollView>
+						<Card key={1} type='empty' />
+					</Animated.ScrollView>
+				) : (
+					<Animated.ScrollView>
+						<Text>Hello</Text>
+					</Animated.ScrollView>
+				)}
 			</Animated.View>
 			<Portal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
