@@ -10,7 +10,7 @@ import Constants from 'expo-constants';
 import CustomerMain from './views/customer/CustomerMain';
 import EventOrganizerMain from './views/customer/EventOrganizerMain';
 import DeliveryMain from './views/delivery/DeliveryMain';
-import {useSelector,useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {isLoaded, useFonts} from 'expo-font';
 import * as Network from 'expo-network';
 import * as SplashScreen from 'expo-splash-screen';

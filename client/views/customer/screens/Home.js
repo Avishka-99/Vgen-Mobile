@@ -29,7 +29,7 @@ export default function Home({navigation}) {
 	const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [focused, setFocused] = useState(false);
-
+	//dispatch(setUserId(bfshjz))
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
@@ -196,6 +196,8 @@ export default function Home({navigation}) {
 		console.log('focus lost');
 		setFocused(false);
 	};
+	const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {useNativeDriver: false});
+
 	useEffect(() => {
 		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
 			dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
@@ -213,8 +215,10 @@ export default function Home({navigation}) {
 				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} />
 				{!focused ? (
 					<Animated.ScrollView
-						style={{flex: 1, width: '100%'}}
-						onScroll={Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {useNativeDriver: false})}
+						style={{flex: 1, width: '100%', height: '100%'}}
+						onScroll={(event) => {
+							handleScroll(event), console.log(scrollY);
+						}}
 						scrollEventThrottle={16}
 						contentContainerStyle={{
 							flexGrow: 1,
@@ -233,7 +237,7 @@ export default function Home({navigation}) {
 						<Card key={1} type='empty' />
 					</Animated.ScrollView>
 				) : (
-					<Animated.ScrollView>
+					<Animated.ScrollView style={{flex: 1, width: '100%'}}>
 						<Text>Hello</Text>
 					</Animated.ScrollView>
 				)}
