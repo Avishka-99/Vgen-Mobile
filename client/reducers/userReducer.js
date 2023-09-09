@@ -1,11 +1,12 @@
-import {SET_OTP_EMAIL, SET_USER,SET_USER_ID,SET_USER_LOCATION} from '../constants/ActionTypes';
+import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM} from '../constants/ActionTypes';
 
 //initializing state
 const initialState = {
 	user: '',
-	otpEmail:'',
-	userid:'',
-	userLocation:{},
+	otpEmail: '',
+	userid: '',
+	userLocation: {},
+	searchTerm: '',
 };
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -16,9 +17,9 @@ const userReducer = (state = initialState, action) => {
 				user: action.payload,
 			};
 		case SET_OTP_EMAIL:
-			return{
+			return {
 				...state,
-				otpEmail:action.payload,
+				otpEmail: action.payload,
 			};
 		case SET_USER_ID:
 			return {
@@ -26,10 +27,15 @@ const userReducer = (state = initialState, action) => {
 				userid: action.payload,
 			};
 		case SET_USER_LOCATION:
-			return{
+			return {
 				...state,
-				userLocation:action.payload,
-			}
+				userLocation: action.payload,
+			};
+		case SET_SEARCH_TERM:
+			return {
+				...state,
+				searchTerm: action.payload,
+			};
 		default:
 			return state;
 	}

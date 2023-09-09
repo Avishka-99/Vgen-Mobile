@@ -7,7 +7,11 @@ import {BASE_URL} from '../constants/Constants';
 import {NGROK_URL} from '../constants/Constants';
 import {Chip} from 'react-native-paper';
 import Axios from '../api/Axios';
+import {ScrollView} from 'react-native-gesture-handler';
+import * as Icons from '../constants/Icons';
+import * as Device from 'expo-device';
 export default function Card(props) {
+	console.log(props.info);
 	if (props.type == 'store') {
 		return (
 			<View style={styles.StoreCardContainer}>
@@ -48,9 +52,9 @@ export default function Card(props) {
 			</View>
 		);
 	} else if (props.type == 'food') {
-		console.log(props.data.sell_products[0].price)
+		console.log(props.data.sell_products[0].price);
 		return (
-			<TouchableWithoutFeedback onPress={()=>props.openModal(props.data)}>
+			<TouchableWithoutFeedback onPress={() => props.openModal(props.data)}>
 				<View style={styles.FoodCardContainer}>
 					<View style={styles.FoodCardContainerCol1}>
 						<Image
@@ -87,6 +91,58 @@ export default function Card(props) {
 					height: Dimensions.get('screen').height / 30,
 				}}
 			></View>
+		);
+	} else if (props.type == 'community') {
+		return (
+			<TouchableWithoutFeedback onPress={() => props.openFunction()}>
+				<View
+					style={{
+						width: '96%',
+						height: Dimensions.get('screen').height / 7,
+						marginBottom: 5,
+						padding: 4,
+						marginLeft: '2%',
+						borderRadius: 30,
+						marginTop: '1%',
+						borderColor: '#76B693',
+						borderWidth: 2,
+						// justifyContent: 'center',
+						flexDirection: 'row',
+						alignItems: 'center',
+					}}
+				>
+					<View
+						style={{
+							width: '58%',
+							height: '95%',
+							backgroundColor: 'red',
+							borderRadius: 30,
+							marginLeft: '0.8%',
+						}}
+					></View>
+					<View
+						style={{
+							width: '40%',
+							height: '95%',
+							marginLeft: '2%',
+							justifyContent: 'center',
+						}}
+					>
+						<View style={{flexDirection: 'row'}}>
+							<View style={{marginRight: '2%'}}>
+								<Icons.Ionicons name='earth' size={18} color='#8C8C8C' />
+							</View>
+							<View>{Device.brand == 'Apple' ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 12, color: '#8C8C8C'}}>Public community</Text> : <Text style={{fontFamily: 'Poppins-semibold', fontSize: 13, color: '#8C8C8C'}}>{props.info.type}</Text>}</View>
+						</View>
+						<View style={{flexDirection: 'row'}}>
+							<View style={{marginRight: '2%'}}>
+								<Icons.Ionicons name='people-sharp' size={18} color='#8C8C8C' />
+							</View>
+							<View>{Device.brand == 'Apple' ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 12, color: '#8C8C8C'}}>{props.info.members}K members</Text> : <Text style={{fontFamily: 'Poppins-semibold', fontSize: 13, color: '#8C8C8C'}}>{props.info.members}K members</Text>}</View>
+						</View>
+					</View>
+				</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 }
