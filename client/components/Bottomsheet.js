@@ -13,10 +13,12 @@ import * as ALL_ACTIONS from '../actions/AllActions';
 import {useSelector, useDispatch} from 'react-redux';
 import Card from './Card';
 import {FlashList} from '@shopify/flash-list';
-import {Modal, Portal, Button, PaperProvider, IconButton,MD3Colors} from 'react-native-paper';
+import {Modal, Portal, Button, PaperProvider, IconButton, MD3Colors} from 'react-native-paper';
 import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
 import {CardField, confirmPayment, useConfirmPayment, useStripe} from '@stripe/stripe-react-native';
+import MapViewDirections from 'react-native-maps-directions';
+import {MAPS_API_KEY} from '../keys/Keys';
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -36,6 +38,14 @@ export default function Bottomsheet(props) {
 		const langitude = useSelector((state) => state.userReducer.userLocation.lang);
 		const longitude = useSelector((state) => state.userReducer.userLocation.lang);
 		const userID = useSelector((state) => state.userReducer.userid);
+		console.log('TYPE - > ' + typeof props.info.restaurant_manager.latitude);
+		// Axios.post('https://app.notify.lk/api/v1/send',null,{params:{
+		// 	user_id:'dilanka',
+		// 	api_key:'Kxbdsfiwfjdf_fh438fsd',
+		// 	sender_id:'NotifyDEMO',
+		// 	to:'0714758322',
+		// 	message:'This is your OTP 583925'
+		// }});
 
 		useEffect(() => {
 			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_PRODUCTS, {
@@ -282,10 +292,29 @@ export default function Bottomsheet(props) {
 					}}
 					style={{width: '100%', height: '100%'}}
 				>
+					<MapViewDirections
+						origin={{
+							latitude: props.info.restaurant_manager.latitude,
+							longitude: props.info.restaurant_manager.longitude,
+						}}
+						destination={{
+							latitude: 6.90531,
+							longitude: 79.862316,
+						}}
+						apikey={MAPS_API_KEY} // insert your API Key here
+						strokeWidth={4}
+						strokeColor='#111111'
+					/>
 					<Marker
 						coordinate={{
 							latitude: props.info.restaurant_manager.latitude,
 							longitude: props.info.restaurant_manager.longitude,
+						}}
+					/>
+					<Marker
+						coordinate={{
+							latitude: 6.90531,
+							longitude: 79.862316,
 						}}
 					/>
 				</MapView>

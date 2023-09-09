@@ -1,13 +1,19 @@
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import React from 'react';
+import React, {useState, useRef, useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Card from '../../../components/Card';
 import {FlashList} from '@shopify/flash-list';
+import * as Icons from '../../../constants/Icons';
+import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {Portal, PortalHost} from '@gorhom/portal';
+import Backdrop from '../../../components/Backdrop';
 import {FAB} from 'react-native-elements';
 //import {Item} from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
 export default function Community() {
+	const bottomSheetModalRef = useRef(null);
 	var user = useSelector((state) => state.userReducer.user);
+	const [isModalVisible, setIsModalVisible] = useState(false);
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
@@ -32,96 +38,136 @@ export default function Community() {
 			// marginTop: Constants.deviceName == "iPhone" ? 0 : Constants.statusBarHeight,
 		},
 	});
-	const restaurants = [
+	const communities = [
 		{
 			id: 1,
-			image: 'barista.png',
+			type: 'Public community',
 			name: 'Barista',
 			location: 'Reid Aveue',
-			rating: 4.5,
+			members: 4.5,
 		},
 		{
 			id: 2,
-			image: 'pizzahut.png',
+			type: 'Public community',
 			name: 'Pizza hut',
 			location: 'Havlock',
-			rating: 4.2,
+			members: 1.2,
 		},
 		{
 			id: 3,
-			image: 'srivihar.jpg',
+			type: 'Public community',
 			name: 'Sri Vihar',
 			location: 'Thunmulla',
-			rating: 4.6,
+			members: 1.6,
 		},
 		{
 			id: 4,
-			image: 'nelumkole.jpg',
+			type: 'Public community',
 			name: 'Nelum kole',
 			location: 'Thimbirigasyaya',
-			rating: 4.3,
+			members: 3.3,
 		},
 		{
 			id: 5,
-			image: 'savinra.jpg',
+			type: 'Public community',
 			name: 'Savinra',
 			location: 'Nugegoda',
-			rating: 4.5,
+			members: 2.5,
 		},
 		{
 			id: 6,
-			image: 'mcdonalds.png',
+			type: 'Public community',
 			name: 'McDonalds',
 			location: 'Reid Avenue',
-			rating: 4.5,
+			members: 7.5,
 		},
 		{
 			id: 7,
-			image: 'mayumi.jpg',
+			type: 'Public community',
 			name: 'Mayumi Home Foods',
 			location: 'Nawala',
-			rating: 4.7,
+			members: 1.7,
 		},
 		{
 			id: 8,
-			image: 'kfc.jpg',
+			type: 'Public community',
 			name: 'KFC',
 			location: 'Nugegoda',
-			rating: 4.2,
+			members: 5.2,
 		},
 		{
 			id: 9,
-			image: 'elite.jpg',
+			type: 'Public community',
 			name: 'Elite',
 			location: 'Bambalapitiya',
-			rating: 4.4,
+			members: 1.4,
 		},
 		{
 			id: 10,
-			image: 'elina.webp',
+			type: 'Public community',
 			name: 'Elina Foods',
 			location: 'Kirulapone',
-			rating: 4.8,
+			members: 2.8,
 		},
 		{
 			id: 11,
-			image: 'saveira.jpg',
+			type: 'Public community',
 			name: 'Saveira',
 			location: 'Kohuwala',
-			rating: 4.9,
+			members: 2.9,
 		},
 		{
 			id: 12,
-			image: 'gogreen.jpg',
+			type: 'Public community',
 			name: 'Go Green',
 			location: 'Townhall',
-			rating: 4.7,
+			members: 1.7,
 		},
 	];
+	const snapPoints = useMemo(() => ['98%'], []);
+
+	const openModal = (data) => {
+		//setstoreInfo(data);
+		bottomSheetModalRef.current.present();
+	};
+	const CloseModal = () => {
+		//console.log('sdsd')
+		bottomSheetModalRef.current.close();
+	};
 	const MyCommunities = () => {
 		return (
 			<View style={{flex: 1, justifyContent: 'center'}}>
-				<FlashList data={restaurants} renderItem={({item}) => <Card type='community' />} estimatedItemSize={restaurants.length} />
+				<View style={{width: '100%', height: '10%', backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center'}}>
+					<View
+						style={{
+							width: '96%',
+							height: '96%',
+							backgroundColor: '#76B693',
+							marginLeft: '2%',
+							borderRadius: 20,
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}
+					>
+						<Icons.AntDesign name='addusergroup' size={44} color='white' />
+						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#fff'}}>New Community</Text>
+					</View>
+				</View>
+				<FlashList data={communities} renderItem={({item}) => <Card type='community' openFunction={openModal} info={item} />} estimatedItemSize={communities.length} />
+				<Portal>
+					<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
+						<CommunityModal />
+					</BottomSheetModal>
+					{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
+					<View style={{flex: 1}}>
+						<Text>Hello!</Text>
+
+						<Button title='Hide modal' onPress={toggleModal} />
+					</View>
+				</Modal> */}
+				</Portal>
+				<PortalHost name='community_main' />
 				{/* <FAB title='Create' style={{position: 'absolute', left: '74%', top: '80%'}} /> */}
 			</View>
 		);
@@ -130,6 +176,13 @@ export default function Community() {
 		return (
 			<View>
 				<Text>Explore communities</Text>
+			</View>
+		);
+	};
+	const CommunityModal = () => {
+		return (
+			<View style={{backgroundColor: 'white', flex: 1}}>
+				<Text>Hellloo</Text>
 			</View>
 		);
 	};
