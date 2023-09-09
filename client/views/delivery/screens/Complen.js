@@ -25,8 +25,9 @@ function Complen(props) {
     const[image,setimage]=useState([])
 
     const complaintType=[
-        {label:'I dont reseve mony',value:'1'},
-        {label:'coustemor cheet me ',value:'2'}
+        {label:'I dont reserve money',value:'1'},
+        {label:'customer rejects to accept order ',value:'2'},
+        {label:'Items did not received',value:'3'},
     ]
 
     const area = [
@@ -43,7 +44,8 @@ function Complen(props) {
     const user=[
         { label:'madawa', value: '1' },
         { label:'Madawa', value: '2' },
-        { label:'shanu', value: '3' }
+        { label:'shanu', value: '3' },
+        {label:'shashika',value:'4'}
     ]  
     
     const  back=()=> {
@@ -96,12 +98,13 @@ function Complen(props) {
                    </View> 
                   
                      <View style={styles.complenView}>
-                        <ScrollView  style={{flex:1}}>
+                        
                       
                        <View style={{width:'90%',Height:'70%',backgroundColor:'#fff',marginTop:'5%',marginBottom:'10%',borderRadius:20,borderWidth:1,borderColor:'#7EB693',alignItems:'center',alignSelf:'center'}}>
                            <Dropdwon data={complaintType} sty={styles.dropdwon} styledropdwon={styles.droplist} styleinputSerach={styles.dropdownSerachbar} placeholder='select type' name='select compaint type' />
                            <Dropdwon data={area} sty={styles.dropdwon} styledropdwon={styles.droplist} styleinputSerach={styles.dropdownSerachbar} placeholder='find area' name='select area' />
                            <Dropdwon data={user} sty={styles.dropdwon} styledropdwon={styles.droplist} styleinputSerach={styles.dropdownSerachbar} placeholder='find user' name=' user name' />
+                           
                            <Button func={imageView} butname={'Add Image'} custermize={styles.button} sty={{fontSize:17}} />
                           
                             
@@ -131,7 +134,7 @@ function Complen(props) {
                         
                        </View> 
 
-                       </ScrollView> 
+                       
             
                    </View>
   

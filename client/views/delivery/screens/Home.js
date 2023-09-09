@@ -9,40 +9,18 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as Location from 'expo-location';
 
 
-
-
 function Home({navigation}) {
 
     const [details,setDeails]=useState([]);
-    const [orders,setorders]=useState([])
+    let [orders,setorders]=useState([])
     const [deliver,setdeliver]=useState([])
-    const [lati,setlati]=useState()
-    const [longi,setlongi]=useState()
+    let [lati,setlati]=useState(0.0)
+    let [longi,setlongi]=useState(0.0)
     const [errorMsg, setErrorMsg] = useState('');
     const userID =useSelector((state) => state.userReducer.userid)
     console.log(userID)
     
 
-  
-   const back = async () => {
-    
-    try {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      let currentLocation = await Location.getCurrentPositionAsync({});
-      setlati(currentLocation.coords.latitude)
-      setlongi(currentLocation.coords.longitude)
-    } catch (error) {
-      setErrorMsg('Error fetching location: ' + error.message);
-    }
-  };
-
- 
 
    const value=[] // push card data
 
@@ -56,40 +34,49 @@ function Home({navigation}) {
 
   //get oder for deliver
    useEffect(()=>{
-         
-          
-        const intervalTime=setInterval(async()=>{
-          console.log("time")
-            try{
-                const order= await Axios.get(API_ENDPOINTS.Delivery_Orders_URL,{
-                    params:{userid:userID,
-                             lat:lati,
-                             lon:longi
-                           }
-                }
-                );
-             
-                setorders(order.data)  
+    const fetchData = async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
 
-            }catch(error){
-                console.error(error)
-            }
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+          return;
+        }
 
-        },10000);
-       
-         return ()=>{
-            clearInterval(intervalTime);
-         }
+        let currentLocation = await Location.getCurrentPositionAsync({});
+        setlati(currentLocation.coords.latitude);
+        setlongi(currentLocation.coords.longitude);
+
+        const order = await Axios.get(API_ENDPOINTS.Delivery_Orders_URL, {
+          params: {
+            userid: userID,
+            lat: currentLocation.coords.latitude,
+            lon: currentLocation.coords.longitude,
+          },
+        });
+
+        setorders(order.data);
+      } catch (error) {
+        setErrorMsg('Error fetching location or orders: ' + error.message);
+      }
+    };
+
+    const intervalTime = setInterval(fetchData, 10000);
+
+    return () => {
+      clearInterval(intervalTime);
+    };
 
     },[userID]);
 
+    //back end data push value array
    orders.map((data)=>{
      value.push(data)
    })
 
   
-  //console.log("lati",lati)
-  //console.log("long",longi)
+  console.log("lati",lati)
+  console.log("long",longi)
     
     return (
         <View style={{flex:1}}>
