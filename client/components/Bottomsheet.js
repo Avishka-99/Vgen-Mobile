@@ -18,7 +18,7 @@ import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
 import {CardField, confirmPayment, useConfirmPayment, useStripe} from '@stripe/stripe-react-native';
 import MapViewDirections from 'react-native-maps-directions';
-import {MAPS_API_KEY} from '../keys/Keys';
+import {GOOGLE_API} from '../keys/Keys';
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -301,7 +301,7 @@ export default function Bottomsheet(props) {
 							latitude: 6.90531,
 							longitude: 79.862316,
 						}}
-						apikey={MAPS_API_KEY} // insert your API Key here
+						apikey={GOOGLE_API} // insert your API Key here
 						strokeWidth={4}
 						strokeColor='#111111'
 					/>
