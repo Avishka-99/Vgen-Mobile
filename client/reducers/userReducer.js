@@ -1,4 +1,4 @@
-import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM} from '../constants/ActionTypes';
+import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM, SET_USER_LANGUAGE} from '../constants/ActionTypes';
 
 //initializing state
 const initialState = {
@@ -7,6 +7,7 @@ const initialState = {
 	userid: '',
 	userLocation: {},
 	searchTerm: '',
+	userLanguage: 'si',
 };
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -35,6 +36,11 @@ const userReducer = (state = initialState, action) => {
 			return {
 				...state,
 				searchTerm: action.payload,
+			};
+		case SET_USER_LANGUAGE:
+			return {
+				...state,
+				userLanguage: action.payload,
 			};
 		default:
 			return state;

@@ -15,6 +15,9 @@ import {Button, Modal} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import * as Location from 'expo-location';
 import MapView, {Marker} from 'react-native-maps';
+import {signup} from '../../constants/Localizations';
+import {I18n} from 'i18n-js';
+import MarqueeView from 'react-native-marquee-view';
 export default function SignUp({navigation}) {
 	const [checked, setChecked] = useState('first');
 	const [email, setEmail] = useState('');
@@ -30,6 +33,8 @@ export default function SignUp({navigation}) {
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [location, setLocation] = useState(null);
 	const [region, setRegion] = useState();
+	//const [locale, setLocale] = useState('ta');
+	const locale = useSelector((state) => state.userReducer.userLanguage);
 	var currentLocation = useSelector((state) => state.userReducer.userLocation);
 	console.log(currentLocation);
 	const dispatch = useDispatch();
@@ -192,14 +197,15 @@ export default function SignUp({navigation}) {
 		setIsModalVisible(!isModalVisible);
 	};
 	//console.log(location);
-
+	const i18n = new I18n(signup);
+	i18n.enableFallback = true;
+	i18n.locale = locale;
 	return (
 		<View style={styles.loginContainer}>
 			<View style={{height: '15%'}}>
 				<Text style={{fontFamily: 'Yellowtail-Regular', fontSize: 24, color: '#7EB693'}}>Embrace Your Vegan Journey</Text>
 				<Text style={{fontFamily: 'Poppins-ExtraBold', fontSize: 32, color: '#274C5B'}}>Sign Up Today!</Text>
 			</View>
-
 			<View style={{flexDirection: 'row', justifyContent: 'space-between', width: '95%', marginBottom: '1.1%'}}>
 				<TextInputField
 					isSecured={false}
@@ -213,7 +219,7 @@ export default function SignUp({navigation}) {
 					iconType={Icons.Feather}
 					iconProps={{name: 'user', size: 24, paddingleft: 19}}
 					height='8%'
-					placeholder='First name'
+					placeholder={i18n.t('firstname')}
 					function={setfirstName}
 					value={firstName}
 				/>
@@ -229,37 +235,50 @@ export default function SignUp({navigation}) {
 					iconType={Icons.Feather}
 					iconProps={{name: 'user', size: 24, paddingleft: 19}}
 					height='8%'
-					placeholder='Last name'
+					placeholder={i18n.t('lastname')}
 					function={setlastName}
 					value={lastName}
 				/>
 			</View>
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.FontAwesome} iconProps={{name: 'id-badge', size: 24}} height='8%' placeholder='NIC' function={setNic} value={nic} />
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.Feather} iconProps={{name: 'phone', size: 24}} height='8%' placeholder='Contact no' function={setContactNo} value={contactNo} />
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.MaterialCommunityIcons} iconProps={{name: 'email-outline', size: 24}} height='8%' placeholder='Email' function={setEmail} value={email} />
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder='Password' function={setPassword} value={password} />
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder='Confirm password' function={setConfirmPassword} value={confirmpassword} />
+			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.FontAwesome} iconProps={{name: 'id-badge', size: 24}} height='8%' placeholder={i18n.t('nic')} function={setNic} value={nic} />
+			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.Feather} iconProps={{name: 'phone', size: 24}} height='8%' placeholder={i18n.t('contactno')} function={setContactNo} value={contactNo} />
+			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.MaterialCommunityIcons} iconProps={{name: 'email-outline', size: 24}} height='8%' placeholder={i18n.t('email')} function={setEmail} value={email} />
+			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder={i18n.t('password')} function={setPassword} value={password} />
+			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder={i18n.t('confirmpassword')} function={setConfirmPassword} value={confirmpassword} />
 			<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', width: '95%'}}>
 				<Button mode='contained' onPress={openModal} buttonColor='#7EB693' labelStyle={{fontFamily: 'Poppins-semibold', fontSize: 14}}>
-					Pick Location
+					{i18n.t('picklocation')}
 				</Button>
-				{region ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>Location fetched</Text> : location ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>Current location fetched</Text> : <Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>Fetching current location...</Text>}
+				{region ? (
+					<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('fetchedlocation2')}</Text>
+				) : location && locale=='ta' ? (
+					<MarqueeView
+						style={{
+							backgroundColor: 'blue',
+							width: 200,
+						}}
+					>
+						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('fetchedlocation')}</Text>
+					</MarqueeView>
+				) : (
+					<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('currentlocation')}</Text>
+				)}
 			</View>
 
 			<View style={styles.radioButtonContainer}>
 				<RadioButton value='first' status={userRole === 'Customer' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Customer')} />
-				<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Customer</Text>
+				<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>{i18n.t('customer')}</Text>
 				<RadioButton value='second' status={userRole === 'Delivery' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Delivery')} />
-				<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Delivery</Text>
+				<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>{i18n.t('delivery')}</Text>
 			</View>
 
 			<TouchableOpacity style={styles.submitButton} activeOpacity={0.9} onPress={handleSubmit}>
-				<RoundedButton width='100%' height='100%' color='#7EB693' function={handleSubmit} text='Sign up' />
+				<RoundedButton width='100%' height='100%' color='#7EB693' function={handleSubmit} text={i18n.t('signup')} />
 			</TouchableOpacity>
 			<Text style={styles.bottomText}>
-				Already a member?{' '}
+				{i18n.t('alreadyamember')}{' '}
 				<Text style={styles.signUptext} onPress={() => navigation.navigate('SignIn')}>
-					Sign in
+					{i18n.t('signin')}
 				</Text>
 			</Text>
 			<Toast config={toastConfig} />
