@@ -1,4 +1,4 @@
-import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM} from '../constants/ActionTypes.js';
+import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM, SET_USER_LANGUAGE} from '../constants/ActionTypes.js';
 export const setUserAction = (parameter) => {
 	return {
 		type: SET_USER,
@@ -26,6 +26,12 @@ export const setUserLocation = (parameter) => {
 export const setSearchTerm = (parameter) => {
 	return {
 		type: SET_SEARCH_TERM,
+		payload: parameter,
+	};
+};
+export const setUserLanguage = (parameter) => {
+	return {
+		type: SET_USER_LANGUAGE,
 		payload: parameter,
 	};
 };

@@ -18,6 +18,8 @@ import Axios from '../../../api/Axios';
 import {useSelector, useDispatch} from 'react-redux';
 import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
 import * as ALL_ACTIONS from '../../../actions/AllActions';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {Tab} from 'react-native-elements';
 const {diffClamp} = Animated;
 
 export default function Home({navigation}) {
@@ -29,7 +31,12 @@ export default function Home({navigation}) {
 	const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [focused, setFocused] = useState(false);
-	//dispatch(setUserId(bfshjz))
+	const headerTranslateY = diffClamp.interpolate({
+		inputRange: [0, HEADER_HEIGHT],
+		outputRange: [0, -HEADER_HEIGHT],
+		extrapolate: 'clamp',
+	});
+	const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {useNativeDriver: false});
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
@@ -39,11 +46,7 @@ export default function Home({navigation}) {
 			setRefreshing(false);
 		}, 2000);
 	}, []);
-	const headerTranslateY = diffClamp.interpolate({
-		inputRange: [0, HEADER_HEIGHT],
-		outputRange: [0, -HEADER_HEIGHT],
-		extrapolate: 'clamp',
-	});
+
 	const restaurants = [
 		{
 			id: 1,
@@ -157,8 +160,6 @@ export default function Home({navigation}) {
 		},
 	});
 	const bottomSheetModalRef = useRef(null);
-
-	// variables
 	const snapPoints = useMemo(() => ['98%'], []);
 
 	const openModal = (data) => {
@@ -166,7 +167,6 @@ export default function Home({navigation}) {
 		bottomSheetModalRef.current.present();
 	};
 	const CloseModal = () => {
-		//console.log('sdsd')
 		bottomSheetModalRef.current.close();
 	};
 	const setFavouriteStore = async (id) => {
@@ -196,22 +196,101 @@ export default function Home({navigation}) {
 		console.log('focus lost');
 		setFocused(false);
 	};
-	const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {useNativeDriver: false});
-
+	const Tab = createMaterialTopTabNavigator();
 	useEffect(() => {
 		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
 			dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
 		});
 	}, []);
+	const appointments = [
+		{
+			appointmentId: 1,
+			patientName: 'Alice Johnson',
+			age: 25,
+		},
+		{
+			appointmentId: 2,
+			patientName: 'Bob Smith',
+			age: 35,
+		},
+		{
+			appointmentId: 3,
+			patientName: 'Charlie Brown',
+			age: 40,
+		},
+		{
+			appointmentId: 4,
+			patientName: 'David Lee',
+			age: 28,
+		},
+		{
+			appointmentId: 5,
+			patientName: 'Eve Miller',
+			age: 55,
+		},
+		{
+			appointmentId: 6,
+			patientName: 'Frank Wilson',
+			age: 33,
+		},
+		{
+			appointmentId: 7,
+			patientName: 'Grace Taylor',
+			age: 47,
+		},
+		{
+			appointmentId: 8,
+			patientName: 'Hank Harris',
+			age: 29,
+		},
+		{
+			appointmentId: 9,
+			patientName: 'Ivy Green',
+			age: 38,
+		},
+		{
+			appointmentId: 10,
+			patientName: 'Jackie Turner',
+			age: 42,
+		},
+		{
+			appointmentId: 11,
+			patientName: 'Karen Anderson',
+			age: 31,
+		},
+		{
+			appointmentId: 12,
+			patientName: 'Liam Jackson',
+			age: 48,
+		},
+	];
+	const MyCommnities = () => {
+		return <Text>dfs</Text>;
+	};
+	const ExploreCommunities = () => {
+		const Tab = createMaterialTopTabNavigator();
+		return (
+			<Tab.Navigator
+				screenOptions={{
+					tabBarLabelStyle: {fontSize: 12},
+					tabBarStyle: {borderBottomColor: 'yellow', shadowColor: 'red'},
+				}}
+			>
+				<Tab.Screen name='Explore' component={ExploreCommunities} />
+				<Tab.Screen name='My Communities' component={MyCommnities} />
+			</Tab.Navigator>
+		);
+	};
 	return (
 		<View style={styles.container}>
-			{!focused && (
+			{/* {!focused && (
 				<Animated.View style={[{transform: [{translateY: headerTranslateY}]}]}>
 					<DeliverAddress />
 				</Animated.View>
-			)}
+			)} */}
 
-			<Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}>
+			{/* <Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}> */}
+			<Animated.View style={[styles.container_2]}>
 				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} />
 				{!focused ? (
 					<Animated.ScrollView
@@ -238,7 +317,15 @@ export default function Home({navigation}) {
 					</Animated.ScrollView>
 				) : (
 					<Animated.ScrollView style={{flex: 1, width: '100%'}}>
-						<Text>Hello</Text>
+						<Tab.Navigator
+							screenOptions={{
+								tabBarLabelStyle: {fontSize: 12},
+								tabBarStyle: {borderBottomColor: 'yellow', shadowColor: 'red'},
+							}}
+						>
+							<Tab.Screen name='Explore' component={ExploreCommunities} />
+							<Tab.Screen name='My Communities' component={MyCommnities} />
+						</Tab.Navigator>
 					</Animated.ScrollView>
 				)}
 			</Animated.View>

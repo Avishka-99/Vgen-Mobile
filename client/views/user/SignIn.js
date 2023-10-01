@@ -13,17 +13,21 @@ import TextInputField from '../../components/TextInputField';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import {setOtpEmail} from '../../actions/UserAction';
 import {DeviceType} from 'expo-device';
-import { setUserLocation } from '../../actions/UserAction';
+import {setUserLocation} from '../../actions/UserAction';
+import {signin} from '../../constants/Localizations';
+import * as Localization from 'expo-localization';
+import {I18n} from 'i18n-js';
 export default function SignIn({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-
+	//const [locale, setLocale] = useState('en');
 	// let [fontsLoaded] = useFonts({
 	//   "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
 	// })
 	//console.log(email)
 	console.log(Device.modelName);
 	const dispatch = useDispatch();
+	const locale = useSelector((state) => state.userReducer.userLanguage);
 	const handleSubmit = () => {
 		//dispatch(setUserAction('delivery'))
 		Axios.post(API_ENDPOINTS.SIGNIN_URL, {
@@ -109,6 +113,10 @@ export default function SignIn({navigation}) {
 			// text2: 'This is some something 👋',
 		});
 	};
+	const i18n = new I18n(signin);
+	i18n.enableFallback = true;
+	i18n.locale = locale;
+
 	return (
 		// <KeyboardAvoidingView
 		//   behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -121,18 +129,18 @@ export default function SignIn({navigation}) {
 					<View style={styles.loginContainer}>
 						<Image style={styles.image_2} source={require('../../assets/vf-bg.png')} />
 						<View style={{padding: '9%'}} />
-						<TextInputField isSecured={false} iconType={Icons.Feather} iconProps={{name: 'user', size: 24}} placeholder='Email' function={setEmail} value={email} textInputStyles={{height: '15%'}} />
-						<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} placeholder='Password' function={setPassword} value={password} textInputStyles={{height: '15%'}} />
+						<TextInputField isSecured={false} iconType={Icons.Feather} iconProps={{name: 'user', size: 24}} placeholder={i18n.t('emailPlaceholder')} function={setEmail} value={email} textInputStyles={{height: '15%'}} />
+						<TextInputField isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} placeholder={i18n.t('passwordPlaceholder')} function={setPassword} value={password} textInputStyles={{height: '15%'}} />
 						<View style={styles.forgotPassword}>
 							<Text style={styles.forgotPasswordText} onPress={() => navigation.navigate('FrogetPassword')}>
-								Forgot password?
+								{i18n.t('forgotpassword')}
 							</Text>
 						</View>
-						<RoundedButton color='#7EB693' function={handleSubmit} text='Log in' />
+						<RoundedButton color='#7EB693' function={handleSubmit} text={i18n.t('signin')} />
 						<Text style={styles.bottomText}>
-							New to VGen?
+							{i18n.t('newtovgen')}
 							<Text style={styles.signUptext} onPress={() => navigation.navigate('SignUp')}>
-								Sign up
+								{i18n.t('signup')}
 							</Text>
 						</Text>
 					</View>
