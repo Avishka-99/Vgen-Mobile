@@ -1,6 +1,4 @@
 import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM, SET_USER_LANGUAGE} from '../constants/ActionTypes';
-
-//initializing state
 const initialState = {
 	user: '',
 	otpEmail: '',
@@ -14,7 +12,6 @@ const userReducer = (state = initialState, action) => {
 		case SET_USER:
 			return {
 				...state,
-				//counter: state.counter + action.payload
 				user: action.payload,
 			};
 		case SET_OTP_EMAIL:

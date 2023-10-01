@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, StatusBar, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, Touchable} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {Image} from 'expo-image';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {RadioButton} from 'react-native-paper';
 import Constants from 'expo-constants';
 import TextInputField from '../../components/TextInputField';
@@ -18,6 +18,9 @@ import MapView, {Marker} from 'react-native-maps';
 import {signup} from '../../constants/Localizations';
 import {I18n} from 'i18n-js';
 import MarqueeView from 'react-native-marquee-view';
+import {setUserLanguage} from '../../actions/UserAction';
+import * as Device from 'expo-device';
+import * as Haptics from 'expo-haptics';
 export default function SignUp({navigation}) {
 	const [checked, setChecked] = useState('first');
 	const [email, setEmail] = useState('');
@@ -25,7 +28,7 @@ export default function SignUp({navigation}) {
 	const [name, setName] = useState('');
 	const [firstName, setfirstName] = useState('');
 	const [lastName, setlastName] = useState('');
-	const [userRole, setuserRole] = useState('');
+	const [userRole, setuserRole] = useState('Customer');
 	const [profilePicture, setProfilePicture] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmpassword, setConfirmPassword] = useState('');
@@ -34,9 +37,7 @@ export default function SignUp({navigation}) {
 	const [location, setLocation] = useState(null);
 	const [region, setRegion] = useState();
 	//const [locale, setLocale] = useState('ta');
-	const locale = useSelector((state) => state.userReducer.userLanguage);
 	var currentLocation = useSelector((state) => state.userReducer.userLocation);
-	console.log(currentLocation);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		(async () => {
@@ -45,11 +46,18 @@ export default function SignUp({navigation}) {
 				setErrorMsg('Permission to access location was denied');
 				return;
 			}
-
+			let locale = await AsyncStorage.getItem('locale').then((response) => {
+				if (response) {
+					dispatch(setUserLanguage(locale));
+				} else {
+					dispatch(setUserLanguage('si'));
+				}
+			});
 			let location = await Location.getCurrentPositionAsync({});
 			setLocation(location);
 		})();
 	}, []);
+	const locale = useSelector((state) => state.userReducer.userLanguage);
 	const toastConfig = {
 		success: (props) => (
 			<BaseToast
@@ -196,91 +204,156 @@ export default function SignUp({navigation}) {
 		//console.log(location);
 		setIsModalVisible(!isModalVisible);
 	};
+	const changeLocale = (value) => {
+		const localeList = ['en', 'si', 'ta'];
+		dispatch(setUserLanguage(localeList[(localeList.indexOf(locale) + 1) % 3]));
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+	};
 	//console.log(location);
 	const i18n = new I18n(signup);
 	i18n.enableFallback = true;
 	i18n.locale = locale;
 	return (
 		<View style={styles.loginContainer}>
-			<View style={{height: '15%'}}>
+			<View style={{height: '8%', width: '100%', alignItems: 'flex-end', justifyContent: 'center'}}>
+				<TouchableOpacity activeOpacity={0.3} onPress={changeLocale}>
+					<View style={{height: '80%', width: '38%', justifyContent: 'center', flexDirection: 'row', marginRight: '2%'}}>
+						<View style={{width: '30%', height: '100%', backgroundColor: '#7EB693', alignItems: 'center', justifyContent: 'center', borderTopLeftRadius: 400, borderBottomLeftRadius: 400}}>
+							<Icons.FontAwesome5 name='globe-asia' size={27} color='#274C5B' />
+						</View>
+						<View style={[{width: '50%', height: '100%', backgroundColor: '#7EB693', borderTopRightRadius: 400, borderBottomRightRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular'}]}>
+							<Text style={styles.localeText}>{i18n.t('locale')}</Text>
+						</View>
+					</View>
+				</TouchableOpacity>
+			</View>
+			<View style={{height: '15%', width: '100%', alignItems: 'center', justifyContent: 'center'}}>
 				<Text style={{fontFamily: 'Yellowtail-Regular', fontSize: 24, color: '#7EB693'}}>Embrace Your Vegan Journey</Text>
 				<Text style={{fontFamily: 'Poppins-ExtraBold', fontSize: 32, color: '#274C5B'}}>Sign Up Today!</Text>
 			</View>
-			<View style={{flexDirection: 'row', justifyContent: 'space-between', width: '95%', marginBottom: '1.1%'}}>
-				<TextInputField
-					isSecured={false}
-					textInputRow={{
-						width: '49.3%',
-						height: 45,
-					}}
-					textInput={{
-						paddingLeft: 18,
-					}}
-					iconType={Icons.Feather}
-					iconProps={{name: 'user', size: 24, paddingleft: 19}}
-					height='8%'
-					placeholder={i18n.t('firstname')}
-					function={setfirstName}
-					value={firstName}
-				/>
-				<TextInputField
-					isSecured={false}
-					textInputRow={{
-						width: '49.3%',
-						height: 45,
-					}}
-					textInput={{
-						paddingLeft: 18,
-					}}
-					iconType={Icons.Feather}
-					iconProps={{name: 'user', size: 24, paddingleft: 19}}
-					height='8%'
-					placeholder={i18n.t('lastname')}
-					function={setlastName}
-					value={lastName}
-				/>
-			</View>
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.FontAwesome} iconProps={{name: 'id-badge', size: 24}} height='8%' placeholder={i18n.t('nic')} function={setNic} value={nic} />
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.Feather} iconProps={{name: 'phone', size: 24}} height='8%' placeholder={i18n.t('contactno')} function={setContactNo} value={contactNo} />
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.MaterialCommunityIcons} iconProps={{name: 'email-outline', size: 24}} height='8%' placeholder={i18n.t('email')} function={setEmail} value={email} />
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder={i18n.t('password')} function={setPassword} value={password} />
-			<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder={i18n.t('confirmpassword')} function={setConfirmPassword} value={confirmpassword} />
-			<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', width: '95%'}}>
-				<Button mode='contained' onPress={openModal} buttonColor='#7EB693' labelStyle={{fontFamily: 'Poppins-semibold', fontSize: 14}}>
-					{i18n.t('picklocation')}
-				</Button>
-				{region ? (
-					<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('fetchedlocation2')}</Text>
-				) : location && locale=='ta' ? (
-					<MarqueeView
-						style={{
-							backgroundColor: 'blue',
-							width: 200,
+			<View style={{alignItems: 'center', justifyContent: 'center'}}>
+				<View style={{flexDirection: 'row', justifyContent: 'space-between', width: '95%', marginBottom: '1.1%'}}>
+					<TextInputField
+						isSecured={false}
+						textInputRow={{
+							width: '49.3%',
+							height: Device.brand == 'Apple' ? 45 : 45,
 						}}
-					>
-						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('fetchedlocation')}</Text>
-					</MarqueeView>
-				) : (
-					<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('currentlocation')}</Text>
-				)}
-			</View>
+						textInput={{
+							paddingLeft: 18,
+						}}
+						iconType={Icons.Feather}
+						iconProps={{name: 'user', size: 24, paddingleft: 19}}
+						height='8%'
+						placeholder={i18n.t('firstname')}
+						function={setfirstName}
+						value={firstName}
+					/>
+					<TextInputField
+						isSecured={false}
+						textInputRow={{
+							width: '49.3%',
+							height: 45,
+						}}
+						textInput={{
+							paddingLeft: 18,
+						}}
+						iconType={Icons.Feather}
+						iconProps={{name: 'user', size: 24, paddingleft: 19}}
+						height='8%'
+						placeholder={i18n.t('lastname')}
+						function={setlastName}
+						value={lastName}
+					/>
+				</View>
+				<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.FontAwesome} iconProps={{name: 'id-badge', size: 24}} height='8%' placeholder={i18n.t('nic')} function={setNic} value={nic} />
+				<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.Feather} iconProps={{name: 'phone', size: 24}} height='8%' placeholder={i18n.t('contactno')} function={setContactNo} value={contactNo} />
+				<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={false} iconType={Icons.MaterialCommunityIcons} iconProps={{name: 'email-outline', size: 24}} height='8%' placeholder={i18n.t('email')} function={setEmail} value={email} />
+				<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder={i18n.t('password')} function={setPassword} value={password} />
+				<TextInputField textInputRow={{height: 45, marginBottom: 4}} isSecured={true} iconType={Icons.Feather} iconProps={{name: 'lock', size: 24}} height='8%' placeholder={i18n.t('confirmpassword')} function={setConfirmPassword} value={confirmpassword} />
+				<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', width: '95%'}}>
+					{locale == 'ta' ? (
+						<TouchableWithoutFeedback onPress={openModal}>
+							<View
+								style={{
+									backgroundColor: '#7EB693',
+									padding: 10,
+									borderRadius: 45,
+								}}
+							>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: 'white'}}>{i18n.t('picklocation')}</Text>
+							</View>
+						</TouchableWithoutFeedback>
+					) : (
+						<Button mode='contained' onPress={openModal} buttonColor='#7EB693' labelStyle={{fontFamily: 'Poppins-semibold', fontSize: 14}}>
+							{i18n.t('picklocation')}
+						</Button>
+					)}
+					{/* <Button mode='contained' onPress={openModal} buttonColor='#7EB693' labelStyle={{fontFamily: 'Poppins-semibold', fontSize: 14}}>
+					{i18n.t('picklocation')}
+				</Button> */}
+					{region ? (
+						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('fetchedlocation2')}</Text>
+					) : location && locale == 'ta' ? (
+						<View>
+							<MarqueeView
+								style={{
+									width: 150,
 
-			<View style={styles.radioButtonContainer}>
-				<RadioButton value='first' status={userRole === 'Customer' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Customer')} />
-				<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>{i18n.t('customer')}</Text>
-				<RadioButton value='second' status={userRole === 'Delivery' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Delivery')} />
-				<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>{i18n.t('delivery')}</Text>
-			</View>
+									alignItems: 'center',
+									justifyContent: 'center',
+									alignContent: 'center',
+								}}
+							>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('fetchedlocation')}</Text>
+							</MarqueeView>
+						</View>
+					) : locale == 'ta' ? (
+						<View>
+							<MarqueeView
+								style={{
+									width: 150,
+									alignItems: 'center',
+								}}
+							>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('currentlocation')}</Text>
+							</MarqueeView>
+						</View>
+					) : locale == 'si' ? (
+						<View>
+							<MarqueeView
+								style={{
+									width: 150,
+									alignItems: 'center',
+								}}
+							>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('currentlocation')}</Text>
+							</MarqueeView>
+						</View>
+					) : (
+						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('currentlocation')}</Text>
+					)}
+				</View>
 
+				<View style={styles.radioButtonContainer}>
+					<RadioButton value='first' status={userRole === 'Customer' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Customer')} />
+					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>{i18n.t('customer')}</Text>
+					<RadioButton value='second' status={userRole === 'Delivery' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Delivery')} />
+					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>{i18n.t('delivery')}</Text>
+				</View>
+			</View>
 			<TouchableOpacity style={styles.submitButton} activeOpacity={0.9} onPress={handleSubmit}>
-				<RoundedButton width='100%' height='100%' color='#7EB693' function={handleSubmit} text={i18n.t('signup')} />
+				<RoundedButton width='80%' height='100%' color='#7EB693' function={handleSubmit} text={i18n.t('signup')} />
 			</TouchableOpacity>
-			<Text style={styles.bottomText}>
-				{i18n.t('alreadyamember')}{' '}
-				<Text style={styles.signUptext} onPress={() => navigation.navigate('SignIn')}>
-					{i18n.t('signin')}
+			<View style={{width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+				<Text style={styles.bottomText}>
+					{i18n.t('alreadyamember')}{' '}
+					<Text style={styles.signUptext} onPress={() => navigation.navigate('SignIn')}>
+						{i18n.t('signin')}
+					</Text>
 				</Text>
-			</Text>
+			</View>
+
 			<Toast config={toastConfig} />
 			<Modal
 				dismissable={true}
@@ -362,8 +435,6 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: '100%',
 		backgroundColor: 'white',
-		alignItems: 'center',
-		justifyContent: 'center',
 	},
 	textInput: {
 		width: '80%',
@@ -373,11 +444,12 @@ const styles = StyleSheet.create({
 	radioButtonContainer: {
 		alignItems: 'center',
 		flexDirection: 'row',
+		justifyContent: 'center',
 	},
 	submitButton: {
 		position: 'relative',
-		width: '80%',
-		height: '10%',
+		width: '100%',
+		height: '6%',
 		justifyContent: 'center',
 		alignItems: 'center',
 		marginBottom: '1%',
@@ -394,6 +466,10 @@ const styles = StyleSheet.create({
 	signUptext: {
 		color: 'royalblue',
 		textDecorationLine: 'underline',
-		fontFamily: 'Poppins-medium',
+		fontFamily: 'Poppins-semibold',
+		color: '#7EB693',
+	},
+	localeText: {
+		fontFamily: 'Poppins-semibold',
 	},
 });

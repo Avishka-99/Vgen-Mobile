@@ -42,6 +42,7 @@ const signup = {
 		signup: 'Sign Up',
 		alreadyamember: 'Already a member?',
 		signin: 'Sign in',
+		locale: 'English',
 	},
 	si: {
 		firstname: 'මුල් නම ',
@@ -60,6 +61,7 @@ const signup = {
 		signup: 'ලියාපදිංචි වන්න ',
 		alreadyamember: 'දැනටමත් සාමාජිකයෙක්ද?',
 		signin: 'පුරන්න',
+		locale: 'සිංහල',
 	},
 	ta: {
 		firstname: 'முதல் பெயர்',
@@ -67,7 +69,7 @@ const signup = {
 		nic: 'தேசிய அடையாள அட்டை',
 		contactno: 'தொடர்பு எண்',
 		email: 'மின்னஞ்சல்',
-		passwordPlaceholder: 'கடவுச்சொல்',
+		password: 'கடவுச்சொல்',
 		confirmpassword: 'கடவுச்சொல்லை உறுதிப்படுத்தவும்',
 		picklocation: 'ஒரு இடத்தை தேர்வு செய்யவும்',
 		currentlocation: 'தற்போதைய இருப்பிடத்தைப் பெறுகிறது...',
@@ -78,6 +80,7 @@ const signup = {
 		signup: 'பதிவு செய்யவும்',
 		alreadyamember: 'ஏற்கனவே உறுப்பினர்?',
 		signin: 'உள்நுழைக',
+		locale: 'தமிழ்',
 	},
 };
 export {signin, signup};
