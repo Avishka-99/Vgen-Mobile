@@ -99,6 +99,7 @@ export default function Bottomsheet(props) {
 			Axios.post('/api/intents', {
 				amount: amount * 100,
 			}).then(async (response) => {
+				console.log(response)
 				if (response.data == 'error') {
 					return;
 				} else {
