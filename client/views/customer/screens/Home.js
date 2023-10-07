@@ -202,68 +202,14 @@ export default function Home({navigation}) {
 			dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
 		});
 	}, []);
-	const appointments = [
-		{
-			appointmentId: 1,
-			patientName: 'Alice Johnson',
-			age: 25,
-		},
-		{
-			appointmentId: 2,
-			patientName: 'Bob Smith',
-			age: 35,
-		},
-		{
-			appointmentId: 3,
-			patientName: 'Charlie Brown',
-			age: 40,
-		},
-		{
-			appointmentId: 4,
-			patientName: 'David Lee',
-			age: 28,
-		},
-		{
-			appointmentId: 5,
-			patientName: 'Eve Miller',
-			age: 55,
-		},
-		{
-			appointmentId: 6,
-			patientName: 'Frank Wilson',
-			age: 33,
-		},
-		{
-			appointmentId: 7,
-			patientName: 'Grace Taylor',
-			age: 47,
-		},
-		{
-			appointmentId: 8,
-			patientName: 'Hank Harris',
-			age: 29,
-		},
-		{
-			appointmentId: 9,
-			patientName: 'Ivy Green',
-			age: 38,
-		},
-		{
-			appointmentId: 10,
-			patientName: 'Jackie Turner',
-			age: 42,
-		},
-		{
-			appointmentId: 11,
-			patientName: 'Karen Anderson',
-			age: 31,
-		},
-		{
-			appointmentId: 12,
-			patientName: 'Liam Jackson',
-			age: 48,
-		},
-	];
+	const searchFun = (text) => {
+		//console.log(text)
+		Axios.post(API_ENDPOINTS.FETCH_SEARCH_RESULT, {
+			parameter: text,
+		}).then((response) => {
+			console.log(response.data);
+		});
+	};
 	const MyCommnities = () => {
 		return <Text>dfs</Text>;
 	};
@@ -291,13 +237,13 @@ export default function Home({navigation}) {
 
 			{/* <Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}> */}
 			<Animated.View style={[styles.container_2]}>
-				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} />
+				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} searchFun={searchFun} />
 				{!focused ? (
 					<Animated.ScrollView
 						style={{flex: 1, width: '100%', height: '100%'}}
-						onScroll={(event) => {
-							handleScroll(event), console.log(scrollY);
-						}}
+						// onScroll={(event) => {
+						// 	handleScroll(event), console.log(scrollY);
+						// }}
 						scrollEventThrottle={16}
 						contentContainerStyle={{
 							flexGrow: 1,
@@ -317,15 +263,7 @@ export default function Home({navigation}) {
 					</Animated.ScrollView>
 				) : (
 					<Animated.ScrollView style={{flex: 1, width: '100%'}}>
-						<Tab.Navigator
-							screenOptions={{
-								tabBarLabelStyle: {fontSize: 12},
-								tabBarStyle: {borderBottomColor: 'yellow', shadowColor: 'red'},
-							}}
-						>
-							<Tab.Screen name='Explore' component={ExploreCommunities} />
-							<Tab.Screen name='My Communities' component={MyCommnities} />
-						</Tab.Navigator>
+						<Text>hello</Text>
 					</Animated.ScrollView>
 				)}
 			</Animated.View>
