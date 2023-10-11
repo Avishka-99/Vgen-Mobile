@@ -31,6 +31,8 @@ export default function Home({navigation}) {
 	const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [focused, setFocused] = useState(false);
+	const [fetchedData, setFethedData] = useState(false);
+	const [SearchTerm, setSearchTerm] = useState('');
 	const headerTranslateY = diffClamp.interpolate({
 		inputRange: [0, HEADER_HEIGHT],
 		outputRange: [0, -HEADER_HEIGHT],
@@ -134,7 +136,7 @@ export default function Home({navigation}) {
 		},
 	];
 	const restaurantArray = useSelector((state) => state.restaurantReducer.restaurants);
-	console.log(useSelector((state) => state.userReducer.userLocation.lang));
+	//console.log(useSelector((state) => state.userReducer.userLocation.lang));
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
@@ -203,15 +205,30 @@ export default function Home({navigation}) {
 		});
 	}, []);
 	const searchFun = (text) => {
-		//console.log(text)
-		Axios.post(API_ENDPOINTS.FETCH_SEARCH_RESULT, {
-			parameter: text,
-		}).then((response) => {
-			console.log(response.data);
-		});
+		setSearchTerm(text);
+		console.log(text);
+		if (!text == '') {
+			Axios.post(API_ENDPOINTS.FETCH_SEARCH_RESULT, {
+				parameter: text,
+			}).then((response) => {
+				setFethedData(response.data);
+				//console.log(response.data);
+			});
+		}else{
+			setFethedData(false)
+		}
 	};
-	const MyCommnities = () => {
-		return <Text>dfs</Text>;
+	const handleModal = (data) => {
+		console.log('hello');
+		// Axios.post('/api/fetchproduct', {
+		// 	id: data.productId,
+		// 	restaurantId: data.sell_products[0].manufactureId,
+		// }).then(async (response) => {
+		// 	dispatch(ALL_ACTIONS.setModalDetails(response.data[0]));
+		// });
+		//(data);
+
+		//setIsModalVisible(true);
 	};
 	const ExploreCommunities = () => {
 		const Tab = createMaterialTopTabNavigator();
@@ -238,7 +255,7 @@ export default function Home({navigation}) {
 			{/* <Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}> */}
 			<Animated.View style={[styles.container_2]}>
 				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} searchFun={searchFun} />
-				{!focused ? (
+				{!focused && SearchTerm == '' ? (
 					<Animated.ScrollView
 						style={{flex: 1, width: '100%', height: '100%'}}
 						// onScroll={(event) => {
@@ -259,17 +276,18 @@ export default function Home({navigation}) {
 						{/* {restaurants.map((item) => (
 						<Card onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} key={item.id} details={item} type='store' name={item.name} location={item.location} rating={item.rating} image={item.image} />
 					))} */}
-						<Card key={1} type='empty' />
+						<View style={{height: 100}}></View>
 					</Animated.ScrollView>
 				) : (
-					<Animated.ScrollView style={{flex: 1, width: '100%'}}>
-						<Text>hello</Text>
-					</Animated.ScrollView>
+					<View style={{flex: 1, width: '100%', height: '100%'}}>
+						<FlashList contentContainerStyle={{paddingBottom:20}}  data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
+						
+					</View>
 				)}
 			</Animated.View>
 			<Portal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
-					<Bottomsheet closeFun={CloseModal} info={storeInfo} />
+					<Bottomsheet closeFun={CloseModal} info={storeInfo} type='store' />
 				</BottomSheetModal>
 				{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
 					<View style={{flex: 1}}>

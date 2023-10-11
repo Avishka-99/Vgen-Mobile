@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Categories from './screens/Categories';
-import Feed from './screens/Feed';
+import Cart from './screens/Cart';
 import Home from './screens/Home';
 import Community from './screens/Community';
 import Account from './screens/Account';
@@ -46,7 +46,7 @@ export default function EventOrganizerMain() {
                     ),
                 }}
             />
-            <Tab.Screen name="Feed" component={Feed}
+            <Tab.Screen name="Feed" component={Cart}
                 options={{
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
