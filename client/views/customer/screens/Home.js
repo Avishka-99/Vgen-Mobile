@@ -276,17 +276,18 @@ export default function Home({navigation}) {
 						{/* {restaurants.map((item) => (
 						<Card onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} key={item.id} details={item} type='store' name={item.name} location={item.location} rating={item.rating} image={item.image} />
 					))} */}
-						<Card key={1} type='empty' />
+						<View style={{height: 100}}></View>
 					</Animated.ScrollView>
 				) : (
 					<View style={{flex: 1, width: '100%', height: '100%'}}>
-						<FlashList data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
+						<FlashList contentContainerStyle={{paddingBottom:20}}  data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
+						
 					</View>
 				)}
 			</Animated.View>
 			<Portal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
-					<Bottomsheet closeFun={CloseModal} info={storeInfo} />
+					<Bottomsheet closeFun={CloseModal} info={storeInfo} type='store' />
 				</BottomSheetModal>
 				{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
 					<View style={{flex: 1}}>

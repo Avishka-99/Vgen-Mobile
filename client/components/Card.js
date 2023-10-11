@@ -1,8 +1,7 @@
 import {StyleSheet, Text, View, Dimensions, Image, TouchableWithoutFeedback} from 'react-native';
-// import { Image } from 'expo-image';
 import React, {useEffect} from 'react';
 import {AntDesign} from '@expo/vector-icons';
-import {RESTAURANT_IMG_PATH, PRODUCT_IMG_PATH} from '../constants/Constants';
+import {RESTAURANT_IMG_PATH, PRODUCT_IMG_PATH, CATEGORY_IMG_PATH} from '../constants/Constants';
 import {BASE_URL} from '../constants/Constants';
 import {NGROK_URL} from '../constants/Constants';
 import {Chip} from 'react-native-paper';
@@ -11,7 +10,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import * as Icons from '../constants/Icons';
 import * as Device from 'expo-device';
 export default function Card(props) {
-	console.log(props.info);
+	console.log(props);
 	if (props.type == 'store') {
 		return (
 			<View style={styles.StoreCardContainer}>
@@ -139,6 +138,67 @@ export default function Card(props) {
 								<Icons.Ionicons name='people-sharp' size={18} color='#8C8C8C' />
 							</View>
 							<View>{Device.brand == 'Apple' ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 12, color: '#8C8C8C'}}>{props.info.members}K members</Text> : <Text style={{fontFamily: 'Poppins-semibold', fontSize: 13, color: '#8C8C8C'}}>{props.info.members}K members</Text>}</View>
+						</View>
+					</View>
+				</View>
+			</TouchableWithoutFeedback>
+		);
+	} else if (props.type == 'category') {
+		return (
+			<TouchableWithoutFeedback
+				onPress={() => props.openFun(props.data.name)}
+				style={{
+					alignItems: 'center',
+					justifyContent: 'center',
+					backgroundColor: 'red',
+				}}
+			>
+				<View
+					style={{
+						width: Dimensions.get('screen').width / 2,
+						alignItems: 'center',
+					}}
+				>
+					<View
+						style={{
+							width: '92%',
+							height: Dimensions.get('screen').height / 4,
+							borderRadius: 15,
+							borderColor: '#76B693',
+							borderWidth: 2,
+							// justifyContent: 'center',
+							flexDirection: 'row',
+							alignItems: 'center',
+							flexDirection: 'column',
+						}}
+					>
+						<View
+							style={{
+								width: '100%',
+								height: '80%',
+								alignItems: 'center',
+								justifyContent: 'flex-end',
+							}}
+						>
+							<Image
+								style={{
+									height: 100,
+									width: '98%',
+								}}
+								source={{uri: NGROK_URL + CATEGORY_IMG_PATH + props.data.image}}
+								contentFit='cover'
+								resizeMode='contain'
+							/>
+						</View>
+						<View
+							style={{
+								width: '100%',
+								height: '20%',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
+						>
+							<Text style={{fontFamily: 'Poppins-regular'}}>{props.data.name}</Text>
 						</View>
 					</View>
 				</View>
