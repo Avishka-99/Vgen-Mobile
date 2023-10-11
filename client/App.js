@@ -37,6 +37,7 @@ const AppWrapper = () => {
 		'Poppins-ExtraBold': require('./assets/fonts/Poppins-ExtraBold.ttf'),
 		'Yellowtail-Regular': require('./assets/fonts/Yellowtail-Regular.ttf'),
 		'RammettoOne-Regular': require('./assets/fonts/RammettoOne-Regular.ttf'),
+		'Gabarito-Bold': require('./assets/fonts/Gabarito-Bold.ttf'),
 	});
 	useEffect(() => {
 		async function prepare() {

@@ -19,7 +19,7 @@ import CounterInput from 'react-native-counter-input';
 import {CardField, confirmPayment, useConfirmPayment, useStripe} from '@stripe/stripe-react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import {GOOGLE_API} from '../keys/Keys';
-export default  function Bottomsheet(props) {
+export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
 	const Stack = createNativeStackNavigator();
@@ -277,11 +277,8 @@ export default  function Bottomsheet(props) {
 					)}
 				</View>
 			);
-		}else if(props.type=='category_product'){
-			return (
-				<View style={styles.container}></View>
-			)
-
+		} else if (props.type == 'category_product') {
+			return <View style={styles.container}></View>;
 		}
 		// const handlePayment = async () => {};
 		//console.log(modalDetails);
@@ -347,10 +344,17 @@ export default  function Bottomsheet(props) {
 		</NavigationContainer>
 	);
 }
-export  function CategoryBottomSheet(props){
-	return(
-		<View style={styles.container}></View>
-	)
+export function CategoryBottomSheet(props) {
+	return (
+		<View style={styles.container}>
+			<View style={{
+				height:'14%',
+				justifyContent:'center',
+			}}>
+				<Text style={{fontFamily: 'Gabarito-Bold',fontSize:37,paddingLeft:Dimensions.get('screen').width/30}}>{props.title}</Text>
+			</View>
+		</View>
+	);
 }
 const styles = StyleSheet.create({
 	container: {

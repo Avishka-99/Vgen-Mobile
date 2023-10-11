@@ -12,7 +12,6 @@ export default function Cart() {
 	});
 	return (
 		<View style={styles.container}>
-			<Heart isClick={isClick} onClick={() => setClick(!isClick)} />
 		</View>
 	);
 }
