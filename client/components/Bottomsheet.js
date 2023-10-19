@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {NGROK_URL, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
-import * as Icons from '../constants/Icons';
+import {AntDesign, Entypo, EvilIcons, Feather, FontAwesome, FontAwesome5, Fontisto, Foundation, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons, Zocial} from '@expo/vector-icons';
 import {BaseButton, ScrollView, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {LinearGradient} from 'expo-linear-gradient';
 import {NavigationContainer} from '@react-navigation/native';
@@ -13,12 +13,13 @@ import * as ALL_ACTIONS from '../actions/AllActions';
 import {useSelector, useDispatch} from 'react-redux';
 import Card from './Card';
 import {FlashList} from '@shopify/flash-list';
-import {Modal, Portal, Button, PaperProvider, IconButton, MD3Colors} from 'react-native-paper';
+import {Modal, Portal, PaperProvider, MD3Colors} from 'react-native-paper';
 import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
 import {CardField, confirmPayment, useConfirmPayment, useStripe} from '@stripe/stripe-react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import {GOOGLE_API} from '../keys/Keys';
+import {IconButton, Button} from './Button';
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -347,11 +348,62 @@ export default function Bottomsheet(props) {
 export function CategoryBottomSheet(props) {
 	return (
 		<View style={styles.container}>
-			<View style={{
-				height:'14%',
-				justifyContent:'center',
-			}}>
-				<Text style={{fontFamily: 'Gabarito-Bold',fontSize:37,paddingLeft:Dimensions.get('screen').width/30}}>{props.title}</Text>
+			<View
+				style={{
+					height: '10%',
+					justifyContent: 'center',
+				}}
+			>
+				<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 37, paddingLeft: Dimensions.get('screen').width / 45}}>{props.title}</Text>
+			</View>
+			<View
+				style={{
+					height: '10%',
+					width: '100%',
+				}}
+			>
+				{props.type == 'delivery' ? (
+					<IconButton
+						name={MaterialIcons}
+						padding={true}
+						iconProps={{
+							name: 'delivery-dining',
+							size: 24,
+							color: 'black',
+							radius: 30,
+						}}
+						title='Delivery'
+						func={props.optionChangeFun}
+					/>
+				) : props.type == 'all' ? (
+					<IconButton name={MaterialIcons} padding={true} title='All' func={props.optionChangeFun} />
+				) : props.type == 'dine in' ? (
+					<IconButton
+						name={MaterialCommunityIcons}
+						padding={true}
+						iconProps={{
+							name: 'silverware-fork-knife',
+							size: 24,
+							color: 'black',
+							radius: 30,
+						}}
+						title='Dine in'
+						func={props.optionChangeFun}
+					/>
+				) : (
+					<IconButton
+						name={Ionicons}
+						padding={true}
+						iconProps={{
+							name: 'fast-food-outline',
+							size: 24,
+							color: 'black',
+							radius: 30,
+						}}
+						title='Take away'
+						func={props.optionChangeFun}
+					/>
+				)}
 			</View>
 		</View>
 	);

@@ -5,10 +5,11 @@ import Categories from './screens/Categories';
 import Cart from './screens/Cart';
 import Home from './screens/Home';
 import Community from './screens/Community';
-import Account from './screens/Account';
+import Menu from './screens/Menu';
 import {Feather, Ionicons} from '@expo/vector-icons';
 import {MaterialIcons} from '@expo/vector-icons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {SimpleLineIcons} from '@expo/vector-icons';
 import {FontAwesome5} from '@expo/vector-icons';
 export default function CustomerMain() {
 	const Tab = createBottomTabNavigator();
@@ -80,13 +81,13 @@ export default function CustomerMain() {
 			/>
 			<Tab.Screen
 				name='Account'
-				component={Account}
+				component={Menu}
 				options={{
 					headerShown: false,
 					tabBarInactiveTintColor: 'black',
 					tabBarActiveTintColor: 'dodgerblue',
 					tabBarShowLabel: false,
-					tabBarIcon: ({color, focused}) => <MaterialCommunityIcons name='account' size={30} color={focused ? '#76B693' : '#8B8B8B'} />,
+					tabBarIcon: ({color, focused}) => <SimpleLineIcons name='grid' size={30} color={focused ? '#76B693' : '#8B8B8B'} />,
 				}}
 			/>
 		</Tab.Navigator>

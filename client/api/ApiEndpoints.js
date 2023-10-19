@@ -6,3 +6,4 @@ export const Delivery_Orders_URL = '/api/deliveryOrders';
 export const FETCH_RESTAURANT_DETAILS = '/api/fetchrestaurants';
 export const FETCH_RESTAURANT_PRODUCTS = '/api/fetchrestaurantproducts';
 export const FETCH_SEARCH_RESULT = '/api/fetchresult';
+export const FETCH_CATEGORIES = '/api/fetchcategories';
