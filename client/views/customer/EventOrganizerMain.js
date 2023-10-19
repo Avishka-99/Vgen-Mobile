@@ -5,7 +5,7 @@ import Categories from './screens/Categories';
 import Cart from './screens/Cart';
 import Home from './screens/Home';
 import Community from './screens/Community';
-import Account from './screens/Account';
+import Menu from './screens/Menu';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
