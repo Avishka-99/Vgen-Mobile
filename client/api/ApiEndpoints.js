@@ -7,3 +7,4 @@ export const FETCH_RESTAURANT_DETAILS = '/api/fetchrestaurants';
 export const FETCH_RESTAURANT_PRODUCTS = '/api/fetchrestaurantproducts';
 export const FETCH_SEARCH_RESULT = '/api/fetchresult';
 export const FETCH_CATEGORIES = '/api/fetchcategories';
+export const FETCH_ALL_PRODUCTS = '/api/getallproducts';

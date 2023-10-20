@@ -42,6 +42,7 @@ export default function Home({navigation}) {
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
+			dispatch(ALL_ACTIONS.setRestaurantAction([]));
 			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
 				dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
 			});

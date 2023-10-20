@@ -1,17 +1,61 @@
-import {StyleSheet, Text, View, Dimensions, Image, TouchableWithoutFeedback} from 'react-native';
-import React, {useEffect} from 'react';
+import {StyleSheet, Text, View, Dimensions, Image, TouchableWithoutFeedback, Animated} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {AntDesign} from '@expo/vector-icons';
 import {RESTAURANT_IMG_PATH, PRODUCT_IMG_PATH, CATEGORY_IMG_PATH} from '../constants/Constants';
 import {BASE_URL} from '../constants/Constants';
 import {NGROK_URL} from '../constants/Constants';
-import {Chip} from 'react-native-paper';
+import {Chip, ActivityIndicator} from 'react-native-paper';
 import Axios from '../api/Axios';
 import {ScrollView} from 'react-native-gesture-handler';
 import * as Icons from '../constants/Icons';
 import * as Device from 'expo-device';
+import {FadeIn, FadeOut} from 'react-native-reanimated';
 export default function Card(props) {
-	console.log(props);
+	//console.log(props);
 	if (props.type == 'store') {
+		const [load, setLoad] = useState(true);
+		const [animation, setAnimation] = useState(new Animated.Value(0));
+
+		useEffect(() => {
+			Animated.timing(animation, {
+				toValue: 1,
+				duration: 3000,
+				useNativeDriver: false,
+			}).start(({finished}) => {
+				if (finished && load) {
+					// Animation has completed, you can restart it or do something else
+					setAnimation(new Animated.Value(0)); // Reset the value
+					//setTimeout(runAnimation, 1000); // Delay before restarting
+				}
+			});
+		}, [animation]);
+		const bgStyle = {
+			backgroundColor: animation.interpolate({
+				inputRange: [0, 0.5, 1],
+				outputRange: ['rgba(255,99,71, 1)', 'rgba(255,99,71, 0)', 'rgba(255,99,71, 1)'],
+			}),
+		};
+		const boxStyle = {
+			backgroundColor: animation.interpolate({
+				inputRange: [0, 0.5, 1],
+				outputRange: ['rgb(127, 130, 135)', 'rgb(200,200,200)', 'rgb(127, 130, 135)'],
+			}),
+		};
+		const stylesr = StyleSheet.create({
+			container: {
+				position: 'absolute',
+				height: '100%',
+				width: '100%',
+				borderTopLeftRadius: 15,
+				borderTopRightRadius: 15,
+			},
+			box: {
+				borderTopLeftRadius: 15,
+				borderTopRightRadius: 15,
+				height: '100%',
+				width: '100%',
+			},
+		});
 		return (
 			<View style={styles.StoreCardContainer}>
 				<TouchableWithoutFeedback onPress={() => props.onPress(props.details)}>
@@ -24,7 +68,13 @@ export default function Card(props) {
 								borderTopRightRadius: 15,
 							}}
 							source={{uri: NGROK_URL + RESTAURANT_IMG_PATH + props.image}}
+							onLoad={() => setLoad(false)}
 						/>
+						{load && (
+							<Animated.View style={[stylesr.container, bgStyle]}>
+								<Animated.View style={[stylesr.box, boxStyle]} />
+							</Animated.View>
+						)}
 					</View>
 				</TouchableWithoutFeedback>
 
@@ -51,7 +101,7 @@ export default function Card(props) {
 			</View>
 		);
 	} else if (props.type == 'food') {
-		console.log(props.data.sell_products[0].price);
+		//console.log(props.data.sell_products[0].price);
 		return (
 			<TouchableWithoutFeedback onPress={() => props.openModal(props.data)}>
 				<View style={styles.FoodCardContainer}>
@@ -144,6 +194,7 @@ export default function Card(props) {
 			</TouchableWithoutFeedback>
 		);
 	} else if (props.type == 'category') {
+		const [load, setLoad] = useState(true);
 		return (
 			<TouchableWithoutFeedback
 				onPress={() => props.openFun(props.data.name)}
@@ -188,7 +239,17 @@ export default function Card(props) {
 								source={{uri: NGROK_URL + CATEGORY_IMG_PATH + props.data.image}}
 								contentFit='cover'
 								resizeMode='contain'
+								onLoadEnd={() => setLoad(false)}
 							/>
+							{load && (
+								<ActivityIndicator
+									style={{
+										height: 100,
+										width: '98%',
+									}}
+									color='#76B693'
+								/>
+							)}
 						</View>
 						<View
 							style={{
@@ -219,6 +280,7 @@ const styles = StyleSheet.create({
 		height: '75%',
 		borderRadius: 14,
 		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	StoreCardContainerRow2: {
 		flexDirection: 'row',
