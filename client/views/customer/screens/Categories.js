@@ -11,13 +11,15 @@ import Axios from '../../../api/Axios';
 import * as Haptics from 'expo-haptics';
 import * as ALL_ACTIONS from '../../../actions/AllActions';
 import {useSelector, useDispatch} from 'react-redux';
+import {all} from 'axios';
 export default function Categories() {
 	const dispatch = useDispatch();
 	const [sheetTitle, setSheetTitle] = useState(null);
 	const [method, setMethod] = useState('pickup');
-	const [foods, setFoods] = useState([]);
+	const [foods, setFoods] = useState(null);
+	const [sheetFoods, setSheetFoods] = useState(null);
 	const [categories, setCategories] = useState(null);
-	const [option, setOption] = useState('take away');
+	const [option, setOption] = useState('all');
 	const options = ['delivery', 'dine in', 'take away', 'all'];
 	const initialRender = useRef(true);
 	const allFoods = useSelector((state) => state.userReducer.allProducts);
@@ -30,13 +32,18 @@ export default function Categories() {
 		},
 	});
 	useEffect(() => {
-		Axios.post(API_ENDPOINTS.FETCH_CATEGORIES).then((result) => {
-			setCategories(result.data);
-		});
-		Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
-			setFoods(result.data);
-			dispatch(ALL_ACTIONS.setAllProducts(result.data));
-		});
+		async function fetchData() {
+			const categories = await Axios.post(API_ENDPOINTS.FETCH_CATEGORIES);
+			setCategories(categories.data);
+		}
+		fetchData();
+		//setCategories()
+		// Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
+		// 	console.log(result.data)
+		// 	setFoods(result.data);
+		// 	dispatch(ALL_ACTIONS.setAllProducts(result.data));
+		// 	//allFoods = useSelector((state) => state.userReducer.allProducts);
+		// });
 	}, []);
 	useEffect(() => {
 		if (initialRender.current) {
@@ -44,20 +51,33 @@ export default function Categories() {
 			return;
 		}
 		if (option == 'all') {
-			setFoods(allFoods);
+			setSheetFoods(foods);
 		} else {
 			var newFoods = foods.filter(filterArrayByOptions);
-			setFoods(newFoods);
+			setSheetFoods(newFoods);
 		}
 	}, [option]);
+	// useEffect(() => {
+	// 	if (initialRender.current) {
+	// 		initialRender.current = false; // Set to false after the initial render
+	// 		return;
+	// 	} else {
+	// 		console.log('food updated');
+	// 		console.log(foods);
+	// 	}
+	// }, [foods]);
 	const bottomSheetModalRef = useRef(null);
 	const snapPoints = useMemo(() => ['98%'], []);
 	const openModal = (data) => {
-		var newFoods = allFoods.filter((item) => filterArrayByCategory(item, data));
-		setFoods(newFoods);
+		Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
+			const newFoods = result.data.filter((item) => filterArrayByCategory(item, data));
+			setOption('all')
+			setFoods(newFoods);
+			setSheetFoods(newFoods)
+			//dispatch(ALL_ACTIONS.setAllProducts(result.data));
+			//allFoods = useSelector((state) => state.userReducer.allProducts);
+		});
 		setSheetTitle(data);
-		console.log(data);
-		//setstoreInfo(data);
 		bottomSheetModalRef.current.present();
 	};
 	const CloseModal = () => {
@@ -89,7 +109,7 @@ export default function Categories() {
 
 			<Portal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
-					{foods ? <CategoryBottomSheet optionChangeFun={changeOption} closeFun={CloseModal} type={option} title={sheetTitle} data={foods} /> : <></>}
+					{sheetFoods && <CategoryBottomSheet optionChangeFun={changeOption} data={sheetFoods} closeFun={CloseModal} type={option} title={sheetTitle} />} 
 				</BottomSheetModal>
 				{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
 					<View style={{flex: 1}}>

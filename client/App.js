@@ -22,6 +22,7 @@ import {StripeProvider} from '@stripe/stripe-react-native';
 import {STRIPE_PUBLIC_KEY} from './keys/Keys';
 import * as Location from 'expo-location';
 import * as ALL_ACTIONS from './actions/AllActions';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 // import OtpInputs from 'react-native-otp-inputs';
 
 //config my new redux
@@ -54,7 +55,9 @@ const AppWrapper = () => {
 		<Provider store={store}>
 			<StripeProvider publishableKey={STRIPE_PUBLIC_KEY}>
 				<GestureHandlerRootView style={{flex: 1}}>
-					<App />
+					<SafeAreaProvider>
+						<App />
+					</SafeAreaProvider>
 				</GestureHandlerRootView>
 			</StripeProvider>
 		</Provider>

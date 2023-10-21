@@ -13,7 +13,8 @@ import * as ALL_ACTIONS from '../actions/AllActions';
 import {useSelector, useDispatch} from 'react-redux';
 import Card from './Card';
 import {FlashList} from '@shopify/flash-list';
-import {Modal, Portal, PaperProvider, MD3Colors} from 'react-native-paper';
+import {Modal, PaperProvider, MD3Colors} from 'react-native-paper';
+import {Portal, PortalHost} from '@gorhom/portal';
 import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
 import {CardField, confirmPayment, useConfirmPayment, useStripe} from '@stripe/stripe-react-native';
@@ -21,6 +22,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import {GOOGLE_API} from '../keys/Keys';
 import {IconButton, Button} from './Button';
 import {BlurView} from 'expo-blur';
+import ItemModal from '../components/ItemModal';
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -156,7 +158,7 @@ export default function Bottomsheet(props) {
 									<Text style={{color: 'white', fontSize: 24}}>{props.info.restaurant_manager.resturantName}</Text>
 								</View>
 								<View style={{top: -10, flexDirection: 'row', alignItems: 'center'}}>
-									<Icons.AntDesign name='star' size={16} color={'white'} />
+									<AntDesign name='star' size={16} color={'white'} />
 									<Text style={{color: 'white', fontSize: 16, left: 4}}>{props.info.rating}</Text>
 								</View>
 							</View>
@@ -164,12 +166,12 @@ export default function Bottomsheet(props) {
 						{/* <IconButton icon='camera' iconColor={MD3Colors.error50} size={20} onPress={() => //('Pressed')} /> */}
 						<BaseButton style={{position: 'absolute', left: '88%', top: '3%'}} onPress={props.closeFun}>
 							<View style={styles.CloseButton}>
-								<Icons.EvilIcons name='close' size={30} color={'black'} />
+								<EvilIcons name='close' size={30} color={'black'} />
 							</View>
 						</BaseButton>
 						<BaseButton style={{position: 'absolute', left: '88%', top: '30%'}} onPress={() => navigation.navigate('StoreLocation')}>
 							<View style={styles.CloseButton}>
-								<Icons.EvilIcons name='location' size={30} color={'black'} />
+								<EvilIcons name='location' size={30} color={'black'} />
 							</View>
 						</BaseButton>
 					</View>
@@ -194,7 +196,7 @@ export default function Bottomsheet(props) {
 									<Text style={{left: 12, flexShrink: 1, fontFamily: 'Poppins-semibold'}}>{modalDetails.productName}</Text>
 									<TouchableWithoutFeedback onPress={closeModal} style={{padding: 5}}>
 										<View style={{borderRadius: 40, width: 40, height: 40, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center'}}>
-											<Icons.EvilIcons name='close' size={30} color={'white'} />
+											<EvilIcons name='close' size={30} color={'white'} />
 										</View>
 									</TouchableWithoutFeedback>
 								</View>
@@ -326,7 +328,7 @@ export default function Bottomsheet(props) {
 				</MapView>
 				<BaseButton style={{position: 'absolute', top: '2%', left: '3%'}} onPress={() => navigation.navigate('StoreHome')}>
 					<View style={[styles.CloseButton, {backgroundColor: 'black'}]}>
-						<Icons.Ionicons name='chevron-back' size={30} color={'white'} />
+						<Ionicons name='chevron-back' size={30} color={'white'} />
 					</View>
 				</BaseButton>
 			</View>
@@ -347,23 +349,82 @@ export default function Bottomsheet(props) {
 	);
 }
 export function CategoryBottomSheet(props) {
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [cardDetails, setCardDetails] = useState();
+	const {confirmPayment, loading} = useConfirmPayment();
+	const [totalCost, setTotalCost] = useState(0);
 	const data = props.data;
 	const dispatch = useDispatch();
-	useEffect(() => {
-		Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
-			dispatch(ALL_ACTIONS.setAllProducts(result.data));
-		});
-	}, []);
-	const handleModal = () => {
-		console.log('hello');
+	// useEffect(() => {
+	// 	Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
+	// 		dispatch(ALL_ACTIONS.setAllProducts(result.data));
+	// 	});
+	// }, []);
+
+	const changeOption = () => {
+		setOption(options[(options.indexOf(option) + 1) % 4]);
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 	};
+	const openModal = (data) => {
+		Axios.post('/api/fetchproduct', {
+			id: data.productId,
+			restaurantId: data.sell_products[0].manufactureId,
+		}).then(async (response) => {
+			console.log(response.data[0]);
+			dispatch(ALL_ACTIONS.setModalDetails(response.data[0]));
+			setIsModalVisible(true);
+		});
+	};
+	const closeModal = () => {
+		setIsModalVisible(false);
+	};
+	
 	return (
 		<View style={styles.container}>
-			<View style={{height: '100%', width: '100%'}}>{data && <FlashList contentContainerStyle={{paddingTop: Dimensions.get('screen').height / 5}} data={data} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={data.length} />}</View>
+			{isModalVisible && (
+				<Portal>
+					<ItemModal isModalVisible={isModalVisible} closeModal={closeModal} />
+				</Portal>
+			)}
+			<View style={{height: '100%', width: '100%'}}>
+				{data.length > 0 ? (
+					<FlashList contentContainerStyle={{paddingTop: Dimensions.get('screen').height / 5}} data={data} renderItem={({item}) => <Card openModal={openModal} type='food' data={item} />} estimatedItemSize={data.length} />
+				) : (
+					<View
+						style={{
+							width: '100%',
+							height: '80%',
+							alignItems: 'center',
+							justifyContent: 'center',
+							paddingTop: Dimensions.get('screen').height / 7,
+						}}
+					>
+						<Image
+							style={{
+								height: '50%',
+								width: '98%',
+								opacity: 0.5,
+							}}
+							contentFit='cover'
+							resizeMode='contain'
+							source={require('../assets/no-results.png')}
+						/>
+						<Text
+							style={{
+								fontFamily: 'Poppins-semibold',
+								fontSize: 20,
+								paddingTop: 20,
+							}}
+						>
+							Oops! No Products
+						</Text>
+					</View>
+				)}
+			</View>
 			<BlurView
 				intensity={70}
 				style={{
-					height: Dimensions.get('screen').height / 5,
+					height: props.data.length > 0 ? Dimensions.get('screen').height / 5 : Dimensions.get('screen').height / 7,
 					width: '100%',
 					textAlign: 'center',
 					justifyContent: 'center',
@@ -379,122 +440,60 @@ export function CategoryBottomSheet(props) {
 				>
 					<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 37, paddingLeft: Dimensions.get('screen').width / 45}}>{props.title}</Text>
 				</View>
-				<View
-					style={{
-						height: '50%',
-						width: '100%',
-					}}
-				>
-					{props.type == 'delivery' ? (
-						<IconButton
-							name={MaterialIcons}
-							padding={true}
-							iconProps={{
-								name: 'delivery-dining',
-								size: 24,
-								color: 'black',
-								radius: 30,
-							}}
-							title='Delivery'
-							func={props.optionChangeFun}
-						/>
-					) : props.type == 'all' ? (
-						<IconButton name={MaterialIcons} padding={true} title='All' func={props.optionChangeFun} />
-					) : props.type == 'dine in' ? (
-						<IconButton
-							name={MaterialCommunityIcons}
-							padding={true}
-							iconProps={{
-								name: 'silverware-fork-knife',
-								size: 24,
-								color: 'black',
-								radius: 30,
-							}}
-							title='Dine in'
-							func={props.optionChangeFun}
-						/>
-					) : (
-						<IconButton
-							name={Ionicons}
-							padding={true}
-							iconProps={{
-								name: 'fast-food-outline',
-								size: 24,
-								color: 'black',
-								radius: 30,
-							}}
-							title='Take away'
-							func={props.optionChangeFun}
-						/>
-					)}
-				</View>
+				{props.data.length > 0 ? (
+					<View
+						style={{
+							height: '50%',
+							width: '100%',
+						}}
+					>
+						{props.type == 'delivery' ? (
+							<IconButton
+								name={MaterialIcons}
+								padding={true}
+								iconProps={{
+									name: 'delivery-dining',
+									size: 24,
+									color: 'black',
+									radius: 30,
+								}}
+								title='Delivery'
+								func={props.optionChangeFun}
+							/>
+						) : props.type == 'all' ? (
+							<IconButton name={MaterialIcons} padding={true} title='All' func={props.optionChangeFun} />
+						) : props.type == 'dine in' ? (
+							<IconButton
+								name={MaterialCommunityIcons}
+								padding={true}
+								iconProps={{
+									name: 'silverware-fork-knife',
+									size: 24,
+									color: 'black',
+									radius: 30,
+								}}
+								title='Dine in'
+								func={props.optionChangeFun}
+							/>
+						) : (
+							<IconButton
+								name={Ionicons}
+								padding={true}
+								iconProps={{
+									name: 'fast-food-outline',
+									size: 24,
+									color: 'black',
+									radius: 30,
+								}}
+								title='Take away'
+								func={props.optionChangeFun}
+							/>
+						)}
+					</View>
+				) : (
+					<></>
+				)}
 			</BlurView>
-			{/* <View
-				style={{
-					height: '20%',
-					width: '100%',
-					position: 'absolute',
-					backgroundColor:'rgba(255,255,255,0.9)'
-				}}
-			>
-				<View
-					style={{
-						height: '50%',
-						justifyContent: 'center',
-					}}
-				>
-					<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 37, paddingLeft: Dimensions.get('screen').width / 45}}>{props.title}</Text>
-				</View>
-				<View
-					style={{
-						height: '50%',
-						width: '100%',
-					}}
-				>
-					{props.type == 'delivery' ? (
-						<IconButton
-							name={MaterialIcons}
-							padding={true}
-							iconProps={{
-								name: 'delivery-dining',
-								size: 24,
-								color: 'black',
-								radius: 30,
-							}}
-							title='Delivery'
-							func={props.optionChangeFun}
-						/>
-					) : props.type == 'all' ? (
-						<IconButton name={MaterialIcons} padding={true} title='All' func={props.optionChangeFun} />
-					) : props.type == 'dine in' ? (
-						<IconButton
-							name={MaterialCommunityIcons}
-							padding={true}
-							iconProps={{
-								name: 'silverware-fork-knife',
-								size: 24,
-								color: 'black',
-								radius: 30,
-							}}
-							title='Dine in'
-							func={props.optionChangeFun}
-						/>
-					) : (
-						<IconButton
-							name={Ionicons}
-							padding={true}
-							iconProps={{
-								name: 'fast-food-outline',
-								size: 24,
-								color: 'black',
-								radius: 30,
-							}}
-							title='Take away'
-							func={props.optionChangeFun}
-						/>
-					)}
-				</View>
-			</View> */}
 		</View>
 	);
 }

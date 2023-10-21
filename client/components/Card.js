@@ -101,7 +101,7 @@ export default function Card(props) {
 			</View>
 		);
 	} else if (props.type == 'food') {
-		//console.log(props.data.sell_products[0].price);
+		console.log(props.data);
 		return (
 			<TouchableWithoutFeedback onPress={() => props.openModal(props.data)}>
 				<View style={styles.FoodCardContainer}>

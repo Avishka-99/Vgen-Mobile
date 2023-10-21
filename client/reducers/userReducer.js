@@ -47,6 +47,7 @@ const userReducer = (state = initialState, action) => {
 				searchedFoods: action.payload,
 			};
 		case SET_ALL_PRODUCTS:
+			
 			return {
 				...state,
 				allProducts: action.payload,
