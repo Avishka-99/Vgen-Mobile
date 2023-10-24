@@ -73,8 +73,8 @@ export default function ItemModal(props) {
 			<View style={{height: '100%', width: '100%'}}>
 				<View style={{width: '100%', height: '11%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
 					<Text style={{left: 12, flexShrink: 1, fontFamily: 'Poppins-semibold'}}>{modalDetails.productName}</Text>
-					<TouchableWithoutFeedback onPress={props.closeModal} style={{padding: 5}}>
-						<View style={{borderRadius: 40, width: 40, height: 40, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center'}}>
+					<TouchableWithoutFeedback onPress={props.closeModal}>
+						<View style={{borderRadius: 40, width: 40, height: 40, backgroundColor: 'black', alignItems: 'center', justifyContent: 'center', right: '10%'}}>
 							<EvilIcons name='close' size={30} color={'white'} />
 						</View>
 					</TouchableWithoutFeedback>
@@ -91,9 +91,9 @@ export default function ItemModal(props) {
 							}}
 							source={{uri: NGROK_URL + PRODUCT_IMG_PATH + modalDetails.productImage}}
 						/>
-						<Chip style={{height: '20%', position: 'absolute', top: '8%', left: '54%'}}>
+						{/* <Chip style={{height: '20%', position: 'absolute', top: '8%', left: '54%'}}>
 							<Text style={{fontSize: 10, fontFamily: 'Poppins-semibold'}}>Vegan</Text>
-						</Chip>
+						</Chip> */}
 						<View style={{height: '10%', alignItems: 'center', marginTop: '2%'}}>
 							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#000'}}>Rs.{modalDetails.sell_products[0].price.toFixed(2)}</Text>
 						</View>
@@ -102,7 +102,7 @@ export default function ItemModal(props) {
 					<View style={{width: '47%', height: '100%', left: '3%', justifyContent: 'space-around'}}>
 						<View>
 							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>From :</Text>
-							<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>sddsa</Text>
+							<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>{modalDetails.resturantName}</Text>
 						</View>
 						<View>
 							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>In Stock :</Text>
