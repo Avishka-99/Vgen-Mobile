@@ -7,6 +7,7 @@ import Axios from '../../../api/Axios';
 import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
 import {useDispatch, useSelector} from 'react-redux';
 import * as Location from 'expo-location';
+import * as ALL_ACTIONS from '../../../actions/AllActions'
 
 
 function Home({navigation}) {
@@ -19,13 +20,17 @@ function Home({navigation}) {
     const [errorMsg, setErrorMsg] = useState('');
     const userID =useSelector((state) => state.userReducer.userid)
     console.log(userID)
+    const dispatch = useDispatch();
     
 
 
    const value=[] // push card data
 
    const Accsept=(id)=>{
-    navigation.navigate('Delivery')
+    navigation.navigate('Delivery',{
+      deliver_lati:lati,
+      deliver_longi:longi
+    })
    }
 
    
@@ -44,6 +49,7 @@ function Home({navigation}) {
         }
 
         let currentLocation = await Location.getCurrentPositionAsync({});
+        dispatch(ALL_ACTIONS.setRiderLocation(currentLocation.coords))
         setlati(currentLocation.coords.latitude);
         setlongi(currentLocation.coords.longitude);
 
@@ -69,7 +75,7 @@ function Home({navigation}) {
 
     },[userID]);
 
-    //back end data push value array
+    //back end data push to value array
    orders.map((data)=>{
      value.push(data)
    })

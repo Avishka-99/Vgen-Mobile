@@ -6,21 +6,27 @@ import {
    Platform,StatusBar,
    TextInput,
    TextInputWithIcon,
-   Dimensions} from 'react-native'
-import React from 'react'
+   Dimensions,
+   Button} from 'react-native'
+import React, { useRef } from 'react'
 import { useState } from 'react';
 import MapView ,{Marker,Polyline} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import { GOOGLE_API } from '../../../keys/Keys';
 import { Feather } from '@expo/vector-icons'
 
 
-export default function Delivery() {
+export default function Delivery({route}) {
   const[map,setmap]=useState({
     latitude: 7.638763374154984,
     latitudeDelta: 2.4436630602649263, 
     longitude: 80.98392890766263, 
     longitudeDelta: 1.1679803207516812 
   })
+  let deliver_latitude=route.params?.deliver_lati;
+  let deliver_longitude=route.params?.deliver_longi;
+  const mapref=useRef(null)
+  //console.log("hiiii",deliver_latitude)
 
   const RegionChange =(regtion)=>{
     console.log(regtion)
@@ -30,27 +36,26 @@ export default function Delivery() {
     {
       title:"start",
       location:{
-        latitude:8.41,
-        longitude:80.8289,
-        
+        latitude: deliver_latitude ,
+        longitude:  deliver_longitude,
       },
       descryption:"shop",
-      //Image:require('../../../assets/th.jpg')
-      
+    
     },
+
     {
       title:"end",
       location:{
         latitude:7.41,
-        longitude:80.54,
+        longitude: 80.54,
        
       },
       descryption:"custemore home"
     }
   ]
 
- 
-
+  console.log(bitweenpoint[0].location)
+  
   const showPoint=()=>{
    return bitweenpoint.map((item,index)=>{
        return(
@@ -59,7 +64,7 @@ export default function Delivery() {
            coordinate={item.location}
            title={item.title}
            description={item.descryption}
-           image={item.Image}
+          // image={item.Image}
            
          />
        )
@@ -85,23 +90,25 @@ export default function Delivery() {
         <MapView style={styles.mapview}
             region={map}
             onRegionChangeComplete={RegionChange}
+            ref={mapref}
+            
           >
+
             {showPoint()}
-            <Polyline
-               coordinates={[bitweenpoint[0].location,bitweenpoint[1].location]}
-               strokeWidth={4}
-               strokeColor="green"
-            />
-            {/* <MapViewDirections
+      
+            <MapViewDirections
                origin={bitweenpoint[0].location}
                destination={bitweenpoint[1].location}
-               apikey='AIzaSyCu5Ifufmv6BQ0gdhrRu7H72690HKuAmtk'
-               strokeWidth={3}
+               apikey={GOOGLE_API}
+               strokeWidth={6}
                strokeColor='green'
-            /> */}
+            />
          </MapView>   
+
+         
           
       </View>
+     
       
     </SafeAreaView> 
   )
