@@ -25,7 +25,10 @@ function Home({navigation}) {
    const value=[] // push card data
 
    const Accsept=(id)=>{
-    navigation.navigate('Delivery')
+    navigation.navigate('Delivery',{
+      deliver_lati:lati,
+      deliver_longi:longi
+    })
    }
 
    
@@ -69,7 +72,7 @@ function Home({navigation}) {
 
     },[userID]);
 
-    //back end data push value array
+    //back end data push to value array
    orders.map((data)=>{
      value.push(data)
    })
