@@ -508,6 +508,50 @@ export function CategoryBottomSheet(props) {
 		</View>
 	);
 }
+export function ProfileBottomSheet(props) {
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [cardDetails, setCardDetails] = useState();
+	const {confirmPayment, loading} = useConfirmPayment();
+	const [totalCost, setTotalCost] = useState(0);
+	const data = props.data;
+	const dispatch = useDispatch();
+	// useEffect(() => {
+	// 	Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
+	// 		dispatch(ALL_ACTIONS.setAllProducts(result.data));
+	// 	});
+	// }, []);
+
+	const changeOption = () => {
+		setOption(options[(options.indexOf(option) + 1) % 4]);
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+	};
+	const openModal = (data) => {
+		console.log('asdhsds');
+		Axios.post('/api/fetchproduct', {
+			id: data.productId,
+			restaurantId: data.sell_products[0].manufactureId,
+		}).then(async (response) => {
+			Axios.post('/api/fetchRestaurant', {
+				id: response.data[0].sell_products[0].manufactureId,
+			}).then((response_2) => {
+				console.log(response.data);
+				let product = response.data[0];
+				let restaurant = response_2.data[0];
+				let modalData = {
+					...product,
+					...restaurant,
+				};
+				dispatch(ALL_ACTIONS.setModalDetails(modalData));
+				setIsModalVisible(true);
+			});
+		});
+	};
+	const closeModal = () => {
+		setIsModalVisible(false);
+	};
+
+	return <View style={styles.container}></View>;
+}
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
