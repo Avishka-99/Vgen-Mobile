@@ -10,6 +10,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import * as Icons from '../constants/Icons';
 import * as Device from 'expo-device';
 import {FadeIn, FadeOut} from 'react-native-reanimated';
+import {MaterialIcons} from '@expo/vector-icons';
 export default function Card(props) {
 	//console.log(props);
 	if (props.type == 'store') {
@@ -201,7 +202,6 @@ export default function Card(props) {
 				style={{
 					alignItems: 'center',
 					justifyContent: 'center',
-					backgroundColor: 'red',
 				}}
 			>
 				<View
@@ -264,6 +264,62 @@ export default function Card(props) {
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
+		);
+	} else if (props.type == 'profile') {
+		return (
+			<View
+				style={{
+					width: '100%',
+					height: '13%',
+					bottom: '0.2%',
+					alignItems: 'center',
+					flexDirection: 'row',
+					left: '1%',
+				}}
+			>
+				<View
+					style={{
+						height: Dimensions.get('screen').height / 11,
+						width: Dimensions.get('screen').height / 11,
+						backgroundColor: '#dddedc',
+						left: '1%',
+						borderRadius: '100%',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+					onPress={() => props.openModal()}
+				>
+					<MaterialIcons name='add-a-photo' size={32} color='#76B693' />
+				</View>
+				<View
+					style={{
+						width: '50%',
+						height: '100%',
+						left: '20%',
+						justifyContent: 'center',
+					}}
+				>
+					<Text
+						style={{
+							fontFamily: 'Poppins-medium',
+							fontSize: 20,
+						}}
+					>
+						Avishka Prabhath
+					</Text>
+					<Text
+						style={{
+							color: 'dodgerblue',
+							textDecorationLine: 'underline',
+							fontFamily: 'Poppins-regular',
+							fontSize: 14,
+						}}
+						onPress={() => props.openModal()}
+					>
+						Update profile
+					</Text>
+				</View>
+			</View>
 		);
 	}
 }
