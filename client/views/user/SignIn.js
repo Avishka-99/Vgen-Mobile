@@ -36,6 +36,7 @@ export default function SignIn({navigation}) {
 		}).then((response) => {
 			console.log(response.data);
 			if (response.data.type) {
+				console.log('re')
 				dispatch(setUserAction(response.data.type));
 				dispatch(setUserId(response.data.userID));
 				dispatch(setUserLocation({lang: response.data.lang, long: response.data.long}));

@@ -36,14 +36,13 @@ export default function Delivery({route}) {
     {
       title:"start",
       location:{
-        latitude: deliver_latitude ,//     7.4141827,
-        longitude:  deliver_longitude// 80.2089502,
-        
+        latitude: deliver_latitude ,
+        longitude:  deliver_longitude,
       },
       descryption:"shop",
-      //Image:require('../../../assets/th.jpg')
-      
+    
     },
+
     {
       title:"end",
       location:{
@@ -55,6 +54,7 @@ export default function Delivery({route}) {
     }
   ]
 
+  console.log(bitweenpoint[0].location)
   
   const showPoint=()=>{
    return bitweenpoint.map((item,index)=>{
@@ -64,7 +64,7 @@ export default function Delivery({route}) {
            coordinate={item.location}
            title={item.title}
            description={item.descryption}
-           image={item.Image}
+          // image={item.Image}
            
          />
        )

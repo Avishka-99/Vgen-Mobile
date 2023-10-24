@@ -1,7 +1,14 @@
 import { Feather } from '@expo/vector-icons';
 import Button from './Button';
 import React from 'react';
-import { View, Text, StyleSheet, StatusBar, ImageBackground, Dimensions, Image, Switch, Alert, TextInput,ScrollView } from 'react-native'
+import { View, Text,
+     StyleSheet, StatusBar, 
+     ImageBackground, 
+     Dimensions, Image, 
+     Switch, 
+     Alert, 
+     TextInput,
+     ScrollView } from 'react-native'
 
 
 function Order(props) {
