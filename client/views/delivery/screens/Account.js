@@ -34,7 +34,7 @@ export default function Account() {
       
     }
   }
- 
+  console.log(useSelector((state)=>state.deliveryReducer.location))
   // drop dwon data filed
   const val = [
     { label: 'Colombo', value: '1' },

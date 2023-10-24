@@ -5,7 +5,7 @@ const initialState = {
 	userid: '',
 	userLocation: {},
 	searchTerm: '',
-	userLanguage: 'si',
+	userLanguage: 'en',
 	searchedFoods: {},
 	allProducts: {},
 };

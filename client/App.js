@@ -106,7 +106,7 @@ const App = () => {
 							<PaperProvider>
 								<EventOrganizerMain />
 							</PaperProvider>
-						) : user == 'Delivery' ? (
+						) : user == 'deliveryPerson' ? (
 							<PaperProvider>
 								<DeliveryMain />
 							</PaperProvider>
