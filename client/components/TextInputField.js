@@ -63,7 +63,6 @@ export default function TextInputField(props) {
 				secureTextEntry={props.isSecured}
 				placeholderTextColor={'#393E46'}
 				selectionColor={'green'}
-				value={props.value ? props.value : ''}
 				onFocus={props.focusFunction ? props.focusFunction : () => {}}
 				onBlur={props.blurFunction ? props.blurFunction : () => {}}
 			/>

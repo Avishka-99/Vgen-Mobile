@@ -1,19 +1,19 @@
-import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM} from '../constants/ActionTypes';
-
-//initializing state
+import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM, SET_USER_LANGUAGE, SET_SEARCHED_FOODS, SET_ALL_PRODUCTS} from '../constants/ActionTypes';
 const initialState = {
 	user: '',
 	otpEmail: '',
 	userid: '',
 	userLocation: {},
 	searchTerm: '',
+	userLanguage: 'si',
+	searchedFoods: {},
+	allProducts: {},
 };
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_USER:
 			return {
 				...state,
-				//counter: state.counter + action.payload
 				user: action.payload,
 			};
 		case SET_OTP_EMAIL:
@@ -35,6 +35,22 @@ const userReducer = (state = initialState, action) => {
 			return {
 				...state,
 				searchTerm: action.payload,
+			};
+		case SET_USER_LANGUAGE:
+			return {
+				...state,
+				userLanguage: action.payload,
+			};
+		case SET_SEARCHED_FOODS:
+			return {
+				...state,
+				searchedFoods: action.payload,
+			};
+		case SET_ALL_PRODUCTS:
+			
+			return {
+				...state,
+				allProducts: action.payload,
 			};
 		default:
 			return state;

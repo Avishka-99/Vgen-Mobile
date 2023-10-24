@@ -18,6 +18,8 @@ import Axios from '../../../api/Axios';
 import {useSelector, useDispatch} from 'react-redux';
 import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
 import * as ALL_ACTIONS from '../../../actions/AllActions';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {Tab} from 'react-native-elements';
 const {diffClamp} = Animated;
 
 export default function Home({navigation}) {
@@ -29,21 +31,25 @@ export default function Home({navigation}) {
 	const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [focused, setFocused] = useState(false);
-	//dispatch(setUserId(bfshjz))
+	const [fetchedData, setFethedData] = useState(false);
+	const [SearchTerm, setSearchTerm] = useState('');
+	const headerTranslateY = diffClamp.interpolate({
+		inputRange: [0, HEADER_HEIGHT],
+		outputRange: [0, -HEADER_HEIGHT],
+		extrapolate: 'clamp',
+	});
+	const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {useNativeDriver: false});
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
 		setTimeout(() => {
+			dispatch(ALL_ACTIONS.setRestaurantAction([]));
 			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
 				dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
 			});
 			setRefreshing(false);
 		}, 2000);
 	}, []);
-	const headerTranslateY = diffClamp.interpolate({
-		inputRange: [0, HEADER_HEIGHT],
-		outputRange: [0, -HEADER_HEIGHT],
-		extrapolate: 'clamp',
-	});
+
 	const restaurants = [
 		{
 			id: 1,
@@ -131,7 +137,7 @@ export default function Home({navigation}) {
 		},
 	];
 	const restaurantArray = useSelector((state) => state.restaurantReducer.restaurants);
-	console.log(useSelector((state) => state.userReducer.userLocation.lang));
+	//console.log(useSelector((state) => state.userReducer.userLocation.lang));
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
@@ -157,8 +163,6 @@ export default function Home({navigation}) {
 		},
 	});
 	const bottomSheetModalRef = useRef(null);
-
-	// variables
 	const snapPoints = useMemo(() => ['98%'], []);
 
 	const openModal = (data) => {
@@ -166,7 +170,6 @@ export default function Home({navigation}) {
 		bottomSheetModalRef.current.present();
 	};
 	const CloseModal = () => {
-		//console.log('sdsd')
 		bottomSheetModalRef.current.close();
 	};
 	const setFavouriteStore = async (id) => {
@@ -196,29 +199,69 @@ export default function Home({navigation}) {
 		console.log('focus lost');
 		setFocused(false);
 	};
-	const handleScroll = Animated.event([{nativeEvent: {contentOffset: {y: scrollY}}}], {useNativeDriver: false});
-
+	const Tab = createMaterialTopTabNavigator();
 	useEffect(() => {
 		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
 			dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
 		});
 	}, []);
+	const searchFun = (text) => {
+		setSearchTerm(text);
+		console.log(text);
+		if (!text == '') {
+			Axios.post(API_ENDPOINTS.FETCH_SEARCH_RESULT, {
+				parameter: text,
+			}).then((response) => {
+				setFethedData(response.data);
+				//console.log(response.data);
+			});
+		}else{
+			setFethedData(false)
+		}
+	};
+	const handleModal = (data) => {
+		console.log('hello');
+		// Axios.post('/api/fetchproduct', {
+		// 	id: data.productId,
+		// 	restaurantId: data.sell_products[0].manufactureId,
+		// }).then(async (response) => {
+		// 	dispatch(ALL_ACTIONS.setModalDetails(response.data[0]));
+		// });
+		//(data);
+
+		//setIsModalVisible(true);
+	};
+	const ExploreCommunities = () => {
+		const Tab = createMaterialTopTabNavigator();
+		return (
+			<Tab.Navigator
+				screenOptions={{
+					tabBarLabelStyle: {fontSize: 12},
+					tabBarStyle: {borderBottomColor: 'yellow', shadowColor: 'red'},
+				}}
+			>
+				<Tab.Screen name='Explore' component={ExploreCommunities} />
+				<Tab.Screen name='My Communities' component={MyCommnities} />
+			</Tab.Navigator>
+		);
+	};
 	return (
 		<View style={styles.container}>
-			{!focused && (
+			{/* {!focused && (
 				<Animated.View style={[{transform: [{translateY: headerTranslateY}]}]}>
 					<DeliverAddress />
 				</Animated.View>
-			)}
+			)} */}
 
-			<Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}>
-				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} />
-				{!focused ? (
+			{/* <Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}> */}
+			<Animated.View style={[styles.container_2]}>
+				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} searchFun={searchFun} />
+				{!focused && SearchTerm == '' ? (
 					<Animated.ScrollView
 						style={{flex: 1, width: '100%', height: '100%'}}
-						onScroll={(event) => {
-							handleScroll(event), console.log(scrollY);
-						}}
+						// onScroll={(event) => {
+						// 	handleScroll(event), console.log(scrollY);
+						// }}
 						scrollEventThrottle={16}
 						contentContainerStyle={{
 							flexGrow: 1,
@@ -234,17 +277,18 @@ export default function Home({navigation}) {
 						{/* {restaurants.map((item) => (
 						<Card onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} key={item.id} details={item} type='store' name={item.name} location={item.location} rating={item.rating} image={item.image} />
 					))} */}
-						<Card key={1} type='empty' />
+						<View style={{height: 100}}></View>
 					</Animated.ScrollView>
 				) : (
-					<Animated.ScrollView style={{flex: 1, width: '100%'}}>
-						<Text>Hello</Text>
-					</Animated.ScrollView>
+					<View style={{flex: 1, width: '100%', height: '100%'}}>
+						<FlashList contentContainerStyle={{paddingBottom:20}}  data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
+						
+					</View>
 				)}
 			</Animated.View>
 			<Portal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
-					<Bottomsheet closeFun={CloseModal} info={storeInfo} />
+					<Bottomsheet closeFun={CloseModal} info={storeInfo} type='store' />
 				</BottomSheetModal>
 				{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
 					<View style={{flex: 1}}>

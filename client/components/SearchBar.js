@@ -4,7 +4,6 @@ import {Feather} from '@expo/vector-icons';
 import TextInputField from './TextInputField';
 import {useSelector, useDispatch} from 'react-redux';
 const SearchBar = (props) => {
-	const [text, setText] = useState('');
 	return (
 		<View style={styles.Container}>
 			<TextInputField
@@ -21,7 +20,7 @@ const SearchBar = (props) => {
 					radius: 30,
 				}}
 				placeholder='Search here..'
-				function={setText}
+				function={props.searchFun}
 				textInputRow={{
 					height: '80%',
 					reverse: true,
@@ -31,7 +30,6 @@ const SearchBar = (props) => {
 					width: '90%',
 					ioswidth: '89%',
 				}}
-				value={text}
 				focusFunction={props.focusFun}
 				blurFunction={props.blurFun}
 			/>

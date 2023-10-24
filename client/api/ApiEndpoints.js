@@ -1,7 +1,10 @@
-export const SIGNIN_URL='/api/signinuser';
-export const SIGNUP_URL='/api/registeruser';
+export const SIGNIN_URL = '/api/signinuser';
+export const SIGNUP_URL = '/api/registeruser';
 export const VERIFY_USER_URL = '/api/verifyuser';
-export const Delivery_DETAILS_URL= '/api/deliverDetails';
-export const Delivery_Orders_URL='/api/deliveryOrders';
+export const Delivery_DETAILS_URL = '/api/deliverDetails';
+export const Delivery_Orders_URL = '/api/deliveryOrders';
 export const FETCH_RESTAURANT_DETAILS = '/api/fetchrestaurants';
 export const FETCH_RESTAURANT_PRODUCTS = '/api/fetchrestaurantproducts';
+export const FETCH_SEARCH_RESULT = '/api/fetchresult';
+export const FETCH_CATEGORIES = '/api/fetchcategories';
+export const FETCH_ALL_PRODUCTS = '/api/getallproducts';
