@@ -4,7 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserAction } from '../../../actions/UserAction';
 //import SwitchSelector from 'react-native-switch-selector';
-import Header from '../../../components/Header';
+//import Header from '../../../components/Header';
 import Switchbutton from '../../../components/Switchbutton';
 import Button from '../../../components/Button';
 import Dropdwon from '../../../components/Dropdwon';
@@ -14,12 +14,13 @@ export default function Account() {
 
   const [iconName, seticonName] = useState('')
   const [ico, setico] = useState('')
-  const [myview, setmyview] = useState(true)
+  const [myview, setmyview] = useState(false)
   const [value,setvalu]=useState('')
   const [Name,setName]=useState('')
   const [datobj,setdataobj]=useState({})
+  
   const switchChanges = (value) => {
-    if (value.val === '1') {
+    if (value.val ==='1') {
       seticonName('chevron-right')
       setico('')
       setName('')
@@ -34,8 +35,7 @@ export default function Account() {
       
     }
   }
-  console.log(useSelector((state)=>state.deliveryReducer.location))
-  // drop dwon data filed
+  
   const val = [
     { label: 'Colombo', value: '1' },
     { label: 'Kurunagela', value: '2' },
@@ -97,29 +97,7 @@ export default function Account() {
     const lowercase=/[a-z]/;
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const timePattern =  /^(?:[01]\d|2[0-3]):[0-5]\d$/;
-  //  if(dataObject.password.length<6){
-  //     console.log(dataObject.password)
-  //     Alert.alert("password should be mor than 6 digit")
-  //  }
-  //  else if(!upercase.test(dataObject.password)){
-  //    Alert.alert("password has at least one upper case letar")
-  //  }
-  //  else if(!lowercase.test(dataObject.password)){
-  //   Alert.alert("password has at least one lower case letar")
-  // }
-
-  // if(dataObject.password!==dataObject.comfromePass){
-  //   Alert.alert('password does not match')
-  // }
-  // if(dataObject.usernaem.length==0){
-  //    Alert.alert('user name is empty')
-  // }
-  // else if(!emailPattern.test(dataObject.usernaem)){
-  //   Alert.alert('user name pattern is invalid')
-  // }
-  // if(dataObject.avalebletime.length==0){
-  //   Alert.alert('Enter avilable  time')
-  // }
+ 
     console.log("hellow click me")
     console.log(datobj)
   }
@@ -145,8 +123,7 @@ export default function Account() {
           </View>
           <View style={styles.editData}>
             <View style={styles.profileData}>
-
-              {myview ? <View>
+              {myview ?<View>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}><Text style={{ fontSize: 10, marginTop: 15, fontFamily: 'Poppins-semibold' }}>I have 12 years experience in delivering Industry.</Text><Text style={{ fontSize: 10, fontFamily: 'Poppins-semibold' }}>Hello! This is Karen Allen,</Text></View>
                 <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15 }}>Vehicle Type : </Text><View><Feather name='truck' size={20} /></View></View>
                 <View style={{ marginStart: 29, marginTop: 25, flexDirection: 'row' }}><Text style={{ color: '#7EB693', fontSize: 15 }}>Vehicle No :</Text><Text style={{ fontSize: 15 }}>AASS-2345</Text></View>
@@ -168,8 +145,6 @@ export default function Account() {
               </View>
               </ScrollView>
               }
-
-
             </View>
           </View>
         </View>
