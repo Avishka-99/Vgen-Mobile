@@ -1,20 +1,22 @@
-import {View, Text, StyleSheet, Button} from 'react-native';
-import React,{useRef,useMemo} from 'react';
+import {View, Text, StyleSheet, Button, Switch, Dimensions} from 'react-native';
+import React, {useRef, useMemo, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUserAction} from '../../../actions/UserAction';
 import Card from '../../../components/Card';
 import {Divider} from 'react-native-paper';
 import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {Portal, PortalHost} from '@gorhom/portal';
-import { ProfileBottomSheet } from '../../../components/Bottomsheet';
+import {ProfileBottomSheet} from '../../../components/Bottomsheet';
 import Backdrop from '../../../components/Backdrop';
 export default function Menu() {
+	const [isEnabled, setIsEnabled] = useState(false);
+	const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 	const dispatch = useDispatch();
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
-			alignItems: 'center',
-			backgroundColor:'white'
+
+			backgroundColor: 'white',
 		},
 	});
 	const bottomSheetModalRef = useRef(null);
@@ -39,9 +41,63 @@ export default function Menu() {
 			<Card type='profile' openModal={openModal} />
 			<Divider
 				style={{
-					width: '100%',
+					width: '96%',
 				}}
 			/>
+			<View
+				style={{
+					height: '8%',
+					width: '100%',
+					alignItems: 'center',
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					left:'2%'
+				}}
+			>
+				<Text
+					style={{
+						fontFamily: 'Poppins-medium',
+					}}
+				>
+					Enroll as event organizer
+				</Text>
+				<Switch
+					value={isEnabled}
+					onValueChange={toggleSwitch}
+					style={{
+						right: '2%',
+					}}
+				/>
+			</View>
+			<View
+				style={{
+					flexDirection: 'row',
+					justifyContent: 'space-evenly',
+					width: '100%',
+				}}
+			>
+				<View
+					style={{
+						width: Dimensions.get('screen').width / 4,
+						height: Dimensions.get('screen').width / 4,
+						backgroundColor: 'red',
+					}}
+				></View>
+				<View
+					style={{
+						width: Dimensions.get('screen').width / 4,
+						height: Dimensions.get('screen').width / 4,
+						backgroundColor: 'red',
+					}}
+				></View>
+				<View
+					style={{
+						width: Dimensions.get('screen').width / 4,
+						height: Dimensions.get('screen').width / 4,
+						backgroundColor: 'red',
+					}}
+				></View>
+			</View>
 			<Button
 				title='Log out'
 				onPress={() => {
