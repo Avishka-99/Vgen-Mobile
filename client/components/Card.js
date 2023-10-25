@@ -269,12 +269,12 @@ export default function Card(props) {
 		return (
 			<View
 				style={{
-					width: '100%',
 					height: '13%',
 					bottom: '0.2%',
 					alignItems: 'center',
 					flexDirection: 'row',
-					left: '1%',
+					left:'2%'
+
 				}}
 			>
 				<View
