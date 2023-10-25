@@ -3,7 +3,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Delivery from './screens/Delivery';
 import Account from './screens/Account';
-import Home from '../delivery/screens/Home';
+import Home from './screens/Home';
 import Complen from './screens/Complen';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -70,7 +70,7 @@ export default function CustomerMain() {
                 }}
             />
 
-            <Tab.Screen name="Complen" component={Complen}
+            {/* <Tab.Screen name="Complen" component={Complen}
                 options={{
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
@@ -80,7 +80,7 @@ export default function CustomerMain() {
                         <MaterialCommunityIcons name="book-edit" size={30} color={focused ? "#7EB693" : "black"} />
                     ),
                 }}
-            />
+            /> */}
         </Tab.Navigator>
 
     )

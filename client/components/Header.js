@@ -3,7 +3,7 @@ import { Text,View,StyleSheet,Image, Dimensions,ImageBackground,TouchableOpacity
 import { Feather } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 
-function Header(props) {
+export default function Header(props) {
    
     return (
        <View  style={[styles.HeaderView,props.sty]} >
@@ -43,4 +43,3 @@ const  styles=StyleSheet.create({
     }
 })
 
-export default Header;

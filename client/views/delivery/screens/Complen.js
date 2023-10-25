@@ -20,6 +20,7 @@ import Header from '../../../components/Header';
 import { Feather } from '@expo/vector-icons'
 import Dropdwon from '../../../components/Dropdwon';
 import Button from '../../../components/Button';
+
 function Complen(props) {
     const[ViewImage,setViewImage]=useState(false)
     const[image,setimage]=useState([])
@@ -73,6 +74,7 @@ function Complen(props) {
           })
         setViewImage(true)
     }
+
     return (
        
              <View style={{flex:1}}>

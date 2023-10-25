@@ -11,7 +11,7 @@ import { View, Text,
      ScrollView } from 'react-native'
 
 
-function Order(props) {
+export default function Order(props) {
     return (
        <View style={[styles.card,props.cardstyle]}>
           <View style={styles.oderimage}>
@@ -82,4 +82,4 @@ const styles=StyleSheet.create({
     
 })
 
-export default Order;
+//export default Order;

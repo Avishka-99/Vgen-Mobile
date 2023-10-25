@@ -1,6 +1,7 @@
 import {StyleSheet, TextInput, View, Dimensions, Keyboard} from 'react-native';
 import React, {useRef, useEffect} from 'react';
 import * as Device from 'expo-device';
+
 export default function TextInputField(props) {
 	const localInputRef = useRef(null);
 
