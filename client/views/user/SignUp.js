@@ -21,6 +21,7 @@ import MarqueeView from 'react-native-marquee-view';
 import {setUserLanguage} from '../../actions/UserAction';
 import * as Device from 'expo-device';
 import * as Haptics from 'expo-haptics';
+import {setUserLocation} from '../../actions/UserAction';
 export default function SignUp({navigation}) {
 	const [checked, setChecked] = useState('first');
 	const [email, setEmail] = useState('');
@@ -34,10 +35,10 @@ export default function SignUp({navigation}) {
 	const [confirmpassword, setConfirmPassword] = useState('@');
 	const [contactNo, setContactNo] = useState('');
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [location, setLocation] = useState(null);
+	const [location, setLocation] = useState();
 	const [region, setRegion] = useState();
 	const [language, setLanguage] = useState('en');
-	var currentLocation = useSelector((state) => state.userReducer.userLocation);
+	const currentLocation = useSelector((state) => state.userReducer.userLocation);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		(async () => {
@@ -47,15 +48,16 @@ export default function SignUp({navigation}) {
 				return;
 			}
 			let locale = await AsyncStorage.getItem('locale').then((response) => {
-				console.log(typeof response);
+				//console.log(typeof response);
 				if (response) {
 					dispatch(setUserLanguage(response));
 				} else {
 					dispatch(setUserLanguage('en'));
 				}
 			});
-			let location = await Location.getCurrentPositionAsync({});
-			setLocation(location);
+			let currentLocation = await Location.getCurrentPositionAsync({});
+			dispatch(setUserLocation(currentLocation));
+			setLocation(currentLocation);
 		})();
 	}, []);
 	//const locale = useSelector((state) => state.userReducer.userLanguage);
@@ -98,7 +100,7 @@ export default function SignUp({navigation}) {
 			</View>
 		),
 	};
-
+	console.log(currentLocation.coords);
 	const showToast = (type, message, message_2, duration) => {
 		Toast.show({
 			type: type,
@@ -299,7 +301,7 @@ export default function SignUp({navigation}) {
 					{/* <Button mode='contained' onPress={openModal} buttonColor='#7EB693' labelStyle={{fontFamily: 'Poppins-semibold', fontSize: 14}}>
 					{i18n.t('picklocation')}
 				</Button> */}
-					{region ? (
+					{location && (locale == 'si' || locale == 'en') ? (
 						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('fetchedlocation2')}</Text>
 					) : location && locale == 'ta' ? (
 						<View>
@@ -355,7 +357,13 @@ export default function SignUp({navigation}) {
 			<View style={{width: '100%', alignItems: 'center', justifyContent: 'center'}}>
 				<Text style={styles.bottomText}>
 					{i18n.t('alreadyamember')}{' '}
-					<Text style={styles.signUptext} onPress={() => navigation.navigate('SignIn')}>
+					<Text
+						style={styles.signUptext}
+						onPress={() => {
+							dispatch(setUserLocation({}));
+							navigation.navigate('SignIn');
+						}}
+					>
 						{i18n.t('signin')}
 					</Text>
 				</Text>

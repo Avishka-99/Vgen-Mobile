@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, StatusBar, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, TextInput, Touchable} from 'react-native';
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image} from 'expo-image';
 import * as Icons from '../../constants/Icons';
 import Constants from 'expo-constants';
@@ -18,7 +18,7 @@ import {signin} from '../../constants/Localizations';
 import * as Localization from 'expo-localization';
 import {I18n} from 'i18n-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setUserLanguage } from '../../actions/UserAction';
+import {setUserLanguage} from '../../actions/UserAction';
 export default function SignIn({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -38,10 +38,11 @@ export default function SignIn({navigation}) {
 					dispatch(setUserLanguage(response));
 				} else {
 					dispatch(setUserLanguage('en'));
+					dispatch(setUserLocation({}));
 				}
 			});
 		})();
-	}, []);
+	},[]);
 	const handleSubmit = () => {
 		//AsyncStorage.clear('locale')
 		//dispatch(setUserAction('delivery'))
@@ -51,7 +52,7 @@ export default function SignIn({navigation}) {
 		}).then((response) => {
 			console.log(response.data);
 			if (response.data.type) {
-				console.log('re')
+				console.log('re');
 				dispatch(setUserAction(response.data.type));
 				dispatch(setUserId(response.data.userID));
 				dispatch(setUserLocation({lang: response.data.lang, long: response.data.long}));
