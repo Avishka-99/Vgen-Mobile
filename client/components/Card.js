@@ -273,15 +273,14 @@ export default function Card(props) {
 					bottom: '0.2%',
 					alignItems: 'center',
 					flexDirection: 'row',
-					left:'2%'
-
+					left: '2%',
 				}}
 			>
 				<View
 					style={{
 						height: Dimensions.get('screen').height / 11,
 						width: Dimensions.get('screen').height / 11,
-						backgroundColor: '#dddedc',
+						backgroundColor: '#efefef',
 						left: '1%',
 						borderRadius: '100%',
 						justifyContent: 'center',
@@ -316,7 +315,7 @@ export default function Card(props) {
 						}}
 						onPress={() => props.openModal()}
 					>
-						Update profile
+						{props.text}
 					</Text>
 				</View>
 			</View>

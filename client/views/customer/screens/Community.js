@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import React, {useState, useRef, useMemo} from 'react';
+import React, {useState, useRef, useMemo,useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Card from '../../../components/Card';
@@ -135,6 +135,20 @@ export default function Community() {
 		bottomSheetModalRef.current.close();
 	};
 	const MyCommunities = () => {
+		useEffect(() => {
+			async function fetchData() {
+				const categories = await Axios.post(API_ENDPOINTS.FETCH_CATEGORIES);
+				setCategories(categories.data);
+			}
+			fetchData();
+			//setCategories()
+			// Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
+			// 	console.log(result.data)
+			// 	setFoods(result.data);
+			// 	dispatch(ALL_ACTIONS.setAllProducts(result.data));
+			// 	//allFoods = useSelector((state) => state.userReducer.allProducts);
+			// });
+		}, []);
 		return (
 			<View style={{flex: 1, justifyContent: 'center'}}>
 				<View style={{width: '100%', height: '10%', backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center'}}>

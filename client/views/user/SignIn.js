@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, StatusBar, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, TextInput, Touchable} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Image} from 'expo-image';
 import * as Icons from '../../constants/Icons';
 import Constants from 'expo-constants';
@@ -17,6 +17,8 @@ import {setUserLocation} from '../../actions/UserAction';
 import {signin} from '../../constants/Localizations';
 import * as Localization from 'expo-localization';
 import {I18n} from 'i18n-js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUserLanguage } from '../../actions/UserAction';
 export default function SignIn({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -25,10 +27,23 @@ export default function SignIn({navigation}) {
 	//   "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
 	// })
 	//console.log(email)
-	console.log(Device.modelName);
+	//AsyncStorage.clear('locale');
 	const dispatch = useDispatch();
 	const locale = useSelector((state) => state.userReducer.userLanguage);
+	useEffect(() => {
+		(async () => {
+			let locale = await AsyncStorage.getItem('locale').then((response) => {
+				console.log(typeof response);
+				if (response) {
+					dispatch(setUserLanguage(response));
+				} else {
+					dispatch(setUserLanguage('en'));
+				}
+			});
+		})();
+	}, []);
 	const handleSubmit = () => {
+		//AsyncStorage.clear('locale')
 		//dispatch(setUserAction('delivery'))
 		Axios.post(API_ENDPOINTS.SIGNIN_URL, {
 			email: email,

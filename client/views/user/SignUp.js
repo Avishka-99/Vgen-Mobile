@@ -30,13 +30,13 @@ export default function SignUp({navigation}) {
 	const [lastName, setlastName] = useState('');
 	const [userRole, setuserRole] = useState('Customer');
 	const [profilePicture, setProfilePicture] = useState('');
-	const [password, setPassword] = useState('');
-	const [confirmpassword, setConfirmPassword] = useState('');
+	const [password, setPassword] = useState('@');
+	const [confirmpassword, setConfirmPassword] = useState('@');
 	const [contactNo, setContactNo] = useState('');
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [location, setLocation] = useState(null);
 	const [region, setRegion] = useState();
-	//const [locale, setLocale] = useState('ta');
+	const [language, setLanguage] = useState('en');
 	var currentLocation = useSelector((state) => state.userReducer.userLocation);
 	const dispatch = useDispatch();
 	useEffect(() => {
@@ -47,17 +47,19 @@ export default function SignUp({navigation}) {
 				return;
 			}
 			let locale = await AsyncStorage.getItem('locale').then((response) => {
+				console.log(typeof response);
 				if (response) {
-					dispatch(setUserLanguage(locale));
+					dispatch(setUserLanguage(response));
 				} else {
-					dispatch(setUserLanguage('si'));
+					dispatch(setUserLanguage('en'));
 				}
 			});
 			let location = await Location.getCurrentPositionAsync({});
 			setLocation(location);
 		})();
 	}, []);
-	const locale = useSelector((state) => state.userReducer.userLanguage);
+	//const locale = useSelector((state) => state.userReducer.userLanguage);
+	const locale = language;
 	const toastConfig = {
 		success: (props) => (
 			<BaseToast
@@ -140,6 +142,7 @@ export default function SignUp({navigation}) {
 		}
 	};
 	const handleSubmit = async () => {
+		//navigation.navigate('Otpcode');
 		console.log(location);
 		var isClean = true;
 		var lat = 0;
@@ -194,6 +197,7 @@ export default function SignUp({navigation}) {
 				if (response.data.type == 'error') {
 					showToast(response.data.type, response.data.message, '', 2000);
 				} else {
+					AsyncStorage.setItem('locale', language);
 					dispatch(setOtpEmail(email));
 					navigation.navigate('Otpcode');
 				}
@@ -206,8 +210,11 @@ export default function SignUp({navigation}) {
 	};
 	const changeLocale = (value) => {
 		const localeList = ['en', 'si', 'ta'];
-		dispatch(setUserLanguage(localeList[(localeList.indexOf(locale) + 1) % 3]));
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+		const newLocale = localeList[(localeList.indexOf(locale) + 1) % 3];
+		setLanguage(localeList[(localeList.indexOf(locale) + 1) % 3]);
+		//AsyncStorage.setItem('locale', newLocale);
+		//dispatch(setUserLanguage(localeList[(localeList.indexOf(locale) + 1) % 3]));
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 	};
 	//console.log(location);
 	const i18n = new I18n(signup);

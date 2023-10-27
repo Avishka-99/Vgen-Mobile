@@ -36,14 +36,15 @@ export default function TextInputField(props) {
 			flexDirection: props.textInputRow ? (props.textInputRow.reverse ? 'row-reverse' : 'row') : 'row',
 		},
 		textInput: {
+			fontFamily: 'Poppins-medium',
 			// width: Device.brand=="Apple"?props.textInput ?props.textInput.width ? props.textInput.width :"90%":"90%":9,
 			color: '#393E46',
 			paddingLeft: props.textInput ? (props.textInput.paddingLeft ? props.textInput.paddingLeft : 10) : 10,
 			width: Device.brand == 'Apple' ? (props.textInput ? (props.textInput.ioswidth ? props.textInput.ioswidth : '90%') : '90%') : '89%',
 		},
 		iconBackground: {
-			height: Device.brand == 'Apple' ? Dimensions.get('screen').width / 9 : Dimensions.get('screen').width / 10,
-			width: Device.brand == 'Apple' ? Dimensions.get('screen').width / 9 : Dimensions.get('screen').width / 10,
+			height: Device.brand == 'Apple' && props.iconType ? Dimensions.get('screen').width / 9 : Device.brand == 'Android' && props.iconType ? Dimensions.get('screen').width / 10 : 0,
+			width: Device.brand == 'Apple' && props.iconType ? Dimensions.get('screen').width / 9 : Device.brand == 'Android' && props.iconType ? Dimensions.get('screen').width / 10 : 0,
 			backgroundColor: props.iconProps ? (props.iconProps.iconBg ? props.iconProps.iconBg : 'transparent') : 'transparent',
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -62,10 +63,11 @@ export default function TextInputField(props) {
 				style={styles.textInput}
 				onChangeText={(event) => props.function(event)}
 				secureTextEntry={props.isSecured}
-				placeholderTextColor={'#393E46'}
+				placeholderTextColor={'#5f5f5f'}
 				selectionColor={'green'}
 				onFocus={props.focusFunction ? props.focusFunction : () => {}}
 				onBlur={props.blurFunction ? props.blurFunction : () => {}}
+				numberOfLines={props.numOfLines?props.numOfLines:1}
 			/>
 		</View>
 	);

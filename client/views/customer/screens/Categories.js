@@ -100,7 +100,7 @@ export default function Categories() {
 	return (
 		<View style={styles.container}>
 			{categories ? (
-				<FlashList contentContainerStyle={{paddingBottom: 100}} ItemSeparatorComponent={() => <View style={{height: 20}} />} numColumns={2} data={categories} renderItem={({item}) => <Card type='category' openFun={openModal} data={item} />} estimatedItemSize={categories.length} />
+				<FlashList contentContainerStyle={{paddingBottom: 100,paddingTop:5}} ItemSeparatorComponent={() => <View style={{height: 20}} />} numColumns={2} data={categories} renderItem={({item}) => <Card type='category' openFun={openModal} data={item} />} estimatedItemSize={categories.length} />
 			) : (
 				<View style={{flex: 1, justifyContent: 'center'}}>
 					<ActivityIndicator size='large' color='#76B693' />

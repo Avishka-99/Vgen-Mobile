@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl, Platform} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {NGROK_URL, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
 import {AntDesign, Entypo, EvilIcons, Feather, FontAwesome, FontAwesome5, Fontisto, Foundation, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons, Zocial} from '@expo/vector-icons';
@@ -13,7 +13,7 @@ import * as ALL_ACTIONS from '../actions/AllActions';
 import {useSelector, useDispatch} from 'react-redux';
 import Card from './Card';
 import {FlashList} from '@shopify/flash-list';
-import {Modal, PaperProvider, MD3Colors} from 'react-native-paper';
+import {Modal, PaperProvider, MD3Colors, TextInput} from 'react-native-paper';
 import {Portal, PortalHost} from '@gorhom/portal';
 import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
@@ -23,6 +23,13 @@ import {GOOGLE_API} from '../keys/Keys';
 import {IconButton, Button} from './Button';
 import {BlurView} from 'expo-blur';
 import ItemModal from '../components/ItemModal';
+import * as ImagePicker from 'expo-image-picker';
+import TextInputField from './TextInputField';
+import RoundedButton from './RoundedButton';
+import * as FileSystem from 'expo-file-system';
+import {RadioButton} from 'react-native-paper';
+import { updateprofile } from '../constants/Localizations';
+import {I18n} from 'i18n-js';
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -513,14 +520,31 @@ export function ProfileBottomSheet(props) {
 	const [cardDetails, setCardDetails] = useState();
 	const {confirmPayment, loading} = useConfirmPayment();
 	const [totalCost, setTotalCost] = useState(0);
+	const [image, setImage] = useState(null);
 	const data = props.data;
 	const dispatch = useDispatch();
+	const locale = useSelector((state) => state.userReducer.userLanguage);
 	// useEffect(() => {
 	// 	Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
 	// 		dispatch(ALL_ACTIONS.setAllProducts(result.data));
 	// 	});
 	// }, []);
+	const pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+			base64: true,
+		});
 
+		console.log(result);
+
+		if (!result.canceled) {
+			setImage(result.assets[0]);
+			setRes(result.base64);
+		}
+	};
 	const changeOption = () => {
 		setOption(options[(options.indexOf(option) + 1) % 4]);
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -549,15 +573,229 @@ export function ProfileBottomSheet(props) {
 	const closeModal = () => {
 		setIsModalVisible(false);
 	};
+	const handleSubmit = () => {
+		const data = new FormData();
+		console.log(Date.now() + image.fileName);
+		Axios.post('/api/registercommunity', {
+			image: res,
+			name: Date.now() + image.fileName,
+			communityName: communityName,
+			communityDescription: communityDescription,
+			user_id: user_id,
+		}).then((response) => {
+			console.log(response.data);
+		});
 
-	return <View style={styles.container}></View>;
+		//console.log(data);
+	};
+	const i18n = new I18n(updateprofile);
+	i18n.enableFallback = true;
+	i18n.locale = locale;
+	return (
+		<View style={styles.container}>
+			<View
+				style={{
+					width: '100%',
+					height: '12%',
+					justifyContent: 'center',
+					left: '3%',
+				}}
+			>
+				<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 26}}>{i18n.t('title')}</Text>
+			</View>
+			<View
+				style={{
+					width: '100%',
+					height: '88%',
+					alignItems: 'center',
+				}}
+			>
+				<TouchableOpacity
+					style={{
+						width: '94%',
+						height: '25%',
+						backgroundColor: '#dfdfdf',
+						borderRadius: '7em',
+					}}
+					activeOpacity={0.7}
+					onPress={pickImage}
+				>
+					<View
+						style={{
+							flex: 1,
+						}}
+					>
+						{image ? (
+							<Image source={{uri: image.uri}} style={{width: '100%', height: '100%', borderRadius: 12}} />
+						) : (
+							<View
+								style={{
+									flex: 1,
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<MaterialIcons name='add-a-photo' size={45} color='#afafaf' />
+								<Text style={{fontFamily: 'Poppins-medium', fontSize: 18, top: '5%', color: '#8f8f8f'}}>{i18n.t('chooseimage')}</Text>
+							</View>
+						)}
+					</View>
+				</TouchableOpacity>
+				<TextInput style={{width: '94%', top: '2%'}} label={i18n.t('contactno')} placeholder='08249234' mode='outlined' />
+				<TextInput style={{width: '94%', top: '2%'}} label={i18n.t('newpassword')} placeholder='08249234' mode='outlined' />
+				<TextInput style={{width: '94%', top: '2%'}} label={i18n.t('confirmnewpassword')} placeholder='08249234' mode='outlined' />
+				{/* <TextInputField isSecured={false} function={setCommunityName} value={communityName} textInput={{paddingLeft: '0%'}} placeholder='Community name' textInputRow={{top: '3%'}} />
+				<TextInputField isSecured={false} function={setCommunityDescription} value={communityDescription} textInput={{paddingLeft: '0%'}} placeholder='Community description' textInputRow={{top: '6%'}} />
+				<TextInputField isSecured={false} function={setCommunityDescription} value={communityDescription} textInput={{paddingLeft: '0%'}} placeholder='Community description' textInputRow={{top: '9%'}} /> */}
+				<TouchableOpacity
+					style={{
+						top: '9%',
+						width: '95%',
+						height: '12%',
+						borderRadius: '200em',
+						backgroundColor: '#7EB693',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+					onPress={handleSubmit}
+					activeOpacity={0.7}
+				>
+					<Text style={{fontFamily: 'Poppins-medium', fontSize: 31, color: 'white'}}>{i18n.t('btntitle')}</Text>
+				</TouchableOpacity>
+			</View>
+		</View>
+	);
+}
+export function CreateCommunityBottomSheet(props) {
+	const [image, setImage] = useState(null);
+	const [res, setRes] = useState(null);
+	const [communityName, setCommunityName] = useState('');
+	const [communityDescription, setCommunityDescription] = useState('');
+	const [userRole, setuserRole] = useState('Customer');
+	const user_id = useSelector((state) => state.userReducer.userid);
+	const pickImage = async () => {
+		// No permissions request is necessary for launching the image library
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+			base64: true,
+		});
+
+		console.log(result);
+
+		if (!result.canceled) {
+			setImage(result.assets[0]);
+			setRes(result.base64);
+		}
+	};
+	const handleSubmit = () => {
+		const data = new FormData();
+		console.log(Date.now() + image.fileName);
+		Axios.post('/api/registercommunity', {
+			image: res,
+			name: Date.now() + image.fileName,
+			communityName: communityName,
+			communityDescription: communityDescription,
+			user_id: user_id,
+		}).then((response) => {
+			console.log(response.data);
+		});
+
+		//console.log(data);
+	};
+	//console.log(image[0].uri);
+	return (
+		<View style={styles.container}>
+			<View
+				style={{
+					width: '100%',
+					height: '12%',
+					justifyContent: 'center',
+					left: '3%',
+				}}
+			>
+				<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 37}}>Create a Community</Text>
+			</View>
+			<View
+				style={{
+					width: '100%',
+					height: '88%',
+					alignItems: 'center',
+				}}
+			>
+				<TouchableOpacity
+					style={{
+						width: '94%',
+						height: '25%',
+						backgroundColor: '#dfdfdf',
+						borderRadius: '7em',
+					}}
+					activeOpacity={0.7}
+					onPress={pickImage}
+				>
+					<View
+						style={{
+							flex: 1,
+						}}
+					>
+						{image ? (
+							<Image source={{uri: image.uri}} style={{width: '100%', height: '100%', borderRadius: 12}} />
+						) : (
+							<View
+								style={{
+									flex: 1,
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<MaterialIcons name='add-a-photo' size={45} color='#afafaf' />
+								<Text style={{fontFamily: 'Poppins-medium', fontSize: 18, top: '5%', color: '#8f8f8f'}}>Choose an image</Text>
+							</View>
+						)}
+					</View>
+				</TouchableOpacity>
+				<TextInputField isSecured={false} function={setCommunityName} value={communityName} textInput={{paddingLeft: '0%'}} placeholder='Community name' textInputRow={{top: '3%'}} />
+				<TextInputField isSecured={false} function={setCommunityDescription} value={communityDescription} textInput={{paddingLeft: '0%'}} placeholder='Community description' textInputRow={{top: '6%'}} />
+				<View
+					style={{
+						alignItems: 'center',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						top: '9%',
+					}}
+				>
+					<RadioButton value='first' status={userRole === 'Customer' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Customer')} />
+					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Private</Text>
+					<RadioButton value='second' status={userRole === 'Delivery' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Delivery')} />
+					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Public</Text>
+				</View>
+				<TouchableOpacity
+					style={{
+						top: '9%',
+						width: '95%',
+						height: '12%',
+						borderRadius: '200em',
+						backgroundColor: '#7EB693',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+					onPress={handleSubmit}
+					activeOpacity={0.7}
+				>
+					<Text style={{fontFamily: 'Poppins-medium', fontSize: 31, color: 'white'}}>Create</Text>
+				</TouchableOpacity>
+			</View>
+		</View>
+	);
 }
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		height: '90%',
 		width: '100%',
-		backgroundColor: '#F5F5F5',
+		backgroundColor: '#FFF',
 	},
 	StoreBottomSheetRow1: {
 		flex: 1 / 3,

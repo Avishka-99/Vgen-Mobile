@@ -4,26 +4,17 @@ import {View, Keyboard, Text, KeyboardAvoidingView, ImageBackground, TouchableOp
 import {Image} from 'expo-image';
 import Axios from '../../api/Axios';
 import * as API_ENDPOINTS from '../../api/ApiEndpoints';
-import Header from '../../components/Header';
-import TextInputField from '../../components/TextInputField';
-import RoundedButton from '../../components/RoundedButton';
 import Button from '../../components/Button';
-import * as Icons from '../../constants/Icons';
 import {OtpInput} from 'react-native-otp-entry';
-import * as ExpoClipboard from 'expo-clipboard';
 import {useSelector} from 'react-redux';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
-const Clipboard = {
-	setString: ExpoClipboard.setStringAsync,
-	getString: ExpoClipboard.getStringAsync,
-};
-function Otpcode({navigation}) {
+export default function Otpcode({navigation}) {
 	useEffect(() => {
 		Keyboard.dismiss;
 	});
 	//  const [otp, setOtp] = useState('');
 	const [otp, setOtp] = useState('');
-    console.log(otp)
+	console.log(otp);
 	const otpEmail = useSelector((state) => state.userReducer.otpEmail);
 	const FrogetPasswordView = () => {
 		// console.log(name)
@@ -65,15 +56,15 @@ function Otpcode({navigation}) {
 			</View>
 		),
 	};
-    const showToast = (type, message, message_2, duration) => {
-			Toast.show({
-				type: type,
-				text1: message,
-				text2: message_2 ? message_2 : '',
-				visibilityTime: duration ? duration : 4000,
-				// text2: 'This is some something 👋',
-			});
-		};
+	const showToast = (type, message, message_2, duration) => {
+		Toast.show({
+			type: type,
+			text1: message,
+			text2: message_2 ? message_2 : '',
+			visibilityTime: duration ? duration : 4000,
+			// text2: 'This is some something 👋',
+		});
+	};
 	const handleSubmit = (e) => {
 		console.log(otp);
 		Axios.post(API_ENDPOINTS.VERIFY_USER_URL, {
@@ -92,8 +83,41 @@ function Otpcode({navigation}) {
 			console.log(response.data);
 		});
 	};
-
+	// return(
+	// 	<View>
+	// 		<View style={{flex: 1, justifyContent: 'space-between'}}>
+	//  			<Image style={styles.image} source={require('../../assets/vf-bg.png')} contentFit='cover' />
+	//  			<View style={{width: Dimensions.get('window').width, height: '65%', alignItems: 'center', opacity: 9, justifyContent: 'space-evenly'}}>
+	//  				<Text style={{fontSize: 25, color: '#7EB693', fontFamily: 'Yellowtail-Regular', fontWeight: 600}}>Secure Your Vegan Journey</Text>
+	//  				<Text style={{fontSize: 25, color: '#274C5B', fontFamily: 'Poppins-ExtraBold', fontWeight: 600}}>Verify with OTP</Text>
+	//  				<View style={{width: Dimensions.get('window').width / 2, height: Dimensions.get('window').width / 2, backgroundColor: 'white', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}>
+	//  					<Image style={{width: Dimensions.get('window').width / 2, height: Dimensions.get('window').width / 2, borderRadius: 100}} source={require('../../assets/otp.png')} />
+	//  				</View>
+	//  				<Text style={{fontSize: 15, fontFamily: 'Poppins-regular'}}>Enter the OTP sent to</Text>
+	//  				<Text style={{fontSize: 15, fontFamily: 'Poppins-regular', color: '#274C5B'}}>{otpEmail}</Text>
+	//  			</View>
+	//  			<View style={{width: Dimensions.get('window').width, height: '35%', marginTop: 0, alignItems: 'center', justifyContent: 'center'}}>
+	//  				<OtpInput
+	//  					numberOfDigits={6}
+	//  					focusColor='#7EB693'
+	//  					onTextChange={setOtp}
+	//  					theme={{
+	//  						containerStyle: styles.containerStyle,
+	//  						inputsContainerStyle: styles.inputStyle,
+	//  						pinCodeContainerStyle: styles.pincodecontainerStyle,
+	//  						pinCodeTextStyle: styles.pincodetextStyle,
+	//  						focusStickStyle: styles.focusStick,
+	//  					}}
+	//  					focusStickBlinkingDuration={500}
+	//  				/>
+	//  				<Button func={handleSubmit} butname={'Verify'} />
+	//  			</View>
+	//  			<Toast config={toastConfig} />
+	//  		</View>
+	// 	</View>
+	// )
 	return (
+		
 		<TouchableNativeFeedback onPress={Keyboard.dismiss}>
 			<View style={{flex: 1, justifyContent: 'space-between'}}>
 				<Image style={styles.image} source={require('../../assets/vf-bg.png')} contentFit='cover' />
@@ -156,4 +180,4 @@ const styles = StyleSheet.create({
 		bacgroundColor: '#7EB693',
 	},
 });
-export default Otpcode;
+//export default Otpcode;
