@@ -9,10 +9,17 @@ import Axios from '../api/Axios';
 import {ScrollView} from 'react-native-gesture-handler';
 import * as Icons from '../constants/Icons';
 import * as Device from 'expo-device';
-import {FadeIn, FadeOut} from 'react-native-reanimated';
+import {useSelector,useDispatch} from 'react-redux';
 import {MaterialIcons} from '@expo/vector-icons';
+import {HeartButton} from './Button';
+import * as ALL_ACTIONS from '../actions/AllActions';
+import * as API_ENDPOINTS from '../api/ApiEndpoints';
+import * as Haptics from 'expo-haptics'
 export default function Card(props) {
-	//console.log(props);
+	const dispatch = useDispatch();
+	const [btnType, setBtnType] = useState('heart-border');
+	const user_id = useSelector((state) => state.userReducer.userid);
+	const favdata = useSelector((state) => state.userReducer.favRestaurants);
 	if (props.type == 'store') {
 		const [load, setLoad] = useState(true);
 		const [animation, setAnimation] = useState(new Animated.Value(0));
@@ -36,6 +43,7 @@ export default function Card(props) {
 				outputRange: ['rgba(255,99,71, 1)', 'rgba(255,99,71, 0)', 'rgba(255,99,71, 1)'],
 			}),
 		};
+
 		const boxStyle = {
 			backgroundColor: animation.interpolate({
 				inputRange: [0, 0.5, 1],
@@ -57,6 +65,36 @@ export default function Card(props) {
 				width: '100%',
 			},
 		});
+		const changeButton = (type, id) => {
+			console.log(favdata)
+			const tempFav = favdata.map((innerArray) => innerArray);
+			console.log(tempFav)
+			if (type == 'heart-border') {
+				if(tempFav.indexOf((id).toString())==-1){
+					tempFav.push(id.toString());
+					dispatch(ALL_ACTIONS.setFavRestaurants(tempFav));
+				}
+				//favdata.stores.push((id).toString())
+				//console.log(tempFav);
+				// Axios.post(API_ENDPOINTS.ADD_FAV_STORE, {
+				// 	user_id: user_id,
+				// }).then((response) => {
+				// 	console.log(response);
+				// });
+			} else {
+				if(!(tempFav.indexOf((id).toString())==-1)){
+					const newArr = tempFav.filter((item) => item != id.toString());
+					console.log(newArr)
+					dispatch(ALL_ACTIONS.setFavRestaurants(newArr));
+					console.log(newArr)
+				}
+				//console.log(favdata.stores);
+			}
+			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+			//console.log(id);
+			const btnTypes = ['heart-border', 'heart-fill'];
+			setBtnType(btnTypes[(btnTypes.indexOf(type) + 1) % 2]);
+		};
 		return (
 			<View style={styles.StoreCardContainer}>
 				<TouchableWithoutFeedback onPress={() => props.onPress(props.details)}>
@@ -90,13 +128,14 @@ export default function Card(props) {
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
-					<View style={[{flexDirection: 'row', alignItems: 'center'}, styles.StoreCardContainerRow2Col]}>
-						<View style={styles.ratingCircle}>
+					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}, styles.StoreCardContainerRow2Col]}>
+						{/* <View style={styles.ratingCircle}>
 							<Text style={{color: 'black'}}>{props.rating}</Text>
+						</View> */}
+						<View style={{position: 'absolute', alignItems: 'center', justifyContent: 'center'}}>
+							<HeartButton type={props.isFav ? 'heart-fill' : 'heart-border'} onPress={changeButton} data={props.details.restaurant_manager.resturantManagerId} />
 						</View>
-						<TouchableWithoutFeedback onPress={() => props.favStore(props.details.id)}>
-							<AntDesign name={props.isFav ? 'heart' : 'hearto'} size={24} color='#F55064' />
-						</TouchableWithoutFeedback>
+						{/* <AntDesign name={props.isFav ? 'heart' : 'hearto'} size={24} color='#F55064' /> */}
 					</View>
 				</View>
 			</View>
@@ -338,10 +377,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	StoreCardContainerRow2: {
+		width: '100%',
 		flexDirection: 'row',
 	},
 	StoreCardContainerRow2Col: {
-		width: '84%',
+		width: '50%',
 		height: '100%',
 	},
 	StoreCardStoreName: {

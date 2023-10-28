@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Button, Switch, Dimensions, Image} from 'react-native';
-import React, {useRef, useMemo, useState} from 'react';
+import React, {useRef, useMemo, useState,useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUserAction} from '../../../actions/UserAction';
 import Card from '../../../components/Card';
@@ -21,11 +21,17 @@ import {I18n} from 'i18n-js';
 import {menu} from '../../../constants/Localizations';
 import {setUserLanguage} from '../../../actions/UserAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
 export default function Menu() {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [load, setLoad] = useState(true);
 	const user_id = useSelector((state) => state.userReducer.userid);
 	const locale = useSelector((state) => state.userReducer.userLanguage);
+	useEffect(() => {
+		Axios.post(API_ENDPOINTS.FETCH_PROFILE).then((result) => {
+			dispatch(ALL_ACTIONS.setAllProducts(result.data));
+		});
+	}, []);
 	const toggleSwitch = () => {
 		Axios.post('/api/requestcommunityorganizer', {
 			user_id: user_id,
@@ -181,7 +187,7 @@ export default function Menu() {
 					flexDirection: 'row',
 					justifyContent: 'space-evenly',
 					width: '100%',
-					top:'2%'
+					top: '2%',
 				}}
 				activeOpacity={0.9}
 				onPress={() => openCommunitySheet()}

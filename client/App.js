@@ -22,7 +22,7 @@ import {StripeProvider} from '@stripe/stripe-react-native';
 import {STRIPE_PUBLIC_KEY} from './keys/Keys';
 import * as Location from 'expo-location';
 import * as ALL_ACTIONS from './actions/AllActions';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 // import OtpInputs from 'react-native-otp-inputs';
 
 //config my new redux
@@ -65,6 +65,7 @@ const AppWrapper = () => {
 };
 const App = () => {
 	var user = useSelector((state) => state.userReducer.user);
+	var user_id = useSelector((state) => state.userReducer.userid);
 	//const [user, setUser] = useState('customer');
 	const [index, setIndex] = useState(0);
 	const styles = StyleSheet.create({
@@ -100,7 +101,7 @@ const App = () => {
 					<NavigationContainer>
 						{user == 'Customer' ? (
 							<PaperProvider>
-								<CustomerMain />
+								<CustomerMain id={user_id} />
 							</PaperProvider>
 						) : user == 'eventorganizer' ? (
 							<PaperProvider>

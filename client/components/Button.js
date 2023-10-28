@@ -1,5 +1,5 @@
-import React from 'react';
-import {TouchableOpacity, Text, StyleSheet, Dimensions, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {TouchableOpacity, Text, StyleSheet, Dimensions, View, Animated} from 'react-native';
 
 export default function Button(props) {
 	return (
@@ -25,19 +25,75 @@ export function IconButton(props) {
 					flexDirection: 'row',
 					alignItems: 'center',
 					borderRadius: '100%',
-					alignSelf:'flex-start',
-					padding:1,
+					alignSelf: 'flex-start',
+					padding: 1,
 				}}
 				onPress={() => props.func()}
 			>
 				{props.iconProps && <props.name name={props.iconProps.name} size={props.iconProps.size ? props.iconProps.size : 25} color={props.iconProps.color ? props.iconProps.color : '#393E46'} />}
 
-				<Text >{props.title}</Text>
+				<Text>{props.title}</Text>
 			</TouchableOpacity>
 		</View>
 	);
 }
-
+export function HeartButton(props) {
+	const [animation, setAnimation] = useState(new Animated.Value(0));
+	useEffect(() => {
+		console.log(animation);
+		Animated.timing(animation, {
+			toValue: 1,
+			duration: 3000,
+			useNativeDriver: false,
+		}).start(() => {});
+	}, []);
+	const dimention = {
+		width: animation.interpolate({
+			inputRange: [0, 1],
+			outputRange: [35, 30],
+		}),
+		height: animation.interpolate({
+			inputRange: [0, 1],
+			outputRange: [35, 30],
+		}),
+	};
+	const stylesr = StyleSheet.create({
+		container: {
+			alignItems: 'center',
+			justifyContent: 'center',
+			height: 30,
+			width: 30,
+		},
+		box: {
+			borderTopLeftRadius: 15,
+			borderTopRightRadius: 15,
+			height: '100%',
+			width: '100%',
+		},
+	});
+	if (props.type == 'heart-border') {
+		return (
+			<TouchableOpacity onPress={() => props.onPress(props.type, props.data)}>
+				<Animated.View style={[stylesr.container]}>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', position: 'absolute', right: '43%', borderRadius: '100%', bottom: '43%', borderColor: '#F36B7E', borderWidth: '2%'}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', position: 'absolute', left: '43%', borderRadius: '100%', bottom: '43%', borderWidth: '2%', borderColor: '#F36B7E'}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', borderWidth: '2%', borderColor: '#F36B7E', borderLeftWidth: '0%', borderTopWidth: '0%'}}></View>
+					<View style={{width: '7%', height: '7%', backgroundColor: '#F36B7E', position: 'absolute', transform: 'rotate(45deg)', top: '15%'}}></View>
+				</Animated.View>
+			</TouchableOpacity>
+		);
+	} else if (props.type == 'heart-fill') {
+		return (
+			<TouchableOpacity onPress={() => props.onPress(props.type, props.data)}>
+				<Animated.View style={[stylesr.container]}>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', backgroundColor: '#F36B7E'}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', position: 'absolute', right: '43%', borderRadius: '100%', bottom: '43%', backgroundColor: '#F36B7E'}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', position: 'absolute', left: '43%', borderRadius: '100%', bottom: '43%', backgroundColor: '#F36B7E'}}></View>
+				</Animated.View>
+			</TouchableOpacity>
+		);
+	}
+}
 const styles = StyleSheet.create({
 	button: {
 		width: 200,

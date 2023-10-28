@@ -8,6 +8,8 @@ import * as Icons from '../../../constants/Icons';
 import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {Portal, PortalHost} from '@gorhom/portal';
 import Backdrop from '../../../components/Backdrop';
+import Axios from '../../../api/Axios';
+import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
 import {FAB} from 'react-native-elements';
 //import {Item} from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
 export default function Community() {
@@ -135,20 +137,13 @@ export default function Community() {
 		bottomSheetModalRef.current.close();
 	};
 	const MyCommunities = () => {
-		useEffect(() => {
-			async function fetchData() {
-				const categories = await Axios.post(API_ENDPOINTS.FETCH_CATEGORIES);
-				setCategories(categories.data);
-			}
-			fetchData();
-			//setCategories()
-			// Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
-			// 	console.log(result.data)
-			// 	setFoods(result.data);
-			// 	dispatch(ALL_ACTIONS.setAllProducts(result.data));
-			// 	//allFoods = useSelector((state) => state.userReducer.allProducts);
-			// });
-		}, []);
+		// useEffect(() => {
+		// 	async function fetchData() {
+		// 		const categories = await Axios.post(API_ENDPOINTS.FETCH_CATEGORIES);
+		// 		setCategories(categories.data);
+		// 	}
+		// 	fetchData();
+		// }, []);
 		return (
 			<View style={{flex: 1, justifyContent: 'center'}}>
 				<View style={{width: '100%', height: '10%', backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center'}}>
@@ -187,6 +182,9 @@ export default function Community() {
 		);
 	};
 	const ExploreCommunities = () => {
+		useEffect(() => {
+			Axios.post(API_ENDPOINTS.FETCH_COMMUNITIES)
+		}, []);
 		return (
 			<View>
 				<Text>Explore communities</Text>

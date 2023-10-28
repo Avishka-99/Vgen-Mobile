@@ -374,11 +374,11 @@ export function CategoryBottomSheet(props) {
 	};
 	const openModal = (data) => {
 		console.log('asdhsds');
-		Axios.post('/api/fetchproduct', {
+		Axios.post(API_ENDPOINTS.FETCH_PRODUCT, {
 			id: data.productId,
 			restaurantId: data.sell_products[0].manufactureId,
 		}).then(async (response) => {
-			Axios.post('/api/fetchRestaurant', {
+			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT, {
 				id: response.data[0].sell_products[0].manufactureId,
 			}).then((response_2) => {
 				console.log(response.data);
@@ -521,6 +521,7 @@ export function ProfileBottomSheet(props) {
 	const {confirmPayment, loading} = useConfirmPayment();
 	const [totalCost, setTotalCost] = useState(0);
 	const [image, setImage] = useState(null);
+	const [res, setRes] = useState(null);
 	const data = props.data;
 	const dispatch = useDispatch();
 	const locale = useSelector((state) => state.userReducer.userLanguage);
@@ -693,7 +694,7 @@ export function CreateCommunityBottomSheet(props) {
 	const handleSubmit = () => {
 		const data = new FormData();
 		console.log(Date.now() + image.fileName);
-		Axios.post('/api/registercommunity', {
+		Axios.post(API_ENDPOINTS.REGISTER_COMMUNITY, {
 			image: res,
 			name: Date.now() + image.fileName,
 			communityName: communityName,

@@ -5,7 +5,7 @@ import * as Icons from '../../constants/Icons';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUserAction, setUserId} from '../../actions/UserAction';
+import {setUserAction, setUserId, setFavFoods, setFavRestaurants} from '../../actions/UserAction';
 import Axios from '../../api/Axios';
 import * as API_ENDPOINTS from '../../api/ApiEndpoints';
 import RoundedButton from '../../components/RoundedButton';
@@ -42,7 +42,7 @@ export default function SignIn({navigation}) {
 				}
 			});
 		})();
-	},[]);
+	}, []);
 	const handleSubmit = () => {
 		//AsyncStorage.clear('locale')
 		//dispatch(setUserAction('delivery'))
@@ -52,10 +52,13 @@ export default function SignIn({navigation}) {
 		}).then((response) => {
 			console.log(response.data);
 			if (response.data.type) {
-				console.log('re');
+				//AsyncStorage.setItem('id', JSON.stringify(response.data.userID));
 				dispatch(setUserAction(response.data.type));
 				dispatch(setUserId(response.data.userID));
 				dispatch(setUserLocation({lang: response.data.lang, long: response.data.long}));
+				dispatch(setFavFoods(response.data.foods));
+				dispatch(setFavRestaurants(response.data.stores));
+
 				// console.log(response.data.lang);
 				// console.log(response.data.long);
 			} else if (response.data == 'Not verified') {

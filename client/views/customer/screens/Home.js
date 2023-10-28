@@ -49,94 +49,10 @@ export default function Home({navigation}) {
 			setRefreshing(false);
 		}, 2000);
 	}, []);
-
-	const restaurants = [
-		{
-			id: 1,
-			image: 'barista.png',
-			name: 'Barista',
-			location: 'Reid Aveue',
-			rating: 4.5,
-		},
-		{
-			id: 2,
-			image: 'pizzahut.png',
-			name: 'Pizza hut',
-			location: 'Havlock',
-			rating: 4.2,
-		},
-		{
-			id: 3,
-			image: 'srivihar.jpg',
-			name: 'Sri Vihar',
-			location: 'Thunmulla',
-			rating: 4.6,
-		},
-		{
-			id: 4,
-			image: 'nelumkole.jpg',
-			name: 'Nelum kole',
-			location: 'Thimbirigasyaya',
-			rating: 4.3,
-		},
-		{
-			id: 5,
-			image: 'savinra.jpg',
-			name: 'Savinra',
-			location: 'Nugegoda',
-			rating: 4.5,
-		},
-		{
-			id: 6,
-			image: 'mcdonalds.png',
-			name: 'McDonalds',
-			location: 'Reid Avenue',
-			rating: 4.5,
-		},
-		{
-			id: 7,
-			image: 'mayumi.jpg',
-			name: 'Mayumi Home Foods',
-			location: 'Nawala',
-			rating: 4.7,
-		},
-		{
-			id: 8,
-			image: 'kfc.jpg',
-			name: 'KFC',
-			location: 'Nugegoda',
-			rating: 4.2,
-		},
-		{
-			id: 9,
-			image: 'elite.jpg',
-			name: 'Elite',
-			location: 'Bambalapitiya',
-			rating: 4.4,
-		},
-		{
-			id: 10,
-			image: 'elina.webp',
-			name: 'Elina Foods',
-			location: 'Kirulapone',
-			rating: 4.8,
-		},
-		{
-			id: 11,
-			image: 'saveira.jpg',
-			name: 'Saveira',
-			location: 'Kohuwala',
-			rating: 4.9,
-		},
-		{
-			id: 12,
-			image: 'gogreen.jpg',
-			name: 'Go Green',
-			location: 'Townhall',
-			rating: 4.7,
-		},
-	];
 	const restaurantArray = useSelector((state) => state.restaurantReducer.restaurants);
+	const favourite_restaurants = useSelector((state) => state.userReducer.favRestaurants);
+	//console.log(favourite_restaurants);
+	//console.log(restaurantArray)
 	//console.log(useSelector((state) => state.userReducer.userLocation.lang));
 	const styles = StyleSheet.create({
 		container: {
@@ -215,8 +131,8 @@ export default function Home({navigation}) {
 				setFethedData(response.data);
 				//console.log(response.data);
 			});
-		}else{
-			setFethedData(false)
+		} else {
+			setFethedData(false);
 		}
 	};
 	const handleModal = (data) => {
@@ -245,6 +161,9 @@ export default function Home({navigation}) {
 			</Tab.Navigator>
 		);
 	};
+	//favourite_restaurants.stores.push('67');
+	//console.log(restaurantArray);
+	//console.log(favourite_restaurants.stores.indexOf((38).toString()));
 	return (
 		<View style={styles.container}>
 			{/* {!focused && (
@@ -271,7 +190,7 @@ export default function Home({navigation}) {
 						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 					>
 						{restaurantArray.map((item) => (
-							<Card key={item.userId} onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} details={item} type='store' name={item.restaurant_manager.resturantName} location={item.city} rating={item.rating} image={item.restaurant_manager.image} />
+							<Card key={item.userId} onPress={openModal} isFav={favourite_restaurants ? (favourite_restaurants.indexOf(item.userId.toString()) != -1 ? true : false) : false} favStore={setFavouriteStore} details={item} type='store' name={item.restaurant_manager.resturantName} location={item.city} rating={item.rating} image={item.restaurant_manager.image} />
 						))}
 
 						{/* {restaurants.map((item) => (
@@ -281,8 +200,7 @@ export default function Home({navigation}) {
 					</Animated.ScrollView>
 				) : (
 					<View style={{flex: 1, width: '100%', height: '100%'}}>
-						<FlashList contentContainerStyle={{paddingBottom:20}}  data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
-						
+						<FlashList contentContainerStyle={{paddingBottom: 20}} data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
 					</View>
 				)}
 			</Animated.View>
