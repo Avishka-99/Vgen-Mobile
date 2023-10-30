@@ -1,4 +1,4 @@
-import {View, Text,Dimensions} from 'react-native';
+import {View, Text, Dimensions} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Categories from './screens/Categories';
@@ -6,7 +6,7 @@ import Cart from './screens/Cart';
 import Home from './screens/Home';
 import Community from './screens/Community';
 import Menu from './screens/Menu';
-import {Feather, Ionicons} from '@expo/vector-icons';
+import {Entypo, Feather, Ionicons} from '@expo/vector-icons';
 import {MaterialIcons} from '@expo/vector-icons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {SimpleLineIcons} from '@expo/vector-icons';
@@ -18,7 +18,7 @@ export default function CustomerMain() {
 			screenOptions={{
 				tabBarStyle: {
 					position: 'absolute',
-					height: Dimensions.get('screen').height/8,
+					height: Dimensions.get('screen').height / 8,
 					borderRadius: 30,
 					elevation: 5,
 					shadowColor: 'black',
@@ -76,6 +76,7 @@ export default function CustomerMain() {
 					tabBarInactiveTintColor: 'black',
 					tabBarActiveTintColor: 'dodgerblue',
 					tabBarShowLabel: false,
+					//tabBarStyle:{display:'none'},
 					tabBarIcon: ({color, focused}) => <Feather name='shopping-cart' size={30} color={focused ? '#76B693' : '#8B8B8B'} />,
 				}}
 			/>
@@ -87,7 +88,7 @@ export default function CustomerMain() {
 					tabBarInactiveTintColor: 'black',
 					tabBarActiveTintColor: 'dodgerblue',
 					tabBarShowLabel: false,
-					tabBarIcon: ({color, focused}) => <SimpleLineIcons name='grid' size={30} color={focused ? '#76B693' : '#8B8B8B'} />,
+					tabBarIcon: ({color, focused}) => <Entypo name='grid' size={39} color={focused ? '#76B693' : '#8B8B8B'} />,
 				}}
 			/>
 		</Tab.Navigator>
