@@ -51,8 +51,8 @@ export default function Delivery({route}) {
     {
       title:"end",
       location:{
-        latitude:6.90531, //loction_deliver.latitude ,
-        longitude:79.862316 //loction_deliver.longitude,
+        latitude:loction_deliver.latitude ,
+        longitude:loction_deliver.longitude,
        
       },
       descryption:"custemore home"
