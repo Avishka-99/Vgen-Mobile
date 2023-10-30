@@ -39,15 +39,16 @@ export default function Delivery({route}) {
 			descryption: 'shop',
 		},
 
-		{
-			title: 'end',
-			location: {
-				latitude: 6.90531, //loction_deliver.latitude ,
-				longitude: 79.862316, //loction_deliver.longitude,
-			},
-			descryption: 'custemore home',
-		},
-	];
+    {
+      title:"end",
+      location:{
+        latitude:loction_deliver.latitude ,
+        longitude:loction_deliver.longitude,
+       
+      },
+      descryption:"custemore home"
+    }
+  ]
 
 	//console.log(bitweenpoint[0].location)
 
