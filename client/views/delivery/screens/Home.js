@@ -8,18 +8,18 @@ import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
 import {useDispatch, useSelector} from 'react-redux';
 import * as Location from 'expo-location';
 import * as ALL_ACTIONS from '../../../actions/AllActions'
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
 
 function Home({navigation}) {
 
     const [details,setDeails]=useState([]);
-    let [orders,setorders]=useState([])
+    let [order,setOder]=useState([])
     const [deliver,setdeliver]=useState([])
     let [lati,setlati]=useState(0.0)
     let [longi,setlongi]=useState(0.0)
     const [errorMsg, setErrorMsg] = useState('');
     const userID =useSelector((state) => state.userReducer.userid)
-    console.log(userID)
     const dispatch = useDispatch();
     
 
@@ -33,11 +33,6 @@ function Home({navigation}) {
     })
    }
 
-   
- 
- // console.log(errorMsg)
-
-  //get oder for deliver
    useEffect(()=>{
     const fetchData = async () => {
       try {
@@ -53,7 +48,7 @@ function Home({navigation}) {
         setlati(currentLocation.coords.latitude);
         setlongi(currentLocation.coords.longitude);
 
-        const order = await Axios.get(API_ENDPOINTS.Delivery_Orders_URL, {
+          const order= await Axios.get(API_ENDPOINTS.Delivery_Orders_URL, {
           params: {
             userid: userID,
             lat: currentLocation.coords.latitude,
@@ -61,7 +56,7 @@ function Home({navigation}) {
           },
         });
 
-        setorders(order.data);
+        setOder(order.data);
       } catch (error) {
         setErrorMsg('Error fetching location or orders: ' + error.message);
       }
@@ -73,16 +68,17 @@ function Home({navigation}) {
       clearInterval(intervalTime);
     };
 
-    },[userID]);
+    },[userID]);   
 
-    //back end data push to value array
-   orders.map((data)=>{
-     value.push(data)
+   order.map((item)=>{
+     value.push(item)
    })
 
+   console.log("shgfsdgf",value)
   
   console.log("lati",lati)
   console.log("long",longi)
+  //console.log('eaultttt',orders.orderTableData[0][0]) 
     
     return (
         <View style={{flex:1}}>
@@ -122,32 +118,35 @@ function Home({navigation}) {
                           </View>
                        </View>
                    </View>
-                   <View style={styles.recvest}>
-                    <FlatList
+                    <View style={styles.recvest}>
+                      
+                      
+                     <FlatList
                       data={value}
                       renderItem={({item})=>(
                           <Order 
                           funcname={Accsept} 
-                          quntity={item.totalQuantity} 
-                          fname={item.firstName} 
-                          contact={item.cust_contact}
-                          address={item.cust_Address}
-                          amount={item.amount}
+                          quntity={item.order_quantitiy} 
+                          fname={item.vgen_name} 
+                          contact={item.vgen_contacNo}
+                          address={item.vgen_address}
+                          amount={item.order_amount}
                           free={300}
-                          shopname={item.resturantName}
-                          shopAddress={item.rest_Address}
-                          shopNo={item.rest_contact}
+                          shopname={item.rest_name}
+                          shopAddress={item.rest_address}
+                          shopNo={item.rest_contacNo}
                           distance={300}
                           
                           />
                       )}
-                      //keyExtractor={item=>item.orderId}
+                      keyExtractor={item=>item.order_id}
                       contentContainerStyle={styles.flatlist}
                       disableVirtualization={true}
                       ListFooterComponent={<View style={{marginBottom:100}}></View>}
                     />
                       
                    </View>
+
             </ImageBackground>
 
         </View>
@@ -202,9 +201,10 @@ const styles=StyleSheet.create({
         width:Dimensions.get('window').width,
         height:Dimensions.get('window').height,
         flex:1,
-        //backgroundColor:'red',
+       // backgroundColor:'red',//un coment this
         marginTop:'2%',
-        alignItems:'center'
+        alignItems:'center',
+        //justifyContent:'center'
     },
     flatlist:{
         width:Dimensions.get('window').width, 
@@ -214,6 +214,21 @@ const styles=StyleSheet.create({
     },
     last:{
         marginBottom:70
+    },
+    video:{
+      width:'90%',
+      height:'75%',
+      //justifyContent:'center',
+      alignItems:'center',
+      //backgroundColor:'#ffff',
+      marginTop:'10%',
+      borderRadius:20,
+      //borderWidth:2,
+      //borderColor:'#EFD373',
+      //elevation:3
+
+      
+      
     }
 })
 
