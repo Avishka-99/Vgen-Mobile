@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, Button, Switch, Dimensions, Image} from 'react-native';
-import React, {useRef, useMemo, useState,useEffect} from 'react';
+import React, {useRef, useMemo, useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUserAction} from '../../../actions/UserAction';
 import Card from '../../../components/Card';
@@ -21,17 +21,17 @@ import {I18n} from 'i18n-js';
 import {menu} from '../../../constants/Localizations';
 import {setUserLanguage} from '../../../actions/UserAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
+import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
 export default function Menu() {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [load, setLoad] = useState(true);
 	const user_id = useSelector((state) => state.userReducer.userid);
 	const locale = useSelector((state) => state.userReducer.userLanguage);
-	useEffect(() => {
-		Axios.post(API_ENDPOINTS.FETCH_PROFILE).then((result) => {
-			dispatch(ALL_ACTIONS.setAllProducts(result.data));
-		});
-	}, []);
+	// useEffect(() => {
+	// 	Axios.post(API_ENDPOINTS.FETCH_PROFILE).then((result) => {
+	// 		dispatch(ALL_ACTIONS.setAllProducts(result.data));
+	// 	});
+	// }, []);
 	const toggleSwitch = () => {
 		Axios.post('/api/requestcommunityorganizer', {
 			user_id: user_id,
@@ -84,8 +84,12 @@ export default function Menu() {
 			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 		});
 	};
-	const CloseModal = () => {
-		profileSheetModalRef.current.close();
+	const CloseModal = (type) => {
+		if (type == 'profile') {
+			profileSheetModalRef.current.close();
+		}else if(type=='community'){
+			communitySheetRef.current.close();
+		}
 	};
 	const i18n = new I18n(menu);
 	i18n.enableFallback = true;
@@ -256,10 +260,10 @@ export default function Menu() {
 			></Button>
 			<Portal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={profileSheetModalRef} index={0} snapPoints={snapPoints}>
-					<ProfileBottomSheet />
+					<ProfileBottomSheet CloseModal={CloseModal} />
 				</BottomSheetModal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={communitySheetRef} index={0} snapPoints={snapPoints}>
-					<CreateCommunityBottomSheet />
+					<CreateCommunityBottomSheet CloseModal={CloseModal} />
 				</BottomSheetModal>
 				{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
 					<View style={{flex: 1}}>

@@ -486,5 +486,6 @@ const styles = StyleSheet.create({
 	},
 	localeText: {
 		fontFamily: 'Poppins-semibold',
+		color: '#274C5B',
 	},
 });

@@ -190,7 +190,7 @@ export default function Home({navigation}) {
 						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 					>
 						{restaurantArray.map((item) => (
-							<Card key={item.userId} onPress={openModal} isFav={favourite_restaurants ? (favourite_restaurants.indexOf(item.userId.toString()) != -1 ? true : false) : false} favStore={setFavouriteStore} details={item} type='store' name={item.restaurant_manager.resturantName} location={item.city} rating={item.rating} image={item.restaurant_manager.image} />
+							<Card key={item.userId} onPress={openModal} isFav={favourite_restaurants ? (favourite_restaurants.indexOf(item.userId) != -1 ? true : false) : false} favStore={setFavouriteStore} details={item} type='store' name={item.restaurant_manager.resturantName} location={item.city} rating={item.rating} image={item.restaurant_manager.image} />
 						))}
 
 						{/* {restaurants.map((item) => (

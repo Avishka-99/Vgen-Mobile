@@ -1,4 +1,4 @@
-import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM, SET_USER_LANGUAGE, SET_SEARCHED_FOODS, SET_ALL_PRODUCTS, SET_FAV_FOODS,SET_FAV_RESTAURANTS} from '../constants/ActionTypes';
+import {SET_OTP_EMAIL, SET_USER, SET_USER_ID, SET_USER_LOCATION, SET_SEARCH_TERM, SET_USER_LANGUAGE, SET_SEARCHED_FOODS, SET_ALL_PRODUCTS, SET_FAV_FOODS,SET_FAV_RESTAURANTS,SET_USER_COMMUNITIES,SET_COMMUNITIES} from '../constants/ActionTypes';
 const initialState = {
 	user: '',
 	otpEmail: '',
@@ -10,6 +10,8 @@ const initialState = {
 	allProducts: {},
 	favFoods: {},
 	favRestaurants: {},
+	userCommunities:{},
+	communities:{}
 };
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -62,6 +64,16 @@ const userReducer = (state = initialState, action) => {
 			return {
 				...state,
 				favRestaurants: action.payload,
+			};
+		case SET_USER_COMMUNITIES:
+			return {
+				...state,
+				userCommunities: action.payload,
+			};
+		case SET_COMMUNITIES:
+			return {
+				...state,
+				communities: action.payload,
 			};
 		default:
 			return state;

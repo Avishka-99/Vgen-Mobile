@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl, Platform} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {NGROK_URL, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
+import {COMMUNITY_IMG_PATH, NGROK_URL, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
 import {AntDesign, Entypo, EvilIcons, Feather, FontAwesome, FontAwesome5, Fontisto, Foundation, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons, Zocial} from '@expo/vector-icons';
 import {BaseButton, ScrollView, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -28,8 +28,10 @@ import TextInputField from './TextInputField';
 import RoundedButton from './RoundedButton';
 import * as FileSystem from 'expo-file-system';
 import {RadioButton} from 'react-native-paper';
-import { updateprofile } from '../constants/Localizations';
+import {updateprofile} from '../constants/Localizations';
 import {I18n} from 'i18n-js';
+import * as Icons from '../constants/Icons';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -672,7 +674,7 @@ export function CreateCommunityBottomSheet(props) {
 	const [res, setRes] = useState(null);
 	const [communityName, setCommunityName] = useState('');
 	const [communityDescription, setCommunityDescription] = useState('');
-	const [userRole, setuserRole] = useState('Customer');
+	const [visibility, setVisibility] = useState(0);
 	const user_id = useSelector((state) => state.userReducer.userid);
 	const pickImage = async () => {
 		// No permissions request is necessary for launching the image library
@@ -684,24 +686,25 @@ export function CreateCommunityBottomSheet(props) {
 			base64: true,
 		});
 
-		console.log(result);
+		//console.log(result.assets[0]);
 
 		if (!result.canceled) {
 			setImage(result.assets[0]);
-			setRes(result.base64);
+			setRes(result.assets[0].base64);
 		}
 	};
 	const handleSubmit = () => {
 		const data = new FormData();
-		console.log(Date.now() + image.fileName);
+		//console.log(Date.now() + image.fileName);
 		Axios.post(API_ENDPOINTS.REGISTER_COMMUNITY, {
 			image: res,
 			name: Date.now() + image.fileName,
 			communityName: communityName,
 			communityDescription: communityDescription,
+			visibility: visibility,
 			user_id: user_id,
 		}).then((response) => {
-			console.log(response.data);
+			props.CloseModal('community');
 		});
 
 		//console.log(data);
@@ -767,10 +770,10 @@ export function CreateCommunityBottomSheet(props) {
 						top: '9%',
 					}}
 				>
-					<RadioButton value='first' status={userRole === 'Customer' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Customer')} />
-					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Private</Text>
-					<RadioButton value='second' status={userRole === 'Delivery' ? 'checked' : 'unchecked'} onPress={() => setuserRole('Delivery')} />
+					<RadioButton value='first' status={visibility === 0 ? 'checked' : 'unchecked'} onPress={() => setVisibility(0)} />
 					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Public</Text>
+					<RadioButton value='second' status={visibility === 1 ? 'checked' : 'unchecked'} onPress={() => setVisibility(1)} />
+					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Private</Text>
 				</View>
 				<TouchableOpacity
 					style={{
@@ -791,16 +794,270 @@ export function CreateCommunityBottomSheet(props) {
 		</View>
 	);
 }
+export function CommunityHomeBottomSheet(props) {
+	console.log(props)
+	const [isMember, setIsMemeber] = useState(props.isMember);
+	const [load, setLoad] = useState(true);
+	const [image, setImage] = useState(null);
+	const [res, setRes] = useState(null);
+	const [communityName, setCommunityName] = useState('');
+	const [communityDescription, setCommunityDescription] = useState('');
+	const [visibility, setVisibility] = useState(0);
+	const [ userCount,setUserCount] = useState();
+	const user_id = useSelector((state) => state.userReducer.userid);
+	const userCommunities = useSelector((state) => state.userReducer.userCommunities);
+	//console.log(isMember);
+	const pickImage = async () => {
+		// No permissions request is necessary for launching the image library
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+			base64: true,
+		});
+
+		console.log(result.assets[0]);
+
+		if (!result.canceled) {
+			setImage(result.assets[0]);
+			setRes(result.assets[0].base64);
+		}
+	};
+	const handleSubmit = (id) => {
+		setIsMemeber(!isMember);
+		console.log(id);
+		const tempArray = userCommunities.map((innerArray) => innerArray);
+		tempArray.push(id);
+		console.log(tempArray);
+		// if (type == 'heart-border') {
+		// 	if (tempArray.indexOf(id) == -1) {
+		// 		tempArray.push(id);
+		// 		dispatch(ALL_ACTIONS.setFavRestaurants(tempArray));
+		// 	}
+		// 	Axios.post(API_ENDPOINTS.ADD_FAV_STORE, {
+		// 		user_id: user_id,
+		// 		data: tempArray,
+		// 	}).then((response) => {
+		// 		console.log(response);
+		// 	});
+		// } else {
+		// 	if (!(tempArray.indexOf(id) == -1)) {
+		// 		const newArr = tempArray.filter((item) => item != id);
+		// 		Axios.post(API_ENDPOINTS.ADD_FAV_STORE, {
+		// 			user_id: user_id,
+		// 			data: newArr,
+		// 		}).then((response) => {
+		// 			console.log(response);
+		// 		});
+		// 		dispatch(ALL_ACTIONS.setFavRestaurants(newArr));
+		// 		console.log(newArr);
+		// 	}
+		// }
+		// Axios.post(API_ENDPOINTS.JOIN_COMMUNITY, {
+		// 	userId: user_id,
+		// }).then((response) => {
+		// 	console.log(response);
+		// });
+
+		//console.log(data);
+	};
+	const communities = [
+		{
+			id: 1,
+			type: 'Public community',
+			name: 'Barista',
+			location: 'Reid Aveue',
+			members: 4.5,
+		},
+		{
+			id: 2,
+			type: 'Public community',
+			name: 'Pizza hut',
+			location: 'Havlock',
+			members: 1.2,
+		},
+		{
+			id: 3,
+			type: 'Public community',
+			name: 'Sri Vihar',
+			location: 'Thunmulla',
+			members: 1.6,
+		},
+		{
+			id: 4,
+			type: 'Public community',
+			name: 'Nelum kole',
+			location: 'Thimbirigasyaya',
+			members: 3.3,
+		},
+		{
+			id: 5,
+			type: 'Public community',
+			name: 'Savinra',
+			location: 'Nugegoda',
+			members: 2.5,
+		},
+		{
+			id: 6,
+			type: 'Public community',
+			name: 'McDonalds',
+			location: 'Reid Avenue',
+			members: 7.5,
+		},
+		{
+			id: 7,
+			type: 'Public community',
+			name: 'Mayumi Home Foods',
+			location: 'Nawala',
+			members: 1.7,
+		},
+		{
+			id: 8,
+			type: 'Public community',
+			name: 'KFC',
+			location: 'Nugegoda',
+			members: 5.2,
+		},
+		{
+			id: 9,
+			type: 'Public community',
+			name: 'Elite',
+			location: 'Bambalapitiya',
+			members: 1.4,
+		},
+		{
+			id: 10,
+			type: 'Public community',
+			name: 'Elina Foods',
+			location: 'Kirulapone',
+			members: 2.8,
+		},
+		{
+			id: 11,
+			type: 'Public community',
+			name: 'Saveira',
+			location: 'Kohuwala',
+			members: 2.9,
+		},
+		{
+			id: 12,
+			type: 'Public community',
+			name: 'Go Green',
+			location: 'Townhall',
+			members: 1.7,
+		},
+	];
+	useEffect(() => {
+		Axios.post(API_ENDPOINTS.GET_COMMUNITY_DETAILS, {
+			communityId: props.data.communityId,
+		}).then((response)=>{
+			setUserCount(response.data.count);
+		});
+	}, []);
+	return (
+		<View style={styles.container}>
+			<View style={{height: Dimensions.get('screen').height / 4}}>
+				{load && (
+					<Image
+						style={{
+							height: '100%',
+							width: '100%',
+							opacity: 0.4,
+						}}
+						source={require('../assets/vf-bg-gray.png')}
+						contentFit='cover'
+					/>
+				)}
+				<Image
+					style={{
+						height: '100%',
+						width: '100%',
+						opacity: 0.9,
+					}}
+					source={{uri: NGROK_URL + COMMUNITY_IMG_PATH + props.data.image}}
+					onLoadEnd={() => setLoad(false)}
+				/>
+
+				<LinearGradient style={styles.gradient} colors={['transparent', 'rgba(0,0,0,0.8)']}></LinearGradient>
+
+				{/* <BaseButton style={{position: 'absolute', left: '88%', top: '3%'}} onPress={props.closeFun}>
+					<View style={styles.CloseButton}>
+						<EvilIcons name='close' size={30} color={'black'} />
+					</View>
+				</BaseButton>
+				<BaseButton style={{position: 'absolute', left: '88%', top: '30%'}} onPress={() => navigation.navigate('StoreLocation')}>
+					<View style={styles.CloseButton}>
+						<EvilIcons name='location' size={30} color={'black'} />
+					</View>
+				</BaseButton> */}
+			</View>
+			{isMember ? (
+				<>
+					<View style={{height: '22%', flexDirection: 'row'}}>
+						<View style={{width: '70%', height: '100%'}}>
+							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 28, left: '2%'}}>{props.data.name}</Text>
+							<View style={{flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft: '2%'}}>
+								<Text style={{fontFamily: 'Poppins-medium', fontSize: 14, color: '#4D4C44'}}>{props.data.visibility == 0 ? 'Public community' : 'Private community'}</Text>
+								<Text style={{fontFamily: 'Poppins-medium'}}> {userCount} members</Text>
+							</View>
+						</View>
+
+						<View style={{width: '30%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+							<TouchableOpacity activeOpacity={0.3} onPress={() => setIsMemeber(true)}>
+								<View style={{height: '70%', width: '100%', justifyContent: 'flex-end', flexDirection: 'row', marginRight: '10%'}}>
+									<View style={[{width: '77%', height: '100%', backgroundColor: 'white', borderRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderWidth: '2px', alignItems: 'center'}]}>
+										<Text style={{fontFamily: 'Poppins-semibold'}}>Leave</Text>
+									</View>
+								</View>
+							</TouchableOpacity>
+						</View>
+					</View>
+					<View style={{width: '100%', height: '100%', backgroundColor: 'dodger'}}>{isMember && <FlashList data={communities} renderItem={({item}) => <View style={{width: '100%', height: 100, backgroundColor: 'green', marginBottom: '2%'}}></View>} estimatedItemSize={communities.length} />}</View>
+				</>
+			) : (
+				<>
+					<View style={{height: '22%', flexDirection: 'row'}}>
+						<View style={{width: '70%', height: '100%'}}>
+							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 28, left: '2%'}}>{props.data.name}</Text>
+							<View style={{flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft: '2%'}}>
+								<Text style={{fontFamily: 'Poppins-medium', fontSize: 14, color: '#4D4C44'}}>{props.data.visibility == 0 ? 'Public community' : 'Private community'}</Text>
+								<Text style={{fontFamily: 'Poppins-medium'}}> {userCount} members</Text>
+							</View>
+						</View>
+
+						<View style={{width: '30%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+							<TouchableOpacity activeOpacity={0.3} onPress={() => setIsMemeber(true)}>
+								<View style={{height: '70%', width: '100%', justifyContent: 'flex-end', flexDirection: 'row', marginRight: '10%'}}>
+									{/* <View style={{width: '33%', height: '100%', backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', borderTopLeftRadius: 400, borderBottomLeftRadius: 400, borderColor: 'black', borderLeftWidth: '2px', borderTopWidth: '2px', borderBottomWidth: '2px'}}>
+									<Icons.Ionicons name='exit-outline' size={23} color='black' />
+								</View> */}
+									<View style={[{width: '77%', height: '100%', backgroundColor: 'white', borderRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderWidth: '2px', alignItems: 'center'}]}>
+										<Text style={{fontFamily: 'Poppins-semibold'}}>Join</Text>
+									</View>
+								</View>
+							</TouchableOpacity>
+						</View>
+					</View>
+					<View style={{width: '100%', height: '100%'}}>
+						<View>
+							<Text>error</Text>
+						</View>
+					</View>
+				</>
+			)}
+		</View>
+	);
+}
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		height: '90%',
+		height: '100%',
 		width: '100%',
 		backgroundColor: '#FFF',
 	},
 	StoreBottomSheetRow1: {
 		flex: 1 / 3,
-		height: Dimensions.get('screen').height / 3,
+		height: 400,
 		marginBottom: '1%',
 	},
 	StoreBottomSheetContainer: {
