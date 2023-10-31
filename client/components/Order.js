@@ -12,13 +12,13 @@ import { View, Text,
 
 
 export default function Order(props) {
-    console.log(props.data.length)
+   // console.log(props.data.length)
     return (
        <View style={[styles.card,props.cardstyle]}>
           <View style={styles.oderimage}>
              <Text style={{fontSize:8,color:'black',marginTop:15,fontFamily:'Poppins-semibold'}}>custemore Name:{props.data.vgen_name}</Text>
              <Text style={{fontSize:8,color:'black',marginTop:0,fontFamily:'Poppins-semibold'}}>custemore No:{props.data.vgen_contacNo}</Text>
-             <Text style={{fontSize:8,color:'black',marginTop:0,fontFamily:'Poppins-semibold'}}>Address:{props.vgen_address}</Text>
+             <Text style={{fontSize:8,color:'black',marginTop:0,fontFamily:'Poppins-semibold'}}>Address:{props.data.vgen_address}</Text>
              <View style={{marginTop:10,marginLeft:4}}>
              <Text style={{fontSize:11,color:'black',marginTop:0,fontFamily:'Poppins-semibold',color:'green'}}>Total Quntity x {props.data.order_quantitiy}</Text>
              <Text style={{fontSize:11,fontWeight:500,fontFamily:'Poppins-semibold',color:'green'}}>Total Amout:{props.data.order_amount}</Text>
