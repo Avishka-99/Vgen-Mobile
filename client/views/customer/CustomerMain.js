@@ -88,7 +88,7 @@ export default function CustomerMain() {
 					tabBarInactiveTintColor: 'black',
 					tabBarActiveTintColor: 'dodgerblue',
 					tabBarShowLabel: false,
-					tabBarIcon: ({color, focused}) => <Entypo name='grid' size={39} color={focused ? '#76B693' : '#8B8B8B'} />,
+					tabBarIcon: ({color, focused}) => <Entypo name='grid' size={49} color={focused ? '#76B693' : '#8B8B8B'} />,
 				}}
 			/>
 		</Tab.Navigator>
