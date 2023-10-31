@@ -1,10 +1,11 @@
 import React from 'react';
 import {TouchableOpacity, Text, StyleSheet, Dimensions, View} from 'react-native';
 
-export function Button(props) {
+export default function Button(props) {
+	//console.log(props)
 	return (
-		<TouchableOpacity style={[styles.button, props.custermize]} onPress={() => props.func()}>
-			<Text style={[{color: 'white', fontWeight: 500, fontSize: 20}, props.sty]}>{props.butname}</Text>
+		<TouchableOpacity style={[styles.button,props.custermize]} onPress={() => props.func()}>
+			<Text style={{color: 'white', fontWeight: 500, fontSize: 20}}>{props.butname}</Text>
 		</TouchableOpacity>
 	);
 }

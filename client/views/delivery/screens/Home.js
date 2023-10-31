@@ -70,14 +70,14 @@ function Home({navigation}) {
 
     },[userID]);   
 
-   order.map((item)=>{
-     value.push(item)
-   })
+  //  order.map((item)=>{
+  //    value.push(item)
+  //  })
 
-   console.log("shgfsdgf",value)
+  console.log("shgfsdgf",order[0])
   
-  console.log("lati",lati)
-  console.log("long",longi)
+  // console.log("lati",lati)
+  // console.log("long",longi)
   //console.log('eaultttt',orders.orderTableData[0][0]) 
     
     return (
@@ -121,29 +121,22 @@ function Home({navigation}) {
                     <View style={styles.recvest}>
                       
                       
-                     <FlatList
-                      data={value}
+                     {<FlatList
+                      data={order}
                       renderItem={({item})=>(
                           <Order 
                           funcname={Accsept} 
-                          quntity={item.order_quantitiy} 
-                          fname={item.vgen_name} 
-                          contact={item.vgen_contacNo}
-                          address={item.vgen_address}
-                          amount={item.order_amount}
-                          free={300}
-                          shopname={item.rest_name}
-                          shopAddress={item.rest_address}
-                          shopNo={item.rest_contacNo}
-                          distance={300}
+                          data={item}
                           
                           />
                       )}
+                      
                       keyExtractor={item=>item.order_id}
                       contentContainerStyle={styles.flatlist}
                       disableVirtualization={true}
                       ListFooterComponent={<View style={{marginBottom:100}}></View>}
-                    />
+                      
+                    />}
                       
                    </View>
 

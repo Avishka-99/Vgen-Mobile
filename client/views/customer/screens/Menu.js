@@ -65,13 +65,13 @@ export default function Menu() {
 					value={isEnabled}
 					onValueChange={toggleSwitch}
 					style={{
-						right: '2%',
+						right:'2%',
 					}}
 				/>
 			</View>
 			<View
 				style={{
-					flexDirection: 'row',
+					flexDirection:'row',
 					justifyContent: 'space-evenly',
 					width: '100%',
 				}}
