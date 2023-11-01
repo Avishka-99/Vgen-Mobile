@@ -11,7 +11,7 @@ import {MaterialIcons} from '@expo/vector-icons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {SimpleLineIcons} from '@expo/vector-icons';
 import {FontAwesome5} from '@expo/vector-icons';
-export default function CustomerMain() {
+export default function CustomerMain(props) {
 	const Tab = createBottomTabNavigator();
 	return (
 		<Tab.Navigator
@@ -37,6 +37,7 @@ export default function CustomerMain() {
 			<Tab.Screen
 				name='Home'
 				component={Home}
+				initialParams={{id:props.id}}
 				options={{
 					headerShown: false,
 					tabBarInactiveTintColor: 'black',

@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View, Dimensions, Image, TouchableWithoutFeedback, Animated} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AntDesign} from '@expo/vector-icons';
-import {RESTAURANT_IMG_PATH, PRODUCT_IMG_PATH, CATEGORY_IMG_PATH} from '../constants/Constants';
+import {RESTAURANT_IMG_PATH, PRODUCT_IMG_PATH, CATEGORY_IMG_PATH, COMMUNITY_IMG_PATH} from '../constants/Constants';
 import {BASE_URL} from '../constants/Constants';
 import {NGROK_URL} from '../constants/Constants';
 import {Chip, ActivityIndicator} from 'react-native-paper';
@@ -9,10 +9,21 @@ import Axios from '../api/Axios';
 import {ScrollView} from 'react-native-gesture-handler';
 import * as Icons from '../constants/Icons';
 import * as Device from 'expo-device';
-import {FadeIn, FadeOut} from 'react-native-reanimated';
+import {useSelector, useDispatch} from 'react-redux';
 import {MaterialIcons} from '@expo/vector-icons';
+import {HeartButton} from './Button';
+import * as ALL_ACTIONS from '../actions/AllActions';
+import * as API_ENDPOINTS from '../api/ApiEndpoints';
+import * as Haptics from 'expo-haptics';
+import { I18n } from 'i18n-js';
+import { categoryBottomSheetLocale } from '../constants/Localizations';
+
 export default function Card(props) {
-	//console.log(props);
+	const locale = useSelector((state) => state.userReducer.userLanguage);
+	const dispatch = useDispatch();
+	const [btnType, setBtnType] = useState('heart-border');
+	const user_id = useSelector((state) => state.userReducer.userid);
+	const favdata = useSelector((state) => state.userReducer.favRestaurants);
 	if (props.type == 'store') {
 		const [load, setLoad] = useState(true);
 		const [animation, setAnimation] = useState(new Animated.Value(0));
@@ -36,6 +47,7 @@ export default function Card(props) {
 				outputRange: ['rgba(255,99,71, 1)', 'rgba(255,99,71, 0)', 'rgba(255,99,71, 1)'],
 			}),
 		};
+
 		const boxStyle = {
 			backgroundColor: animation.interpolate({
 				inputRange: [0, 0.5, 1],
@@ -57,6 +69,38 @@ export default function Card(props) {
 				width: '100%',
 			},
 		});
+		const changeButton = async (type, id) => {
+			console.log(favdata);
+			const tempFav = favdata.map((innerArray) => innerArray);
+			console.log(tempFav);
+			if (type == 'heart-border') {
+				if (tempFav.indexOf(id) == -1) {
+					tempFav.push(id);
+					dispatch(ALL_ACTIONS.setFavRestaurants(tempFav));
+				}
+				Axios.post(API_ENDPOINTS.ADD_FAV_STORE, {
+					user_id: user_id,
+					data: tempFav,
+				}).then((response) => {
+					console.log(response);
+				});
+			} else {
+				if (!(tempFav.indexOf(id) == -1)) {
+					const newArr = tempFav.filter((item) => item != id);
+					Axios.post(API_ENDPOINTS.ADD_FAV_STORE, {
+						user_id: user_id,
+						data: newArr,
+					}).then((response) => {
+						console.log(response);
+					});
+					dispatch(ALL_ACTIONS.setFavRestaurants(newArr));
+					console.log(newArr);
+				}
+			}
+			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+			const btnTypes = ['heart-border', 'heart-fill'];
+			setBtnType(btnTypes[(btnTypes.indexOf(type) + 1) % 2]);
+		};
 		return (
 			<View style={styles.StoreCardContainer}>
 				<TouchableWithoutFeedback onPress={() => props.onPress(props.details)}>
@@ -90,13 +134,14 @@ export default function Card(props) {
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
-					<View style={[{flexDirection: 'row', alignItems: 'center'}, styles.StoreCardContainerRow2Col]}>
-						<View style={styles.ratingCircle}>
+					<View style={[{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}, styles.StoreCardContainerRow2Col]}>
+						{/* <View style={styles.ratingCircle}>
 							<Text style={{color: 'black'}}>{props.rating}</Text>
+						</View> */}
+						<View style={{position: 'absolute', alignItems: 'center', justifyContent: 'center'}}>
+							<HeartButton type={props.isFav ? 'heart-fill' : 'heart-border'} onPress={changeButton} data={props.details.restaurant_manager.resturantManagerId} />
 						</View>
-						<TouchableWithoutFeedback onPress={() => props.favStore(props.details.id)}>
-							<AntDesign name={props.isFav ? 'heart' : 'hearto'} size={24} color='#F55064' />
-						</TouchableWithoutFeedback>
+						{/* <AntDesign name={props.isFav ? 'heart' : 'hearto'} size={24} color='#F55064' /> */}
 					</View>
 				</View>
 			</View>
@@ -143,8 +188,49 @@ export default function Card(props) {
 			></View>
 		);
 	} else if (props.type == 'community') {
+		const [load, setLoad] = useState(true);
+		const [animation, setAnimation] = useState(new Animated.Value(0));
+		useEffect(() => {
+			Animated.timing(animation, {
+				toValue: 1,
+				duration: 3000,
+				useNativeDriver: false,
+			}).start(({finished}) => {
+				if (finished && load) {
+					// Animation has completed, you can restart it or do something else
+					setAnimation(new Animated.Value(0)); // Reset the value
+					//setTimeout(runAnimation, 1000); // Delay before restarting
+				}
+			});
+		}, [animation]);
+		const bgStyle = {
+			backgroundColor: animation.interpolate({
+				inputRange: [0, 0.5, 1],
+				outputRange: ['rgba(255,99,71, 1)', 'rgba(255,99,71, 0)', 'rgba(255,99,71, 1)'],
+			}),
+		};
+
+		const boxStyle = {
+			backgroundColor: animation.interpolate({
+				inputRange: [0, 0.5, 1],
+				outputRange: ['rgb(127, 130, 135)', 'rgb(200,200,200)', 'rgb(127, 130, 135)'],
+			}),
+		};
+		const stylesr = StyleSheet.create({
+			container: {
+				position: 'absolute',
+				height: '100%',
+				width: '100%',
+				borderRadius: 10,
+			},
+			box: {
+				borderRadius: 10,
+				height: '100%',
+				width: '100%',
+			},
+		});
 		return (
-			<TouchableWithoutFeedback onPress={() => props.openFunction()}>
+			<TouchableWithoutFeedback onPress={() => props.openFunction(props.info)}>
 				<View
 					style={{
 						width: '96%',
@@ -152,7 +238,7 @@ export default function Card(props) {
 						marginBottom: 5,
 						padding: 4,
 						marginLeft: '2%',
-						borderRadius: 30,
+						borderRadius: 10,
 						marginTop: '1%',
 						borderColor: '#76B693',
 						borderWidth: 2,
@@ -164,38 +250,60 @@ export default function Card(props) {
 					<View
 						style={{
 							width: '58%',
-							height: '95%',
-							backgroundColor: 'red',
+							height: '100%',
 							borderRadius: 30,
-							marginLeft: '0.8%',
+							alignItems: 'center',
+							justifyContent: 'flex-end',
 						}}
-					></View>
+					>
+						<Image
+							style={{
+								height: '100%',
+								width: '100%',
+								borderRadius: 10,
+							}}
+							source={{uri: NGROK_URL + COMMUNITY_IMG_PATH + props.info.image}}
+							contentFit='cover'
+							resizeMode='contain'
+							onLoadEnd={() => setLoad(false)}
+						/>
+						{load && (
+							<Animated.View style={[stylesr.container, bgStyle]}>
+								<Animated.View style={[stylesr.box, boxStyle]} />
+							</Animated.View>
+						)}
+					</View>
 					<View
 						style={{
 							width: '40%',
 							height: '95%',
 							marginLeft: '2%',
-							justifyContent: 'center',
 						}}
 					>
+						<View style={{flexDirection: 'row'}}>
+							<View>{Device.brand == 'Apple' ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 12, color: '#8C8C8C'}}>{props.info.name}</Text> : <Text style={{fontFamily: 'Poppins-semibold', fontSize: 13, color: '#8C8C8C'}}>{props.info.name}</Text>}</View>
+						</View>
 						<View style={{flexDirection: 'row'}}>
 							<View style={{marginRight: '2%'}}>
 								<Icons.Ionicons name='earth' size={18} color='#8C8C8C' />
 							</View>
-							<View>{Device.brand == 'Apple' ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 12, color: '#8C8C8C'}}>Public community</Text> : <Text style={{fontFamily: 'Poppins-semibold', fontSize: 13, color: '#8C8C8C'}}>{props.info.type}</Text>}</View>
+							<View>{Device.brand == 'Apple' ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 12, color: '#8C8C8C'}}>{props.info.visibility == 0 ? 'Public' : 'Private'}</Text> : <Text style={{fontFamily: 'Poppins-semibold', fontSize: 13, color: '#8C8C8C'}}>{props.info.visibility == 0 ? 'Public' : 'Private'}</Text>}</View>
 						</View>
-						<View style={{flexDirection: 'row'}}>
+						{/* <View style={{flexDirection: 'row'}}>
 							<View style={{marginRight: '2%'}}>
 								<Icons.Ionicons name='people-sharp' size={18} color='#8C8C8C' />
 							</View>
 							<View>{Device.brand == 'Apple' ? <Text style={{fontFamily: 'Poppins-semibold', fontSize: 12, color: '#8C8C8C'}}>{props.info.members}K members</Text> : <Text style={{fontFamily: 'Poppins-semibold', fontSize: 13, color: '#8C8C8C'}}>{props.info.members}K members</Text>}</View>
-						</View>
+						</View> */}
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
 		);
 	} else if (props.type == 'category') {
 		const [load, setLoad] = useState(true);
+		const i18n = new I18n(categoryBottomSheetLocale);
+		i18n.enableFallback = true;
+		i18n.locale = locale;
 		return (
 			<TouchableWithoutFeedback
 				onPress={() => props.openFun(props.data.name)}
@@ -259,7 +367,7 @@ export default function Card(props) {
 								justifyContent: 'center',
 							}}
 						>
-							<Text style={{fontFamily: 'Poppins-regular'}}>{props.data.name}</Text>
+							<Text style={{fontFamily: 'Poppins-regular'}}>{i18n.t(`${props.data.name.toLowerCase()}`)}</Text>
 						</View>
 					</View>
 				</View>
@@ -273,17 +381,16 @@ export default function Card(props) {
 					bottom: '0.2%',
 					alignItems: 'center',
 					flexDirection: 'row',
-					left:'2%'
-
+					left: '2%',
 				}}
 			>
 				<View
 					style={{
 						height: Dimensions.get('screen').height / 11,
 						width: Dimensions.get('screen').height / 11,
-						backgroundColor: '#dddedc',
+						backgroundColor: '#efefef',
 						left: '1%',
-						borderRadius: '100%',
+						borderRadius: 30,
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}
@@ -305,7 +412,7 @@ export default function Card(props) {
 							fontSize: 20,
 						}}
 					>
-						Avishka Prabhath
+						{props.name}
 					</Text>
 					<Text
 						style={{
@@ -316,7 +423,7 @@ export default function Card(props) {
 						}}
 						onPress={() => props.openModal()}
 					>
-						Update profile
+						{props.text}
 					</Text>
 				</View>
 			</View>
@@ -334,15 +441,16 @@ const styles = StyleSheet.create({
 	StoreCardContainerRow1: {
 		width: '100%',
 		height: '75%',
-		borderRadius: 14,
+		// borderRadius: 14,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	StoreCardContainerRow2: {
+		width: '100%',
 		flexDirection: 'row',
 	},
 	StoreCardContainerRow2Col: {
-		width: '84%',
+		width: '50%',
 		height: '100%',
 	},
 	StoreCardStoreName: {

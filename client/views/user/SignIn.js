@@ -1,11 +1,11 @@
 import {View, Text, StyleSheet, StatusBar, KeyboardAvoidingView, Dimensions, TouchableOpacity, Platform, TextInput, Touchable} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image} from 'expo-image';
 import * as Icons from '../../constants/Icons';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUserAction, setUserId} from '../../actions/UserAction';
+import {setUserAction, setUserId, setFavFoods, setFavRestaurants, setUserCommunities, setUserLocation, setUserLanguage} from '../../actions/UserAction';
 import Axios from '../../api/Axios';
 import * as API_ENDPOINTS from '../../api/ApiEndpoints';
 import RoundedButton from '../../components/RoundedButton';
@@ -13,10 +13,9 @@ import TextInputField from '../../components/TextInputField';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import {setOtpEmail} from '../../actions/UserAction';
 import {DeviceType} from 'expo-device';
-import {setUserLocation} from '../../actions/UserAction';
 import {signin} from '../../constants/Localizations';
-import * as Localization from 'expo-localization';
 import {I18n} from 'i18n-js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function SignIn({navigation}) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -25,10 +24,24 @@ export default function SignIn({navigation}) {
 	//   "Poppins": require('../../assets/fonts/Poppins-Light.ttf')
 	// })
 	//console.log(email)
-	console.log(Device.modelName);
+	//AsyncStorage.clear('locale');
 	const dispatch = useDispatch();
 	const locale = useSelector((state) => state.userReducer.userLanguage);
+	useEffect(() => {
+		(async () => {
+			let locale = await AsyncStorage.getItem('locale').then((response) => {
+				console.log(typeof response);
+				if (response) {
+					dispatch(setUserLanguage(response));
+				} else {
+					dispatch(setUserLanguage('en'));
+					dispatch(setUserLocation({}));
+				}
+			});
+		})();
+	}, []);
 	const handleSubmit = () => {
+		//AsyncStorage.clear('locale')
 		//dispatch(setUserAction('delivery'))
 		Axios.post(API_ENDPOINTS.SIGNIN_URL, {
 			email: email,
@@ -36,10 +49,17 @@ export default function SignIn({navigation}) {
 		}).then((response) => {
 			console.log(response.data);
 			if (response.data.type) {
-				console.log('re')
+				console.log(response.data);
+				//AsyncStorage.setItem('id', JSON.stringify(response.data.userID));
 				dispatch(setUserAction(response.data.type));
 				dispatch(setUserId(response.data.userID));
 				dispatch(setUserLocation({lang: response.data.lang, long: response.data.long}));
+				if (response.data.type == 'Customer') {
+					dispatch(setFavFoods(response.data.foods));
+					dispatch(setFavRestaurants(response.data.stores));
+					dispatch(setUserCommunities(response.data.communities));
+				}
+
 				// console.log(response.data.lang);
 				// console.log(response.data.long);
 			} else if (response.data == 'Not verified') {
@@ -162,7 +182,6 @@ const styles = StyleSheet.create({
 	},
 	image: {
 		flex: 1,
-		resizeMode: 'cover',
 		position: 'absolute',
 		width: Dimensions.get('window').width,
 		height: Dimensions.get('window').height,
@@ -183,7 +202,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		width: '90%',
 		height: '30%',
-		marginTop: Platform.OS == 'ios' ? 0 : StatusBar.currentHeight,
+		marginTop:Device.brand == 'Apple'? 0 : StatusBar.currentHeight,
 		left: '5%',
 		top: '12%',
 	},

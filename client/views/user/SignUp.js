@@ -21,6 +21,7 @@ import MarqueeView from 'react-native-marquee-view';
 import {setUserLanguage} from '../../actions/UserAction';
 import * as Device from 'expo-device';
 import * as Haptics from 'expo-haptics';
+import {setUserLocation} from '../../actions/UserAction';
 export default function SignUp({navigation}) {
 	const [checked, setChecked] = useState('first');
 	const [email, setEmail] = useState('');
@@ -30,14 +31,14 @@ export default function SignUp({navigation}) {
 	const [lastName, setlastName] = useState('');
 	const [userRole, setuserRole] = useState('Customer');
 	const [profilePicture, setProfilePicture] = useState('');
-	const [password, setPassword] = useState('');
-	const [confirmpassword, setConfirmPassword] = useState('');
+	const [password, setPassword] = useState('@');
+	const [confirmpassword, setConfirmPassword] = useState('@');
 	const [contactNo, setContactNo] = useState('');
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [location, setLocation] = useState(null);
+	const [location, setLocation] = useState();
 	const [region, setRegion] = useState();
-	//const [locale, setLocale] = useState('ta');
-	var currentLocation = useSelector((state) => state.userReducer.userLocation);
+	const [language, setLanguage] = useState('en');
+	const currentLocation = useSelector((state) => state.userReducer.userLocation);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		(async () => {
@@ -47,17 +48,20 @@ export default function SignUp({navigation}) {
 				return;
 			}
 			let locale = await AsyncStorage.getItem('locale').then((response) => {
+				//console.log(typeof response);
 				if (response) {
-					dispatch(setUserLanguage(locale));
+					dispatch(setUserLanguage(response));
 				} else {
-					dispatch(setUserLanguage('si'));
+					dispatch(setUserLanguage('en'));
 				}
 			});
-			let location = await Location.getCurrentPositionAsync({});
-			setLocation(location);
+			let currentLocation = await Location.getCurrentPositionAsync({});
+			dispatch(setUserLocation(currentLocation));
+			setLocation(currentLocation);
 		})();
 	}, []);
-	const locale = useSelector((state) => state.userReducer.userLanguage);
+	//const locale = useSelector((state) => state.userReducer.userLanguage);
+	const locale = language;
 	const toastConfig = {
 		success: (props) => (
 			<BaseToast
@@ -96,7 +100,7 @@ export default function SignUp({navigation}) {
 			</View>
 		),
 	};
-
+	console.log(currentLocation.coords);
 	const showToast = (type, message, message_2, duration) => {
 		Toast.show({
 			type: type,
@@ -140,6 +144,7 @@ export default function SignUp({navigation}) {
 		}
 	};
 	const handleSubmit = async () => {
+		//navigation.navigate('Otpcode');
 		console.log(location);
 		var isClean = true;
 		var lat = 0;
@@ -194,6 +199,7 @@ export default function SignUp({navigation}) {
 				if (response.data.type == 'error') {
 					showToast(response.data.type, response.data.message, '', 2000);
 				} else {
+					AsyncStorage.setItem('locale', language);
 					dispatch(setOtpEmail(email));
 					navigation.navigate('Otpcode');
 				}
@@ -206,8 +212,11 @@ export default function SignUp({navigation}) {
 	};
 	const changeLocale = (value) => {
 		const localeList = ['en', 'si', 'ta'];
-		dispatch(setUserLanguage(localeList[(localeList.indexOf(locale) + 1) % 3]));
-		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+		const newLocale = localeList[(localeList.indexOf(locale) + 1) % 3];
+		setLanguage(localeList[(localeList.indexOf(locale) + 1) % 3]);
+		//AsyncStorage.setItem('locale', newLocale);
+		//dispatch(setUserLanguage(localeList[(localeList.indexOf(locale) + 1) % 3]));
+		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 	};
 	//console.log(location);
 	const i18n = new I18n(signup);
@@ -292,7 +301,7 @@ export default function SignUp({navigation}) {
 					{/* <Button mode='contained' onPress={openModal} buttonColor='#7EB693' labelStyle={{fontFamily: 'Poppins-semibold', fontSize: 14}}>
 					{i18n.t('picklocation')}
 				</Button> */}
-					{region ? (
+					{location && (locale == 'si' || locale == 'en') ? (
 						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#274C5B'}}>{i18n.t('fetchedlocation2')}</Text>
 					) : location && locale == 'ta' ? (
 						<View>
@@ -348,7 +357,13 @@ export default function SignUp({navigation}) {
 			<View style={{width: '100%', alignItems: 'center', justifyContent: 'center'}}>
 				<Text style={styles.bottomText}>
 					{i18n.t('alreadyamember')}{' '}
-					<Text style={styles.signUptext} onPress={() => navigation.navigate('SignIn')}>
+					<Text
+						style={styles.signUptext}
+						onPress={() => {
+							dispatch(setUserLocation({}));
+							navigation.navigate('SignIn');
+						}}
+					>
 						{i18n.t('signin')}
 					</Text>
 				</Text>
@@ -471,5 +486,6 @@ const styles = StyleSheet.create({
 	},
 	localeText: {
 		fontFamily: 'Poppins-semibold',
+		color: '#274C5B',
 	},
 });

@@ -1,22 +1,12 @@
-import {
-   View, 
-   Text, 
-   StyleSheet,
-   SafeAreaView, 
-   Platform,StatusBar,
-   TextInput,
-   TextInputWithIcon,
-   Dimensions,
-   Button,} from 'react-native'
-import React, { useRef } from 'react'
-import { useState } from 'react';
-import MapView ,{Marker,Polyline} from 'react-native-maps';
+import {View, Text, StyleSheet, SafeAreaView, Platform, StatusBar, TextInput, TextInputWithIcon, Dimensions, Button} from 'react-native';
+import React, {useRef} from 'react';
+import {useState} from 'react';
+import MapView, {Marker, Polyline} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import { GOOGLE_API } from '../../../keys/Keys';
-import { Feather } from '@expo/vector-icons'
-import { useSelector } from 'react-redux';
-import { ActivityIndicator, MD2Colors } from 'react-native-paper';
-
+import {GOOGLE_API} from '../../../keys/Keys';
+import {Feather} from '@expo/vector-icons';
+import {useSelector} from 'react-redux';
+import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 
 export default function Delivery({route}) {
   var loction_deliver=useSelector((state)=>state.deliveryReducer.location)
@@ -159,47 +149,41 @@ export default function Delivery({route}) {
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-    //backgroundColor:'pink',
-   // marginTop:Platform.OS ==='android'? StatusBar.currentHeight:Platform.OS==='ios'?StatusBar.currentHeight:true
-   
-  },
-  serachView:{
-    width:'100%',
-    //position:'absolute',
-    zIndex:2,
-    //height:70,
-    marginTop:7,
-    justifyContent:'center',
-    alignItems:'center',
-    //backgroundColor:'#fff',
-   // elevation:2,
-    //shadowColor:'black'
-    
-  },
-  serach:{
-    width:'87%',
-    height:'100%',
-    paddingLeft:10,
-    padding:10
-    //borderRadius:10,
-    //borderWidth:1,
-    //borderColor:'black'
-  },
-  map:{
-    
-    width:'100%',
-    //height:windowHeghit-10,
-    //height:"100%",
-   // backgroundColor:'black',
-    //marginTop:2
-    
-  },
-  mapview:{
-    width:'100%',
-    height:'100%'
-    
-  }
-  
-})
+	container: {
+		flex: 1,
+		//backgroundColor:'pink',
+		// marginTop:Platform.OS ==='android'? StatusBar.currentHeight:Platform.OS==='ios'?StatusBar.currentHeight:true
+	},
+	serachView: {
+		width: '100%',
+		//position:'absolute',
+		zIndex: 2,
+		//height:70,
+		marginTop: 7,
+		justifyContent: 'center',
+		alignItems: 'center',
+		//backgroundColor:'#fff',
+		// elevation:2,
+		//shadowColor:'black'
+	},
+	serach: {
+		width: '87%',
+		height: '100%',
+		paddingLeft: 10,
+		padding: 10,
+		//borderRadius:10,
+		//borderWidth:1,
+		//borderColor:'black'
+	},
+	map: {
+		width: '100%',
+		//height:windowHeghit-10,
+		//height:"100%",
+		// backgroundColor:'black',
+		//marginTop:2
+	},
+	mapview: {
+		width: '100%',
+		height: '100%',
+	},
+});
