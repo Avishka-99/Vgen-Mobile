@@ -139,13 +139,34 @@ export default function Delivery({route}) {
          </MapView>  
         }
 
-        
- 
-      </View>
-     
-      
-    </SafeAreaView> 
-  )
+				{loction_deliver.latitude == null && loction_deliver.longitude == null ? (
+					<View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+						<ActivityIndicator size={'number'} theme={{colors: {primary: 'green'}}} />
+					</View>
+				) : (
+					<MapView
+						style={styles.mapview}
+						region={{
+							latitude: bitweenpoint[0].location.latitude,
+							longitude: bitweenpoint[0].location.longitude,
+							latitudeDelta: latitudeDelta,
+							longitudeDelta: longitudeDelta,
+						}}
+						onRegionChangeComplete={RegionChange}
+						// onRegionChange={(region)=>{
+						//   setLalitudeDelta(region.latitudeDelta)
+						//   setLongitudeDelta(region.longitudeDelta)
+						// }}
+						ref={mapref}
+					>
+						{showPoint()}
+
+						<MapViewDirections origin={bitweenpoint[0].location} destination={bitweenpoint[1].location} apikey={GOOGLE_API} strokeWidth={6} strokeColor='green' />
+					</MapView>
+				)}
+			</View>
+		</SafeAreaView>
+	);
 }
 
 const styles = StyleSheet.create({
