@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl, Platform, Animated} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {NGROK_URL, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
+import {COMMUNITY_IMG_PATH, NGROK_URL, POST_IMG_PATH, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
 import {AntDesign, Entypo, EvilIcons, Feather, FontAwesome, FontAwesome5, Fontisto, Foundation, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons, Zocial} from '@expo/vector-icons';
 import {BaseButton, ScrollView, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -13,7 +13,7 @@ import * as ALL_ACTIONS from '../actions/AllActions';
 import {useSelector, useDispatch} from 'react-redux';
 import Card from './Card';
 import {FlashList} from '@shopify/flash-list';
-import {Modal, PaperProvider, MD3Colors} from 'react-native-paper';
+import {Modal, PaperProvider, MD3Colors, TextInput} from 'react-native-paper';
 import {Portal, PortalHost} from '@gorhom/portal';
 import {Chip} from 'react-native-paper';
 import CounterInput from 'react-native-counter-input';
@@ -23,6 +23,19 @@ import {GOOGLE_API} from '../keys/Keys';
 import {IconButton, Button} from './Button';
 import {BlurView} from 'expo-blur';
 import ItemModal from '../components/ItemModal';
+import * as ImagePicker from 'expo-image-picker';
+import TextInputField from './TextInputField';
+import RoundedButton from './RoundedButton';
+import * as FileSystem from 'expo-file-system';
+import {RadioButton} from 'react-native-paper';
+import {updateprofile} from '../constants/Localizations';
+import {I18n} from 'i18n-js';
+import * as Icons from '../constants/Icons';
+import Backdrop from './Backdrop';
+import {AnimatedFAB} from 'react-native-paper';
+import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import CreatePostModal from './CreatePostModal';
+import * as Device from 'expo-device'
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -367,11 +380,11 @@ export function CategoryBottomSheet(props) {
 	};
 	const openModal = (data) => {
 		console.log('asdhsds');
-		Axios.post('/api/fetchproduct', {
+		Axios.post(API_ENDPOINTS.FETCH_PRODUCT, {
 			id: data.productId,
 			restaurantId: data.sell_products[0].manufactureId,
 		}).then(async (response) => {
-			Axios.post('/api/fetchRestaurant', {
+			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT, {
 				id: response.data[0].sell_products[0].manufactureId,
 			}).then((response_2) => {
 				console.log(response.data);
@@ -513,14 +526,32 @@ export function ProfileBottomSheet(props) {
 	const [cardDetails, setCardDetails] = useState();
 	const {confirmPayment, loading} = useConfirmPayment();
 	const [totalCost, setTotalCost] = useState(0);
+	const [image, setImage] = useState(null);
+	const [res, setRes] = useState(null);
 	const data = props.data;
 	const dispatch = useDispatch();
+	const locale = useSelector((state) => state.userReducer.userLanguage);
 	// useEffect(() => {
 	// 	Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
 	// 		dispatch(ALL_ACTIONS.setAllProducts(result.data));
 	// 	});
 	// }, []);
+	const pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+			base64: true,
+		});
 
+		console.log(result);
+
+		if (!result.canceled) {
+			setImage(result.assets[0]);
+			setRes(result.assets[0].base64);
+		}
+	};
 	const changeOption = () => {
 		setOption(options[(options.indexOf(option) + 1) % 4]);
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -549,19 +580,622 @@ export function ProfileBottomSheet(props) {
 	const closeModal = () => {
 		setIsModalVisible(false);
 	};
+	const handleSubmit = () => {
+		const data = new FormData();
+		console.log(Date.now() + image.fileName);
+		Axios.post('/api/registercommunity', {
+			image: res,
+			name: Date.now() + image.fileName,
+			communityName: communityName,
+			communityDescription: communityDescription,
+			user_id: user_id,
+		}).then((response) => {
+			console.log(response.data);
+		});
 
-	return <View style={styles.container}></View>;
+		//console.log(data);
+	};
+	const i18n = new I18n(updateprofile);
+	i18n.enableFallback = true;
+	i18n.locale = locale;
+	return (
+		<View style={styles.container}>
+			<View
+				style={{
+					width: '100%',
+					height: '12%',
+					justifyContent: 'center',
+					left: '3%',
+				}}
+			>
+				<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 26}}>{i18n.t('title')}</Text>
+			</View>
+			<View
+				style={{
+					width: '100%',
+					height: '88%',
+					alignItems: 'center',
+				}}
+			>
+				<TouchableOpacity
+					style={{
+						width: '94%',
+						height: '25%',
+						backgroundColor: '#dfdfdf',
+						borderRadius:Device.brand=='Apple'? '7em':12,
+					}}
+					activeOpacity={0.7}
+					onPress={pickImage}
+				>
+					<View
+						style={{
+							flex: 1,
+						}}
+					>
+						{image ? (
+							<Image source={{uri: image.uri}} style={{width: '100%', height: '100%', borderRadius: 12}} />
+						) : (
+							<View
+								style={{
+									flex: 1,
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<MaterialIcons name='add-a-photo' size={45} color='#afafaf' />
+								<Text style={{fontFamily: 'Poppins-medium', fontSize: 18, top: '5%', color: '#8f8f8f'}}>{i18n.t('chooseimage')}</Text>
+							</View>
+						)}
+					</View>
+				</TouchableOpacity>
+				<TextInput style={{width: '94%', top: '2%'}} label={i18n.t('contactno')} placeholder='08249234' mode='outlined' />
+				<TextInput style={{width: '94%', top: '2%'}} label={i18n.t('newpassword')} placeholder='08249234' mode='outlined' />
+				<TextInput style={{width: '94%', top: '2%'}} label={i18n.t('confirmnewpassword')} placeholder='08249234' mode='outlined' />
+				{/* <TextInputField isSecured={false} function={setCommunityName} value={communityName} textInput={{paddingLeft: '0%'}} placeholder='Community name' textInputRow={{top: '3%'}} />
+				<TextInputField isSecured={false} function={setCommunityDescription} value={communityDescription} textInput={{paddingLeft: '0%'}} placeholder='Community description' textInputRow={{top: '6%'}} />
+				<TextInputField isSecured={false} function={setCommunityDescription} value={communityDescription} textInput={{paddingLeft: '0%'}} placeholder='Community description' textInputRow={{top: '9%'}} /> */}
+				<TouchableOpacity
+					style={{
+						top: '9%',
+						width: '95%',
+						height: '12%',
+						borderRadius: Device.brand=='Apple'?'200em':12,
+						backgroundColor: '#7EB693',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+					onPress={handleSubmit}
+					activeOpacity={0.7}
+				>
+					<Text style={{fontFamily: 'Poppins-medium', fontSize: 31, color: 'white'}}>{i18n.t('btntitle')}</Text>
+				</TouchableOpacity>
+			</View>
+		</View>
+	);
+}
+export function CreateCommunityBottomSheet(props) {
+	const [image, setImage] = useState(null);
+	const [res, setRes] = useState(null);
+	const [communityName, setCommunityName] = useState('');
+	const [communityDescription, setCommunityDescription] = useState('');
+	const [visibility, setVisibility] = useState(0);
+	const user_id = useSelector((state) => state.userReducer.userid);
+	const pickImage = async () => {
+		// No permissions request is necessary for launching the image library
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+			base64: true,
+		});
+
+		//console.log(result.assets[0]);
+
+		if (!result.canceled) {
+			setImage(result.assets[0]);
+			setRes(result.assets[0].base64);
+		}
+	};
+	const handleSubmit = () => {
+		const data = new FormData();
+		//console.log(Date.now() + image.fileName);
+		Axios.post(API_ENDPOINTS.REGISTER_COMMUNITY, {
+			image: res,
+			name: Date.now() + image.fileName,
+			communityName: communityName,
+			communityDescription: communityDescription,
+			visibility: visibility,
+			user_id: user_id,
+		}).then((response) => {
+			props.CloseModal('community');
+		});
+
+		//console.log(data);
+	};
+	//console.log(image[0].uri);
+	return (
+		<View style={styles.container}>
+			<View
+				style={{
+					width: '100%',
+					height: '12%',
+					justifyContent: 'center',
+					left: '3%',
+				}}
+			>
+				<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 37}}>Create a Community</Text>
+			</View>
+			<View
+				style={{
+					width: '100%',
+					height: '88%',
+					alignItems: 'center',
+				}}
+			>
+				<TouchableOpacity
+					style={{
+						width: '94%',
+						height: '25%',
+						backgroundColor: '#dfdfdf',
+						borderRadius:Device.brand=='Apple'? '7em':4,
+					}}
+					activeOpacity={0.7}
+					onPress={pickImage}
+				>
+					<View
+						style={{
+							flex: 1,
+						}}
+					>
+						{image ? (
+							<Image source={{uri: image.uri}} style={{width: '100%', height: '100%', borderRadius: 12}} />
+						) : (
+							<View
+								style={{
+									flex: 1,
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<MaterialIcons name='add-a-photo' size={45} color='#afafaf' />
+								<Text style={{fontFamily: 'Poppins-medium', fontSize: 18, top: '5%', color: '#8f8f8f'}}>Choose an image</Text>
+							</View>
+						)}
+					</View>
+				</TouchableOpacity>
+				<TextInputField isSecured={false} function={setCommunityName} value={communityName} textInput={{paddingLeft: '0%'}} placeholder='Community name' textInputRow={{top: '3%'}} />
+				<TextInputField isSecured={false} function={setCommunityDescription} value={communityDescription} textInput={{paddingLeft: '0%'}} placeholder='Community description' textInputRow={{top: '6%'}} />
+				<View
+					style={{
+						alignItems: 'center',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						top: '9%',
+					}}
+				>
+					<RadioButton value='first' status={visibility === 0 ? 'checked' : 'unchecked'} onPress={() => setVisibility(0)} />
+					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Public</Text>
+					<RadioButton value='second' status={visibility === 1 ? 'checked' : 'unchecked'} onPress={() => setVisibility(1)} />
+					<Text style={{marginRight: '4%', fontFamily: 'Poppins-medium'}}>Private</Text>
+				</View>
+				<TouchableOpacity
+					style={{
+						top: '9%',
+						width: '95%',
+						height: '12%',
+						borderRadius:Device.brand=='Apple'?  '200em':60,
+						backgroundColor: '#7EB693',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+					onPress={handleSubmit}
+					activeOpacity={0.7}
+				>
+					<Text style={{fontFamily: 'Poppins-medium', fontSize: 31, color: 'white'}}>Create</Text>
+				</TouchableOpacity>
+			</View>
+		</View>
+	);
+}
+export function CommunityHomeBottomSheet(props) {
+	console.log(props);
+	const [isMember, setIsMemeber] = useState(true);
+	const [load, setLoad] = useState(true);
+	const [image, setImage] = useState(null);
+	const [res, setRes] = useState(null);
+	const [communityName, setCommunityName] = useState('');
+	const [communityDescription, setCommunityDescription] = useState('');
+	const [visibility, setVisibility] = useState(0);
+	const [userCount, setUserCount] = useState();
+	const user_id = useSelector((state) => state.userReducer.userid);
+	const userCommunities = useSelector((state) => state.userReducer.userCommunities);
+	const [isExtended, setIsExtended] = useState(true);
+	const bottomSheetModalRef = useRef(null);
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [posts, setPosts] = useState();
+	const pickImage = async () => {
+		// No permissions request is necessary for launching the image library
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [1, 1],
+			quality: 1,
+			base64: true,
+		});
+
+		//console.log(result.assets[0]);
+
+		if (!result.canceled) {
+			setImage(result.assets[0]);
+			setRes(result.assets[0].base64);
+		}
+	};
+	const handleSubmit = (id, type) => {
+		//setIsMemeber(!isMember);
+		//console.log(id);
+		const tempArray = userCommunities.map((innerArray) => innerArray);
+		// tempArray.push(id);
+		// console.log(tempArray);
+		// if (type == 'heart-border') {
+		// 	if (tempArray.indexOf(id) == -1) {
+		// 		tempArray.push(id);
+		// 		dispatch(ALL_ACTIONS.setFavRestaurants(tempArray));
+		// 	}
+		// 	Axios.post(API_ENDPOINTS.ADD_FAV_STORE, {
+		// 		user_id: user_id,
+		// 		data: tempArray,
+		// 	}).then((response) => {
+		// 		console.log(response);
+		// 	});
+		// } else {
+		// 	if (!(tempArray.indexOf(id) == -1)) {
+		// 		const newArr = tempArray.filter((item) => item != id);
+		// 		Axios.post(API_ENDPOINTS.ADD_FAV_STORE, {
+		// 			user_id: user_id,
+		// 			data: newArr,
+		// 		}).then((response) => {
+		// 			console.log(response);
+		// 		});
+		// 		dispatch(ALL_ACTIONS.setFavRestaurants(newArr));
+		// 		console.log(newArr);
+		// 	}
+		// }
+		// Axios.post(API_ENDPOINTS.JOIN_COMMUNITY, {
+		// 	userId: user_id,
+		// }).then((response) => {
+		// 	console.log(response);
+		// });
+
+		//console.log(data);
+	};
+	const communities = [
+		{
+			id: 1,
+			type: 'Public community',
+			name: 'Barista',
+			location: 'Reid Aveue',
+			members: 4.5,
+		},
+		{
+			id: 2,
+			type: 'Public community',
+			name: 'Pizza hut',
+			location: 'Havlock',
+			members: 1.2,
+		},
+		{
+			id: 3,
+			type: 'Public community',
+			name: 'Sri Vihar',
+			location: 'Thunmulla',
+			members: 1.6,
+		},
+		{
+			id: 4,
+			type: 'Public community',
+			name: 'Nelum kole',
+			location: 'Thimbirigasyaya',
+			members: 3.3,
+		},
+		{
+			id: 5,
+			type: 'Public community',
+			name: 'Savinra',
+			location: 'Nugegoda',
+			members: 2.5,
+		},
+		{
+			id: 6,
+			type: 'Public community',
+			name: 'McDonalds',
+			location: 'Reid Avenue',
+			members: 7.5,
+		},
+		{
+			id: 7,
+			type: 'Public community',
+			name: 'Mayumi Home Foods',
+			location: 'Nawala',
+			members: 1.7,
+		},
+		{
+			id: 8,
+			type: 'Public community',
+			name: 'KFC',
+			location: 'Nugegoda',
+			members: 5.2,
+		},
+		{
+			id: 9,
+			type: 'Public community',
+			name: 'Elite',
+			location: 'Bambalapitiya',
+			members: 1.4,
+		},
+		{
+			id: 10,
+			type: 'Public community',
+			name: 'Elina Foods',
+			location: 'Kirulapone',
+			members: 2.8,
+		},
+		{
+			id: 11,
+			type: 'Public community',
+			name: 'Saveira',
+			location: 'Kohuwala',
+			members: 2.9,
+		},
+		{
+			id: 12,
+			type: 'Public community',
+			name: 'Go Green',
+			location: 'Townhall',
+			members: 1.7,
+		},
+	];
+	const onScroll = ({nativeEvent}) => {
+		const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+
+		setIsExtended(currentScrollPosition <= 0);
+	};
+	const fabStyle = {['right']: 16};
+	useEffect(() => {
+		Axios.post(API_ENDPOINTS.GET_COMMUNITY_DETAILS, {
+			communityId: props.data.communityId,
+		}).then((response) => {
+			//console.log(response.data);
+			setUserCount(response.data.count);
+		});
+		Axios.get('/api/getFeed', {
+			params: {
+				communityId: props.data.communityId,
+			},
+		}).then((response) => {
+			setPosts(response.data);
+			console.log(posts);
+		});
+	}, []);
+	const openModal = (data) => {
+		setIsModalVisible(!isModalVisible);
+		//console.log(isModalVisible);
+		//bottomSheetModalRef.current.present();
+	};
+	const closeModal = () => {
+		setIsModalVisible(!isModalVisible);
+	};
+	const snapPoints = useMemo(() => ['96%'], []);
+	return (
+		<View style={styles.container}>
+			{isModalVisible && (
+				<Portal>
+					<CreatePostModal isVisible={isModalVisible} closeFun={closeModal} id={props.data.communityId} />
+				</Portal>
+			)}
+			<View style={{height: '30%'}}>
+				{load && (
+					<Image
+						style={{
+							height: '100%',
+							width: '100%',
+							opacity: 0.4,
+						}}
+						source={require('../assets/vf-bg-gray.png')}
+						contentFit='cover'
+					/>
+				)}
+				<Image
+					style={{
+						height: '100%',
+						width: '100%',
+						opacity: 0.9,
+					}}
+					source={{uri: NGROK_URL + COMMUNITY_IMG_PATH + props.data.image}}
+					onLoadEnd={() => setLoad(false)}
+				/>
+
+				<LinearGradient style={styles.gradient} colors={['transparent', 'rgba(0,0,0,0.8)']}></LinearGradient>
+
+				{/* <BaseButton style={{position: 'absolute', left: '88%', top: '3%'}} onPress={props.closeFun}>
+					<View style={styles.CloseButton}>
+						<EvilIcons name='close' size={30} color={'black'} />
+					</View>
+				</BaseButton>
+				<BaseButton style={{position: 'absolute', left: '88%', top: '30%'}} onPress={() => navigation.navigate('StoreLocation')}>
+					<View style={styles.CloseButton}>
+						<EvilIcons name='location' size={30} color={'black'} />
+					</View>
+				</BaseButton> */}
+			</View>
+			{isMember ? (
+				<>
+					<View style={{height: '12%', flexDirection: 'row'}}>
+						<View style={{width: '70%', height: '100%'}}>
+							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 28, left: '2%'}}>{props.data.name}</Text>
+							<View style={{flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft: '2%'}}>
+								<Text style={{fontFamily: 'Poppins-medium', fontSize: 14, color: '#4D4C44'}}>{props.data.visibility == 0 ? 'Public community' : 'Private community'}</Text>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14}}>.</Text>
+								<Text style={{fontFamily: 'Poppins-medium'}}> {userCount == 1 ? userCount + ' member' : userCount > 999 ? (userCount * 1.0) / 1000 + 'K members' : userCount + ' members'}</Text>
+							</View>
+						</View>
+
+						<View style={{width: '30%', height: '80%', alignItems: 'center', justifyContent: 'center'}}>
+							<TouchableOpacity activeOpacity={0.3} onPress={() => handleSubmit(props.data.communityId, 'leave')}>
+								<View style={{height: '70%', width: '100%', justifyContent: 'flex-end', flexDirection: 'row', marginRight: '10%'}}>
+									<View style={[{width: '77%', height: '100%', backgroundColor: 'white', borderRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderWidth:Device.brand=='Apple'? '2px':2, alignItems: 'center'}]}>
+										<Text style={{fontFamily: 'Poppins-semibold'}}>Leave</Text>
+									</View>
+								</View>
+							</TouchableOpacity>
+						</View>
+					</View>
+					<View style={{width: '100%', height: '58%', backgroundColor: 'dodger'}}>
+						{isMember && posts && (
+							<FlashList
+								onScroll={onScroll}
+								data={posts}
+								renderItem={({item}) => (
+									<View style={{width: '100%', height: Dimensions.get('screen').height / 4, marginBottom: '2%', justifyContent: 'center', alignItems: 'center'} }key={Math.random()}>
+										<View style={{width: '97%', borderColor: 'black', borderWidth: 3, borderRadius: 8}}>
+											<View
+												style={{
+													height: '20%',
+													width: '100%',
+												}}
+											>
+												<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, top: '5%', color: '#000'}}>{item.title}</Text>
+											</View>
+											<View
+												style={{
+													height: '50%',
+													width: '100%',
+												}}
+											>
+												<Text>{item.description}</Text>
+											</View>
+											<View
+												style={{
+													height: '30%',
+													width: '100%',
+													flexDirection: 'row',
+													alignItems:'center',
+													justifyContent:'center'
+												}}
+											>
+												{item.images.map((image, index) => (
+													
+														<Image key={Math.random()}
+															style={{
+																height: 40,
+																width: 40,
+																borderTopLeftRadius: 15,
+																borderTopRightRadius: 15,
+															}}
+															source={{uri: NGROK_URL + POST_IMG_PATH + image.images}}
+															// onLoad={() => setLoad(false)}
+														/>
+													
+												))}
+											</View>
+										</View>
+									</View>
+								)}
+								estimatedItemSize={communities.length}
+								contentContainerStyle={{
+									paddingTop: 10,
+								}}
+							/>
+						)}
+						<AnimatedFAB
+							icon={'plus'}
+							label={'Create'}
+							extended={isExtended}
+							onPress={openModal}
+							visible={true}
+							animateFrom={'right'}
+							iconMode={'dynamic'}
+							color={'white'}
+							style={[
+								{
+									position: 'absolute',
+									backgroundColor: '#76B693',
+									right: 0,
+									bottom: 13,
+								},
+								fabStyle,
+							]}
+						/>
+					</View>
+
+					{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
+					<View style={{flex: 1}}>
+						<Text>Hello!</Text>
+
+						<Button title='Hide modal' onPress={toggleModal} />
+					</View>
+				</Modal> */}
+				</>
+			) : (
+				<>
+					<View style={{height: '12%', flexDirection: 'row'}}>
+						<View style={{width: '70%', height: '100%'}}>
+							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 28, left: '2%'}}>{props.data.name}</Text>
+							<View style={{flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft: '2%'}}>
+								<Text style={{fontFamily: 'Poppins-medium', fontSize: 14, color: '#4D4C44'}}>{props.data.visibility == 0 ? 'Public community' : 'Private community'}</Text>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14}}>.</Text>
+								<Text style={{fontFamily: 'Poppins-medium'}}> {userCount == 1 ? userCount + ' member' : userCount > 999 ? (userCount * 1.0) / 1000 + 'K members' : userCount + ' members'}</Text>
+							</View>
+						</View>
+
+						<View style={{width: '30%', height: '80%', alignItems: 'center', justifyContent: 'center'}}>
+							<TouchableOpacity activeOpacity={0.3} onPress={() => handleSubmit(props.data.communityId, 'add')}>
+								<View style={{height: '70%', width: '100%', justifyContent: 'flex-end', flexDirection: 'row', marginRight: '10%'}}>
+									{/* <View style={{width: '33%', height: '100%', backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', borderTopLeftRadius: 400, borderBottomLeftRadius: 400, borderColor: 'black', borderLeftWidth: '2px', borderTopWidth: '2px', borderBottomWidth: '2px'}}>
+									<Icons.Ionicons name='exit-outline' size={23} color='black' />
+								</View> */}
+									<View style={[{width: '77%', height: '100%', backgroundColor: 'white', borderRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderWidth: Device.brand=='Apple'? '2px':2, alignItems: 'center'}]}>
+										<Text style={{fontFamily: 'Poppins-semibold'}}>Join</Text>
+									</View>
+								</View>
+							</TouchableOpacity>
+						</View>
+					</View>
+					<View style={{width: '100%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+						<Image
+							style={{
+								height: '60%',
+								width: '60%',
+								opacity: 0.4,
+							}}
+							source={require('../assets/private.png')}
+							contentFit='cover'
+						/>
+
+						<Text style={{fontFamily: 'Poppins-semibold', color: '#4D4C44'}}>Please join to community</Text>
+						<Text style={{fontFamily: 'Poppins-semibold', color: '#4D4C44'}}>in order to view its content</Text>
+					</View>
+				</>
+			)}
+		</View>
+	);
+}
+export function CreatePostBottomSheet(props) {
+	return (
+		<View>
+			<Text>Hello</Text>
+		</View>
+	);
 }
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
-		height: '90%',
+		height: '100%',
 		width: '100%',
-		backgroundColor: '#F5F5F5',
+		backgroundColor: '#FFF',
 	},
 	StoreBottomSheetRow1: {
 		flex: 1 / 3,
-		height: Dimensions.get('screen').height / 3,
+		height: 400,
 		marginBottom: '1%',
 	},
 	StoreBottomSheetContainer: {
@@ -574,10 +1208,10 @@ const styles = StyleSheet.create({
 		height: 40,
 		borderRadius: 20,
 		backgroundColor: 'white',
-		shadowColor: '#171717',
-		shadowOffset: {width: -2, height: 4},
-		shadowOpacity: 0.2,
-		shadowRadius: 3,
+		// shadowColor: '#171717',
+		// shadowOffset: {width: -2, height: 4},
+		// shadowOpacity: 0.2,
+		// shadowRadius: 3,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

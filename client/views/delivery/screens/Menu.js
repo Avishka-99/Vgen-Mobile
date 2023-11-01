@@ -22,10 +22,10 @@ import {menu} from '../../../constants/Localizations';
 import {setUserLanguage} from '../../../actions/UserAction';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
-import { brand } from 'expo-device';
 export default function Menu() {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [load, setLoad] = useState(true);
+	const [userName, setUsername] = useState();
 	const user_id = useSelector((state) => state.userReducer.userid);
 	const locale = useSelector((state) => state.userReducer.userLanguage);
 	// useEffect(() => {
@@ -92,19 +92,33 @@ export default function Menu() {
 			communitySheetRef.current.close();
 		}
 	};
+	useEffect(() => {
+		async function fetchUserData() {
+			if (user_id) {
+				Axios.post(API_ENDPOINTS.GET_USER_PROFILE, {
+					userId: user_id,
+				}).then((response) => {
+					console.log(response.data);
+					setUsername(response.data[0].firstName + ' ' + response.data[0].lastName);
+					console.log(userName);
+				});
+			}
+		}
+		fetchUserData();
+	});
 	const i18n = new I18n(menu);
 	i18n.enableFallback = true;
 	i18n.locale = locale;
 	return (
 		<View style={styles.container}>
-			<Card type='profile' openModal={openProfileSheet} text={i18n.t('profile')} />
+			<Card type='profile' openModal={openProfileSheet} text={i18n.t('profile')} name={userName} />
 			<Divider
 				style={{
 					width: '96%',
 					left: '2%',
 				}}
 			/>
-			<View
+			{/* <View
 				style={{
 					height: '8%',
 					width: '100%',
@@ -140,7 +154,7 @@ export default function Menu() {
 					width: '96%',
 					left: '2%',
 				}}
-			/>
+			/> */}
 			<View
 				style={{
 					height: '8%',
@@ -171,10 +185,10 @@ export default function Menu() {
 				>
 					<TouchableOpacity activeOpacity={0.3} onPress={changeLocale}>
 						<View style={{height: '100%', width: '100%', justifyContent: 'flex-end', flexDirection: 'row', marginRight: '2%'}}>
-							<View style={{width: '22%', height: '100%', backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', borderTopLeftRadius: 400, borderBottomLeftRadius: 400, borderColor: 'black', borderLeftWidth: brand=='Apple'? '2px':2, borderTopWidth:brand=='Apple'? '2px':2, borderBottomWidth: brand=='Apple'?'2px':2}}>
+							<View style={{width: '22%', height: '100%', backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', borderTopLeftRadius: 400, borderBottomLeftRadius: 400, borderColor: 'black', borderLeftWidth: '2px', borderTopWidth: '2px', borderBottomWidth: '2px'}}>
 								<Icons.FontAwesome5 name='globe-asia' size={27} color='black' />
 							</View>
-							<View style={[{width: '40%', height: '100%', backgroundColor: 'white', borderTopRightRadius: 400, borderBottomRightRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderRightWidth: brand=='Apple'?'2px':2, borderTopWidth: brand=='Apple'?'2px':2, borderBottomWidth:brand=='Apple'? '2px':2}]}>
+							<View style={[{width: '40%', height: '100%', backgroundColor: 'white', borderTopRightRadius: 400, borderBottomRightRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderRightWidth: '2px', borderTopWidth: '2px', borderBottomWidth: '2px'}]}>
 								<Text style={{fontFamily: 'Poppins-semibold'}}>{i18n.t('locale')}</Text>
 							</View>
 						</View>
@@ -187,9 +201,9 @@ export default function Menu() {
 					left: '2%',
 				}}
 			/>
-			<TouchableOpacity
+			{/* <TouchableOpacity
 				style={{
-					flexDirection:'row',
+					flexDirection: 'row',
 					justifyContent: 'space-evenly',
 					width: '100%',
 					top: '2%',
@@ -201,7 +215,7 @@ export default function Menu() {
 					style={{
 						width: '96%',
 						height: Dimensions.get('screen').width / 4,
-						borderRadius:brand=='Apple'? '7em':20,
+						borderRadius: '7em',
 						backgroundColor: '#efefef',
 						alignItems: 'center',
 						justifyContent: 'center',
@@ -217,7 +231,7 @@ export default function Menu() {
 						resizeMode='contain'
 						onLoadEnd={() => setLoad(false)}
 					/>
-					<LinearGradient style={{position: 'absolute', width: '100%', height: '100%', borderRadius: brand=='Apple'?'7em':20}} colors={['transparent', 'rgba(0,0,0,0.8)']}>
+					<LinearGradient style={{position: 'absolute', width: '100%', height: '100%', borderRadius: '7em'}} colors={['transparent', 'rgba(0,0,0,0.8)']}>
 						<View
 							style={{
 								width: '100%',
@@ -228,7 +242,7 @@ export default function Menu() {
 						</View>
 					</LinearGradient>
 				</View>
-			</TouchableOpacity>
+			</TouchableOpacity> */}
 			<View
 				style={{
 					width: '100%',
@@ -240,7 +254,7 @@ export default function Menu() {
 					style={{
 						width: Dimensions.get('screen').width / 4,
 						height: Dimensions.get('screen').width / 4,
-						borderRadius: brand=='Apple'?'7em':20,
+						borderRadius: '7em',
 						backgroundColor: 'red',
 					}}
 				></View>
@@ -248,7 +262,7 @@ export default function Menu() {
 					style={{
 						width: Dimensions.get('screen').width / 4,
 						height: Dimensions.get('screen').width / 4,
-						borderRadius: brand=='Apple'?'7em':20,
+						borderRadius: '7em',
 						backgroundColor: 'red',
 					}}
 				></View>

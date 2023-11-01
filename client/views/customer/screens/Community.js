@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
-import React, {useState, useRef, useMemo} from 'react';
-import {useSelector} from 'react-redux';
+import React, {useState, useRef, useMemo, useEffect} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Card from '../../../components/Card';
 import {FlashList} from '@shopify/flash-list';
@@ -8,12 +8,21 @@ import * as Icons from '../../../constants/Icons';
 import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import {Portal, PortalHost} from '@gorhom/portal';
 import Backdrop from '../../../components/Backdrop';
-import {FAB} from 'react-native-elements';
+import Axios from '../../../api/Axios';
+import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
+import * as ALL_ACTIONS from '../../../actions/AllActions';
+import {CommunityHomeBottomSheet} from '../../../components/Bottomsheet';
 //import {Item} from 'react-native-paper/lib/typescript/src/components/Drawer/Drawer';
 export default function Community() {
 	const bottomSheetModalRef = useRef(null);
+	const dispatch = useDispatch();
 	var user = useSelector((state) => state.userReducer.user);
 	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [sheetCommunities, setSheetCommunities] = useState();
+	const communityList = useSelector((state) => state.userReducer.communities);
+	const userCommunities = useSelector((state) => state.userReducer.userCommunities);
+	//console.log(communityList);
+	//console.log(userCommunities);
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
@@ -124,10 +133,19 @@ export default function Community() {
 			members: 1.7,
 		},
 	];
-	const snapPoints = useMemo(() => ['98%'], []);
-
+	const snapPoints = useMemo(() => ['96%'], []);
+	useEffect(() => {
+		try {
+			Axios.post(API_ENDPOINTS.FETCH_COMMUNITIES).then((response) => {
+				dispatch(ALL_ACTIONS.setCommunities(response.data));
+	
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
 	const openModal = (data) => {
-		//setstoreInfo(data);
+		setSheetCommunities(data);
 		bottomSheetModalRef.current.present();
 	};
 	const CloseModal = () => {
@@ -135,6 +153,13 @@ export default function Community() {
 		bottomSheetModalRef.current.close();
 	};
 	const MyCommunities = () => {
+		// useEffect(() => {
+		// 	async function fetchData() {
+		// 		const categories = await Axios.post(API_ENDPOINTS.FETCH_CATEGORIES);
+		// 		setCategories(categories.data);
+		// 	}
+		// 	fetchData();
+		// }, []);
 		return (
 			<View style={{flex: 1, justifyContent: 'center'}}>
 				<View style={{width: '100%', height: '10%', backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center'}}>
@@ -154,10 +179,16 @@ export default function Community() {
 						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#fff'}}>New Community</Text>
 					</View>
 				</View>
-				<FlashList data={communities} renderItem={({item}) => <Card type='community' openFunction={openModal} info={item} />} estimatedItemSize={communities.length} />
+				<FlashList
+					data={communityList}
+					renderItem={({item}) => {
+						userCommunities.indexOf(item.communityId) != -1 && <Card type='community' openFunction={openModal} info={item} />;
+					}}
+					estimatedItemSize={communityList.length}
+				/>
 				<Portal>
 					<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
-						<CommunityModal />
+						{sheetCommunities && <CommunityHomeBottomSheet data={sheetCommunities} />}
 					</BottomSheetModal>
 					{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
 					<View style={{flex: 1}}>
@@ -173,16 +204,43 @@ export default function Community() {
 		);
 	};
 	const ExploreCommunities = () => {
+		const communityTempList = useSelector((state) => state.userReducer.communities);
+		var tempCommunities = {};
+		var filteredCommunities = {};
+		async function setCommunities() {
+			try {
+				if (communityTempList && userCommunities) {
+					tempCommunities = communityTempList.map((innerArray) => innerArray);
+					filteredCommunities = tempCommunities.filter((item) => userCommunities.indexOf(item.communityId) == -1);
+					console.log(tempCommunities);
+				}
+			} catch (error) {
+				console.log('error');
+			}
+		}
+		setCommunities();
+
+		//const tempCommunities = communityTempList.map((innerArray) => innerArray);
+		//const filteredCommunities = tempCommunities.filter((item) => userCommunities.indexOf(item.communityId) == -1);
+		//console.log(userCommunities);
+		//console.log(filteredCommunities);
 		return (
-			<View>
-				<Text>Explore communities</Text>
-			</View>
-		);
-	};
-	const CommunityModal = () => {
-		return (
-			<View style={{backgroundColor: 'white', flex: 1}}>
-				<Text>Hellloo</Text>
+			<View style={{flex: 1, justifyContent: 'center', backgroundColor: 'white'}}>
+				{tempCommunities && filteredCommunities && <FlashList data={filteredCommunities} renderItem={({item, index}) => <Card type='community' openFunction={openModal} info={item} usercommunities={userCommunities} />} estimatedItemSize={filteredCommunities.length} />}
+				<Portal>
+					<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
+						{sheetCommunities && <CommunityHomeBottomSheet data={sheetCommunities} user={userCommunities} isMember={false} />}
+					</BottomSheetModal>
+					{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
+					<View style={{flex: 1}}>
+						<Text>Hello!</Text>
+
+						<Button title='Hide modal' onPress={toggleModal} />
+					</View>
+				</Modal> */}
+				</Portal>
+				<PortalHost name='community_main' />
+				{/* <FAB title='Create' style={{position: 'absolute', left: '74%', top: '80%'}} /> */}
 			</View>
 		);
 	};

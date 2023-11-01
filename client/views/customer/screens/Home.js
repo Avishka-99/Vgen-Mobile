@@ -20,7 +20,9 @@ import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
 import * as ALL_ACTIONS from '../../../actions/AllActions';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Tab} from 'react-native-elements';
-const {diffClamp} = Animated;
+import ItemModal from '../../../components/ItemModal';
+import {setModalDetails} from '../../../actions/AllActions';
+//const {diffClamp} = Animated;
 
 export default function Home({navigation}) {
 	const dispatch = useDispatch();
@@ -33,6 +35,7 @@ export default function Home({navigation}) {
 	const [focused, setFocused] = useState(false);
 	const [fetchedData, setFethedData] = useState(false);
 	const [SearchTerm, setSearchTerm] = useState('');
+	const [isModalVisible, setIsModalVisible] = useState(false);
 	const headerTranslateY = diffClamp.interpolate({
 		inputRange: [0, HEADER_HEIGHT],
 		outputRange: [0, -HEADER_HEIGHT],
@@ -49,94 +52,10 @@ export default function Home({navigation}) {
 			setRefreshing(false);
 		}, 2000);
 	}, []);
-
-	const restaurants = [
-		{
-			id: 1,
-			image: 'barista.png',
-			name: 'Barista',
-			location: 'Reid Aveue',
-			rating: 4.5,
-		},
-		{
-			id: 2,
-			image: 'pizzahut.png',
-			name: 'Pizza hut',
-			location: 'Havlock',
-			rating: 4.2,
-		},
-		{
-			id: 3,
-			image: 'srivihar.jpg',
-			name: 'Sri Vihar',
-			location: 'Thunmulla',
-			rating: 4.6,
-		},
-		{
-			id: 4,
-			image: 'nelumkole.jpg',
-			name: 'Nelum kole',
-			location: 'Thimbirigasyaya',
-			rating: 4.3,
-		},
-		{
-			id: 5,
-			image: 'savinra.jpg',
-			name: 'Savinra',
-			location: 'Nugegoda',
-			rating: 4.5,
-		},
-		{
-			id: 6,
-			image: 'mcdonalds.png',
-			name: 'McDonalds',
-			location: 'Reid Avenue',
-			rating: 4.5,
-		},
-		{
-			id: 7,
-			image: 'mayumi.jpg',
-			name: 'Mayumi Home Foods',
-			location: 'Nawala',
-			rating: 4.7,
-		},
-		{
-			id: 8,
-			image: 'kfc.jpg',
-			name: 'KFC',
-			location: 'Nugegoda',
-			rating: 4.2,
-		},
-		{
-			id: 9,
-			image: 'elite.jpg',
-			name: 'Elite',
-			location: 'Bambalapitiya',
-			rating: 4.4,
-		},
-		{
-			id: 10,
-			image: 'elina.webp',
-			name: 'Elina Foods',
-			location: 'Kirulapone',
-			rating: 4.8,
-		},
-		{
-			id: 11,
-			image: 'saveira.jpg',
-			name: 'Saveira',
-			location: 'Kohuwala',
-			rating: 4.9,
-		},
-		{
-			id: 12,
-			image: 'gogreen.jpg',
-			name: 'Go Green',
-			location: 'Townhall',
-			rating: 4.7,
-		},
-	];
 	const restaurantArray = useSelector((state) => state.restaurantReducer.restaurants);
+	const favourite_restaurants = useSelector((state) => state.userReducer.favRestaurants);
+	//console.log(favourite_restaurants);
+	//console.log(restaurantArray)
 	//console.log(useSelector((state) => state.userReducer.userLocation.lang));
 	const styles = StyleSheet.create({
 		container: {
@@ -201,8 +120,8 @@ export default function Home({navigation}) {
 	};
 	const Tab = createMaterialTopTabNavigator();
 	useEffect(() => {
-		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
-			dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
+		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((result) => {
+			dispatch(ALL_ACTIONS.setRestaurantAction(result.data));
 		});
 	}, []);
 	const searchFun = (text) => {
@@ -212,24 +131,50 @@ export default function Home({navigation}) {
 			Axios.post(API_ENDPOINTS.FETCH_SEARCH_RESULT, {
 				parameter: text,
 			}).then((response) => {
-				setFethedData(response.data);
+				if (response) {
+					setFethedData(response.data);
+				}
+
 				//console.log(response.data);
 			});
-		}else{
-			setFethedData(false)
+		} else {
+			setFethedData(false);
 		}
 	};
 	const handleModal = (data) => {
-		console.log('hello');
+		console.log(data);
+		Axios.post(API_ENDPOINTS.FETCH_PRODUCT, {
+			id: data.productId,
+			restaurantId: data.sell_products[0].manufactureId,
+		}).then((response) => {
+			//console.log(response.data);
+			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT, {
+				id: response.data[0].sell_products[0].manufactureId,
+			}).then((response_2) => {
+				console.log(response.data);
+				let product = response.data[0];
+				let restaurant = response_2.data[0];
+				let modalData = {
+					...product,
+					...restaurant,
+				};
+				dispatch(ALL_ACTIONS.setModalDetails(modalData));
+				setIsModalVisible(true);
+			});
+		});
+		//console.log('hello');
 		// Axios.post('/api/fetchproduct', {
 		// 	id: data.productId,
 		// 	restaurantId: data.sell_products[0].manufactureId,
 		// }).then(async (response) => {
 		// 	dispatch(ALL_ACTIONS.setModalDetails(response.data[0]));
 		// });
-		//(data);
+		// (data);
 
-		//setIsModalVisible(true);
+		// setIsModalVisible(true);
+	};
+	const closeModal = () => {
+		setIsModalVisible(false);
 	};
 	const ExploreCommunities = () => {
 		const Tab = createMaterialTopTabNavigator();
@@ -245,6 +190,9 @@ export default function Home({navigation}) {
 			</Tab.Navigator>
 		);
 	};
+	//favourite_restaurants.stores.push('67');
+	//console.log(restaurantArray);
+	//console.log(favourite_restaurants.stores.indexOf((38).toString()));
 	return (
 		<View style={styles.container}>
 			{/* {!focused && (
@@ -271,7 +219,7 @@ export default function Home({navigation}) {
 						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
 					>
 						{restaurantArray.map((item) => (
-							<Card key={item.userId} onPress={openModal} isFav={favRestaurats.includes(item.id) ? true : false} favStore={setFavouriteStore} details={item} type='store' name={item.restaurant_manager.resturantName} location={item.city} rating={item.rating} image={item.restaurant_manager.image} />
+							<Card key={item.userId} onPress={openModal} isFav={favourite_restaurants ? (favourite_restaurants.indexOf(item.userId) != -1 ? true : false) : false} favStore={setFavouriteStore} details={item} type='store' name={item.restaurant_manager.resturantName} location={item.city} rating={item.rating} image={item.restaurant_manager.image} />
 						))}
 
 						{/* {restaurants.map((item) => (
@@ -281,8 +229,12 @@ export default function Home({navigation}) {
 					</Animated.ScrollView>
 				) : (
 					<View style={{flex: 1, width: '100%', height: '100%'}}>
-						<FlashList contentContainerStyle={{paddingBottom:20}}  data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
-						
+						<FlashList contentContainerStyle={{paddingBottom: 20}} data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
+						{isModalVisible && (
+							<Portal>
+								<ItemModal isModalVisible={isModalVisible} closeModal={closeModal} />
+							</Portal>
+						)}
 					</View>
 				)}
 			</Animated.View>
