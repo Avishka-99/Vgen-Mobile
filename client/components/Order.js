@@ -31,7 +31,7 @@ export default function Order(props) {
              <Text style={{fontSize:10,marginTop:0,fontWeight:500}}>shop NO-{props.data.rest_contacNo}</Text>
              <View style={{flexDirection:'row',marginTop:10}}><Feather name='map-pin' size={15} color={'green'}/><Text style={{fontFamily:'Poppins-semibold',color:'green',fontSize:10}}> {50} away</Text></View>
              <View style={{flexDirection:'row'}}>
-                <Button butname='Accept' custermize={{width:'60%',height:30,marginLeft:15,marginTop:12}} sty={styles.buttextStyle} func={()=>props.funcname()}/>
+                <Button butname='Accept' custermize={{width:'60%',height:30,marginLeft:15,marginTop:12}} sty={styles.buttextStyle} func={()=>props.funcname(6)}/>
                 {/* <Button butname='Reject' custermize={styles.buttonstyle} sty={styles.buttextStyle}  func={()=>console.log('Reject')}/> */}
              </View>
           </View>

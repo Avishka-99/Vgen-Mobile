@@ -28,10 +28,12 @@ export default function Delivery({route}) {
     longitudeDelta: 1.1679803207516812 
   }
 )
-  let deliver_latitude=route.params?.deliver_lati;
-  let deliver_longitude=route.params?.deliver_longi;
+  const shop_latitude=route.params?.shop_lati;
+  const shop_longitude=route.params?.shop_longi;
   const mapref=useRef(null)
   //console.log("hiiii",deliver_latitude)
+  console.log("loooooooo",shop_latitude)
+  console.log("logiiii",shop_longitude)
   
   const RegionChange =(regtion)=>{
     console.log(regtion)
@@ -44,23 +46,50 @@ export default function Delivery({route}) {
         latitude:loction_deliver.latitude ==null?6.90531:loction_deliver.latitude,
         longitude:loction_deliver.longitude==null?79.862316:loction_deliver.longitude,
       },
-      descryption:"shop",
+      descryption:"Dilever",
+      
     
     },
 
     {
       title:"end",
       location:{
-        latitude:loction_deliver.latitude ,
-        longitude:loction_deliver.longitude,
+        latitude:shop_latitude,
+        longitude:shop_longitude
        
       },
       descryption:"custemore home"
     }
   ]
 
-  //console.log(bitweenpoint[0].location)
+  const styleDark=[
+    {
+      "elementType": "geometry",
+      "stylers": [
+        {
+          "color": "#242f3e"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.stroke",
+      "stylers": [
+        {
+          "color": "#242f3e"
+        }
+      ]
+    },
+    {
+      "elementType": "labels.text.fill",
+      "stylers": [
+        {
+          "color": "#746855"
+        }
+      ]
+      }
+    
   
+  ]
   const showPoint=()=>{
    return bitweenpoint.map((item,index)=>{
        return(
@@ -80,16 +109,16 @@ export default function Delivery({route}) {
  
   return (
     <SafeAreaView style={[styles.container,]}>
-       <StatusBar/>
+       {/* <StatusBar/> */}
     <View style={[styles.map,{height:windowHeghit}]}>
       <View style={styles.serachView}>
-          <View style={{flexDirection:'row',borderRadius:20, backgroundColor:'#fff',elevation:12,position:'absolute',top:20}}>
+          {/* <View style={{flexDirection:'row',borderRadius:20, backgroundColor:'#fff',elevation:12,position:'absolute',top:20}}>
               <Feather style={{marginTop:8,marginLeft:6}}name='search' size={30} color="red"/>
               <TextInput 
                   style={styles.serach}
                   placeholder='find location'
                />
-          </View>
+          </View> */}
         </View>
 
         {
@@ -100,12 +129,12 @@ export default function Delivery({route}) {
             region={{
               latitude:bitweenpoint[0].location.latitude,
               longitude:bitweenpoint[0].location.longitude,
-              latitudeDelta: 0.001, 
-              longitudeDelta: 0.01, 
+              latitudeDelta:0.1, 
+              longitudeDelta: 0.1, 
             }}
             onRegionChangeComplete={RegionChange}
             ref={mapref}
-          
+            //customMapStyle={styleDark}
           >
 
             {showPoint()}
@@ -115,7 +144,7 @@ export default function Delivery({route}) {
                destination={bitweenpoint[1].location}
                apikey={GOOGLE_API}
                strokeWidth={6}
-               strokeColor='green'
+               strokeColor='black'
             />
          </MapView>  
         }

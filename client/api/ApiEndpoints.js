@@ -4,6 +4,7 @@ export const VERIFY_USER_URL = '/api/verifyuser';
 export const Delivery_DETAILS_URL = '/api/deliverDetails';
 export const Delivery_Orders_URL = '/api/deliveryOrders';
 export const Delivery_Orders_State_URL='/api/deliveryHistory'
+export const Delivery_Orders_Reject_URL='/api/deliveryRject'
 export const FETCH_RESTAURANT_DETAILS = '/api/fetchrestaurants';
 export const FETCH_RESTAURANT_PRODUCTS = '/api/fetchrestaurantproducts';
 export const FETCH_SEARCH_RESULT = '/api/fetchresult';

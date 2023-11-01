@@ -12,6 +12,7 @@ const Backdrop = ({animatedIndex, style, dismiss}) => {
 			style,
 			{
 				backgroundColor: 'rgba(0,0,0,0.5)',
+				
 			},
 			containerAnimatedStyle,
 		],
