@@ -3,8 +3,8 @@ import {TouchableOpacity, Text, StyleSheet, Dimensions, View, Animated} from 're
 import * as Device from 'expo-device'
 export default function Button(props) {
 	return (
-		<TouchableOpacity style={[styles.button, props.custermize]} onPress={() => props.func()}>
-			<Text style={[{color: 'white', fontWeight: 500, fontSize: 20}, props.sty]}>{props.butname}</Text>
+		<TouchableOpacity style={[styles.button,props.custermize]} onPress={() => props.func()}>
+			<Text style={{color: 'white', fontWeight: 500, fontSize: 15}}>{props.butname}</Text>
 		</TouchableOpacity>
 	);
 }
@@ -103,5 +103,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#7EB693',
 		alignItems: 'center',
 		justifyContent: 'center',
+		paddingBottom:2
 	},
 });

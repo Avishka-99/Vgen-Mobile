@@ -8,10 +8,14 @@ import * as API_ENDPOINTS from '../../../api/ApiEndpoints'
 import {useDispatch, useSelector} from 'react-redux';
 import * as Location from 'expo-location';
 import * as ALL_ACTIONS from '../../../actions/AllActions'
+import { BottomSheet, BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import BottomSheetOrder from '../../../components/BottomSheetOder';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 
 
 function Home({navigation}) {
+
+  
 
     const [details,setDeails]=useState([]);
     let [order,setOder]=useState([])
@@ -19,7 +23,7 @@ function Home({navigation}) {
     let [lati,setlati]=useState(0.0)
     let [longi,setlongi]=useState(0.0)
     const [errorMsg, setErrorMsg] = useState('');
-    const userID =useSelector((state) => state.userReducer.userid)
+    const userID =useSelector((state) => state.userReducer.userid) 
     const dispatch = useDispatch();
     
 
@@ -31,6 +35,7 @@ function Home({navigation}) {
       deliver_lati:lati,
       deliver_longi:longi
     })
+    
    }
 
    useEffect(()=>{
@@ -70,15 +75,9 @@ function Home({navigation}) {
 
     },[userID]);   
 
-   order.map((item)=>{
-     value.push(item)
-   })
 
-   //console.log("shgfsdgf",value)
+   
   
-  // console.log("lati",lati)
-  // console.log("long",longi)
-  //console.log('eaultttt',orders.orderTableData[0][0]) 
     
     return (
         <View style={{flex:1}}>
@@ -121,29 +120,24 @@ function Home({navigation}) {
                     <View style={styles.recvest}>
                       
                       
-                     <FlatList
-                      data={value}
+                     {<FlatList
+                      data={order}
                       renderItem={({item})=>(
                           <Order 
                           funcname={Accsept} 
-                          quntity={item.order_quantitiy} 
-                          fname={item.vgen_name} 
-                          contact={item.vgen_contacNo}
-                          address={item.vgen_address}
-                          amount={item.order_amount}
-                          free={300}
-                          shopname={item.rest_name}
-                          shopAddress={item.rest_address}
-                          shopNo={item.rest_contacNo}
-                          distance={300}
+                          data={item}
                           
                           />
                       )}
+                      
                       keyExtractor={item=>item.order_id}
                       contentContainerStyle={styles.flatlist}
                       disableVirtualization={true}
                       ListFooterComponent={<View style={{marginBottom:100}}></View>}
-                    />
+                      
+                    />}
+
+                      <BottomSheetOrder/>
                       
                    </View>
 

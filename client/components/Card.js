@@ -152,7 +152,7 @@ export default function Card(props) {
 							style={{
 								height: '94%',
 								width: '98%',
-								borderRadius: 15,
+								borderRadius:15,
 							}}
 							source={{uri: NGROK_URL + PRODUCT_IMG_PATH + props.data.productImage}}
 						/>

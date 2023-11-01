@@ -5,6 +5,7 @@ import Delivery from './screens/Delivery';
 import Account from './screens/Account';
 import Home from './screens/Home';
 import Complen from './screens/Complen';
+import Samary from './screens/Samary'
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -71,7 +72,7 @@ export default function CustomerMain() {
                 }}
             />
 
-            {/* <Tab.Screen name="Complen" component={Complen}
+            <Tab.Screen name="Complen" component={Complen}
                 options={{
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',
@@ -81,7 +82,19 @@ export default function CustomerMain() {
                         <MaterialCommunityIcons name="book-edit" size={30} color={focused ? "#7EB693" : "black"} />
                     ),
                 }}
-            /> */}
+            />
+
+               <Tab.Screen name="Samary" component={Samary}
+                options={{
+                    headerShown: false,
+                    tabBarInactiveTintColor: 'black',
+                    tabBarActiveTintColor: 'dodgerblue',
+                    tabBarShowLabel: false,
+                    tabBarIcon: ({ color, focused }) => (
+                        <MaterialCommunityIcons name="book-edit" size={30} color={focused ? "#7EB693" : "black"} />
+                    ),
+                }}
+            />
         </Tab.Navigator>
 
     )

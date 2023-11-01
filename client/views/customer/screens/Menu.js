@@ -189,7 +189,7 @@ export default function Menu() {
 			/>
 			<TouchableOpacity
 				style={{
-					flexDirection: 'row',
+					flexDirection:'row',
 					justifyContent: 'space-evenly',
 					width: '100%',
 					top: '2%',
