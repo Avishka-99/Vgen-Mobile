@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useRef,useMemo} from 'react';
 import { View, Text, StyleSheet, StatusBar, ImageBackground, Dimensions, Image, Switch, Alert, TextInput,ScrollView,FlatList } from 'react-native'
 import Header from '../../../components/Header';
 import Order from '../../../components/Order';
@@ -11,11 +11,15 @@ import * as ALL_ACTIONS from '../../../actions/AllActions'
 import { BottomSheet, BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import BottomSheetOrder from '../../../components/BottomSheetOder';
 import { ActivityIndicator, MD2Colors } from 'react-native-paper';
+import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {Portal, PortalHost} from '@gorhom/portal';
+import Backdrop from '../../../components/Backdrop';
+import SamaryCard from '../../../components/SamaryCard';
+
+
 
 
 function Home({navigation}) {
-
-  
 
     const [details,setDeails]=useState([]);
     let [order,setOder]=useState([])
@@ -23,19 +27,43 @@ function Home({navigation}) {
     let [lati,setlati]=useState(0.0)
     let [longi,setlongi]=useState(0.0)
     const [errorMsg, setErrorMsg] = useState('');
+    const[orderProsess,setorderProsess]=useState(false)
     const userID =useSelector((state) => state.userReducer.userid) 
+    const [orderHistory,setOrderHistory]=useState([]);
     const dispatch = useDispatch();
     
+    const bottomSheetModalRef = useRef(null);
+	  const snapPoints = useMemo(() => ["30%"], []); // for bottom sheet 
 
-
-   const value=[] // push card data
-
+   //const value=[] // push card data
+   //  console.log("latiiiiii",order[0].rest_latitude)
    const Accsept=(id)=>{
     navigation.navigate('Delivery',{
-      deliver_lati:lati,
-      deliver_longi:longi
-    })
-    
+      shop_lati: parseFloat(order[0].rest_latitude),
+      shop_longi: parseFloat(order[0].rest_longitude)
+    }) 
+    setorderProsess(true)// call  prosess function
+   }
+
+  const reject=()=>{
+      Axios.get(API_ENDPOINTS.Delivery_Orders_Reject_URL,{
+        params:{
+          userid:userID,
+          orderID:order[0].order_id
+        }  
+
+     });
+     bottomSheetModalRef.current.close();
+  } 
+
+
+   const presentBottom=()=>{
+    bottomSheetModalRef.current.present();
+   }
+
+   //procesing part dilivery
+   const process=()=>{
+      
    }
 
    useEffect(()=>{
@@ -62,18 +90,50 @@ function Home({navigation}) {
         });
 
         setOder(order.data);
+        if(order!=0){
+           presentBottom();
+        }
       } catch (error) {
         setErrorMsg('Error fetching location or orders: ' + error.message);
       }
     };
 
-    const intervalTime = setInterval(fetchData, 10000);
+    const intervalTime = setInterval(fetchData, 9000);
 
     return () => {
       clearInterval(intervalTime);
     };
 
     },[userID]);   
+
+    // call the get oder ditels
+    useEffect(()=>{ 
+      const getHistory=async()=>{
+          try{
+            
+              await Axios.get(API_ENDPOINTS.Delivery_Orders_State_URL,{
+                    params:{
+                      userid:userID
+                    }
+              }).then((Response)=>{
+                  setOrderHistory(Response.data)
+              })
+            
+  
+          }catch(error){
+             console.log(error)
+          }
+      }
+  
+      const interval=setInterval(getHistory,5000);
+  
+      return ()=>{
+        clearInterval(interval);
+      }
+  
+   },[userID])
+  
+//
 
 
    
@@ -101,7 +161,7 @@ function Home({navigation}) {
                         </View>
                      </View>
                  </View>
-                   <View style={styles.Revenue}>
+                    <View style={styles.Revenue}>
                        <View style={styles.count}>
                          <Text style={{color:'#4D5959',fontSize:20,fontWeight:600}}>Count</Text>
                          <Text style={{fontSize:18,fontWeight:300}}>05</Text>
@@ -120,12 +180,18 @@ function Home({navigation}) {
                     <View style={styles.recvest}>
                       
                       
-                     {<FlatList
-                      data={order}
-                      renderItem={({item})=>(
-                          <Order 
-                          funcname={Accsept} 
-                          data={item}
+                     {
+                          orderHistory.length==0?<View style={{alignItems:'center',justifyContent:'center',flex:1}}>
+                          <ActivityIndicator size={"number"} theme={{colors:{primary:'green'}}} />
+                        </View>:
+
+                        <FlatList
+                          data={orderHistory}
+                           renderItem={({item})=>(
+                            <SamaryCard 
+                            funcname={Accsept} 
+                            data={item}
+                          
                           
                           />
                       )}
@@ -137,7 +203,21 @@ function Home({navigation}) {
                       
                     />}
 
-                      <BottomSheetOrder/>
+                        {order.length!=0?<Portal>
+                          <BottomSheetModal
+                           backgroundComponent={null} 
+                           backdropComponent={Backdrop}
+                           ref={bottomSheetModalRef} 
+                           index={0}
+                           snapPoints={snapPoints}
+                           
+                          >
+                              {<BottomSheetOrder data={order[0]} func={Accsept} funcReject={reject} funprosess={process} setBoolean={orderProsess}/>}
+                          </BottomSheetModal>
+                          
+                          </Portal>:null
+                          }
+                      <PortalHost name='community_main' />
                       
                    </View>
 
@@ -195,14 +275,14 @@ const styles=StyleSheet.create({
         width:Dimensions.get('window').width,
         height:Dimensions.get('window').height,
         flex:1,
-       // backgroundColor:'red',//un coment this
-        marginTop:'2%',
+        //backgroundColor:'red',//un coment this
+        marginTop:'7%',
         alignItems:'center',
         //justifyContent:'center'
     },
     flatlist:{
         width:Dimensions.get('window').width, 
-        //height:Dimensions.get('window').height-400,
+       // height:Dimensions.get('window').height-400,
         alignItems:'center',
         
     },
