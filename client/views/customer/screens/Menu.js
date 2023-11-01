@@ -147,7 +147,7 @@ export default function Menu() {
 						alignItems: 'flex-end',
 					}}
 				>
-					<Button onPress={toggleSwitch} title='Click me'></Button>
+					<Button onPress={toggleSwitch} title='Apply now'></Button>
 				</View>
 			</View>
 			<Divider
@@ -244,7 +244,7 @@ export default function Menu() {
 					</LinearGradient>
 				</View>
 			</TouchableOpacity>
-			<View
+			{/* <View
 				style={{
 					width: '100%',
 					flexDirection: 'row',
@@ -267,13 +267,13 @@ export default function Menu() {
 						backgroundColor: 'red',
 					}}
 				></View>
-			</View>
-			<Button
+			</View> */}
+			{/* <Button
 				title='Log out'
 				onPress={() => {
 					dispatch(setUserAction(''));
 				}}
-			></Button>
+			></Button> */}
 			<Portal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={profileSheetModalRef} index={0} snapPoints={snapPoints}>
 					<ProfileBottomSheet CloseModal={CloseModal} />

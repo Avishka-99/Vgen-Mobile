@@ -9,7 +9,7 @@ import {OtpInput} from 'react-native-otp-entry';
 import {useSelector} from 'react-redux';
 import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
 import TextInputField from '../../components/TextInputField';
-export default function Otpcode({navigation}) {
+export default function ResetPassword({navigation}) {
 	useEffect(() => {
 		Keyboard.dismiss;
 	});
@@ -83,11 +83,9 @@ export default function Otpcode({navigation}) {
 		// 	}
 		// 	console.log(response.data);
 		// });
-        navigation.navigate('Otpcode')
+		navigation.navigate('Otpcode');
 	};
-	const sendEmail = ()=>{
-
-	}
+	const sendEmail = () => {};
 	// return(
 	// 	<View>
 	// 		<View style={{flex: 1, justifyContent: 'space-between'}}>
@@ -127,7 +125,7 @@ export default function Otpcode({navigation}) {
 				<Image style={styles.image} source={require('../../assets/vf-bg.png')} contentFit='cover' />
 				{/* <View><Header  func={FrogetPasswordView}/></View>  */}
 				<View style={{width: Dimensions.get('window').width, height: '55%', alignItems: 'center', opacity: 9, justifyContent: 'space-evenly'}}>
-					<Text style={{fontSize: 25, color: '#274C5B', fontFamily: 'Poppins-ExtraBold', fontWeight: 600}}>Enter email</Text>
+					<Text style={{fontSize: 25, color: '#274C5B', fontFamily: 'Poppins-ExtraBold', fontWeight: 600}}>Enter new password</Text>
 					<View style={{width: Dimensions.get('window').width / 2, height: Dimensions.get('window').width / 2, backgroundColor: 'white', borderRadius: 100, alignItems: 'center', justifyContent: 'center'}}>
 						<Image style={{width: Dimensions.get('window').width / 2, height: Dimensions.get('window').width / 2, borderRadius: 100}} source={require('../../assets/otp.png')} />
 					</View>
@@ -146,8 +144,9 @@ export default function Otpcode({navigation}) {
 						}}
 						focusStickBlinkingDuration={500}
 					/> */}
-					<TextInputField placeholder="Email" />
-					<Button func={handleSubmit} butname={'Send OTP'} />
+					<TextInputField placeholder='New password' />
+					<TextInputField placeholder='Confirm new passwrod' />
+					<Button func={handleSubmit} butname={'Change password'} />
 				</View>
 				<Toast config={toastConfig} />
 			</View>

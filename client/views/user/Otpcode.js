@@ -117,7 +117,6 @@ export default function Otpcode({navigation}) {
 	// 	</View>
 	// )
 	return (
-		
 		<TouchableNativeFeedback onPress={Keyboard.dismiss}>
 			<View style={{flex: 1, justifyContent: 'space-between'}}>
 				<Image style={styles.image} source={require('../../assets/vf-bg.png')} contentFit='cover' />
@@ -145,7 +144,7 @@ export default function Otpcode({navigation}) {
 						}}
 						focusStickBlinkingDuration={500}
 					/>
-					<Button func={handleSubmit} butname={'Verify'} />
+					<Button func={navigation.navigate('ResetPassword')} butname={'Verify'} />
 				</View>
 				<Toast config={toastConfig} />
 			</View>
