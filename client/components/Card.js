@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Dimensions, Image, TouchableWithoutFeedback, Animated} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, Image, TouchableWithoutFeedback, Animated, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {AntDesign} from '@expo/vector-icons';
 import {RESTAURANT_IMG_PATH, PRODUCT_IMG_PATH, CATEGORY_IMG_PATH, COMMUNITY_IMG_PATH} from '../constants/Constants';
@@ -15,8 +15,8 @@ import {HeartButton} from './Button';
 import * as ALL_ACTIONS from '../actions/AllActions';
 import * as API_ENDPOINTS from '../api/ApiEndpoints';
 import * as Haptics from 'expo-haptics';
-import { I18n } from 'i18n-js';
-import { categoryBottomSheetLocale } from '../constants/Localizations';
+import {I18n} from 'i18n-js';
+import {categoryBottomSheetLocale} from '../constants/Localizations';
 
 export default function Card(props) {
 	const locale = useSelector((state) => state.userReducer.userLanguage);
@@ -156,7 +156,7 @@ export default function Card(props) {
 							style={{
 								height: '94%',
 								width: '98%',
-								borderRadius:15,
+								borderRadius: 15,
 							}}
 							source={{uri: NGROK_URL + PRODUCT_IMG_PATH + props.data.productImage}}
 						/>
@@ -425,6 +425,70 @@ export default function Card(props) {
 					>
 						{props.text}
 					</Text>
+				</View>
+			</View>
+		);
+	} else if (props.type == 'cartCard') {
+		console.log(props);
+		console.log(props);
+		return (
+			<View style={[styles.FoodCardContainer, {height: Dimensions.get('screen').height / 6}]}>
+				<View style={[styles.FoodCardContainerCol1,{left:'3%'}]}>
+					<Image
+						style={{
+							height: '90%',
+							width: '88%',
+							borderRadius: 15,
+						}}
+						source={{uri: NGROK_URL + PRODUCT_IMG_PATH + props.data.image}}
+					/>
+				</View>
+				<View style={[styles.FoodCardContainerCol2,{left:'3%'}]}>
+					<View style={{justifyContent: 'space-around', height: '100%'}}>
+						<View style={{flexGrow: 1, flex: 1, height: '80%', justifyContent: 'center'}}>
+							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 15}}>{props.data.name}</Text>
+						</View>
+						<Text style={{fontSize: 12, fontFamily: 'Poppins-semibold', flexShrink: 1}}>Quantity : {props.data.qty}</Text>
+						<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, color: '#7EB693'}}>Rs.{props.data.price.toFixed(2)}</Text>
+					</View>
+				</View>
+				<View style={[styles.FoodCardContainerCol3, {width: '30%', alignItems: 'center', justifyContent: 'space-evenly'}]}>
+					<TouchableOpacity
+						style={{
+							width: '93%',
+							height: '20%',
+						}}
+					>
+						<View
+							style={{
+								width: '100%',
+								height: '100%',
+								backgroundColor: '#7EB693',
+								borderRadius: 5,
+								alignItems: 'center',
+							}}
+						>
+							<Text style={{fontFamily: 'Poppins-regular', fontSize: 15, color: '#fff'}}>Place order</Text>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={{
+							width: '93%',
+							height: '20%',
+						}}
+					>
+						<View
+							style={{
+								width: '100%',
+								height: '100%',
+								backgroundColor: '#7EB693',
+								borderRadius: 5,
+								alignItems: 'center',
+							}}
+						>
+							<Text style={{fontFamily: 'Poppins-regular', fontSize: 15, color: '#fff'}}>Remove</Text>
+						</View>
+					</TouchableOpacity>
 				</View>
 			</View>
 		);

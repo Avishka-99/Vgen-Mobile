@@ -33,7 +33,7 @@ export default function Categories() {
 	});
 	useEffect(() => {
 		async function fetchData() {
-			const categories = await Axios.post(API_ENDPOINTS.FETCH_CATEGORIES);
+			const categories = await Axios.get(API_ENDPOINTS.FETCH_CATEGORIES);
 			setCategories(categories.data);
 		}
 		fetchData();

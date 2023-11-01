@@ -805,7 +805,7 @@ export function CreateCommunityBottomSheet(props) {
 }
 export function CommunityHomeBottomSheet(props) {
 	console.log(props);
-	const [isMember, setIsMemeber] = useState(true);
+	const [isMember, setIsMemeber] = useState(false);
 	const [load, setLoad] = useState(true);
 	const [image, setImage] = useState(null);
 	const [res, setRes] = useState(null);
@@ -837,7 +837,7 @@ export function CommunityHomeBottomSheet(props) {
 		}
 	};
 	const handleSubmit = (id, type) => {
-		//setIsMemeber(!isMember);
+		setIsMemeber(!isMember);
 		//console.log(id);
 		const tempArray = userCommunities.map((innerArray) => innerArray);
 		// tempArray.push(id);

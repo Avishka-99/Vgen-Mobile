@@ -62,14 +62,15 @@ export default function ItemModal(props) {
 			}
 		});
 	};
-	const addToCart = (id, qty) => {
+	const addToCart = (details, qty) => {
+		console.log(details)
 		var newCart = [];
-		//var filteredCommunities = {};
+		var filteredCommunities = {};
 		async function updateCart() {
 			try {
 				if (cart) {
 					newCart = cart.map((innerArray) => innerArray);
-					const newItem = {id: id, qty: qty};
+					const newItem = {id: details.productId, qty: qty,image:details.productImage,name:details.productName,price:details.sell_products[0].price};
 					newCart.push(newItem);
 					dispatch(setCart(newCart));
 					console.log(newCart);
@@ -82,7 +83,7 @@ export default function ItemModal(props) {
 			}
 		}
 		updateCart();
-		console.log(id, qty);
+		//console.log(id, qty);
 	};
 	return (
 		<Modal
@@ -177,7 +178,7 @@ export default function ItemModal(props) {
 								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#fff'}}>Buy now</Text>
 							</View>
 						</TouchableWithoutFeedback>
-						<TouchableWithoutFeedback style={{width: '70%', height: '40%'}} onPress={() => addToCart(modalDetails.productId, modalProductQuantity)}>
+						<TouchableWithoutFeedback style={{width: '70%', height: '40%'}} onPress={() => addToCart(modalDetails, modalProductQuantity)}>
 							<View style={{width: '80%', height: '40%', backgroundColor: '#7EB693', alignItems: 'center', justifyContent: 'center', borderRadius: 10}}>
 								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#fff'}}>Add to Cart</Text>
 							</View>

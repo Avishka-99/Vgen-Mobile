@@ -9,6 +9,7 @@ import Header from '../../components/Header';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import Otpcode from './Otpcode';
+import ResetPassword from './ResetPassword';
 export default function Landing() {
 	const Stack = createStackNavigator();
 	return (
@@ -21,6 +22,7 @@ export default function Landing() {
 			<Stack.Screen name='SignUp' component={SignUp}></Stack.Screen>
 			<Stack.Screen name='FrogetPassword' component={FrogetPassword}></Stack.Screen>
 			<Stack.Screen name='Otpcode' component={Otpcode}></Stack.Screen>
+			<Stack.Screen name='ResetPassword' component={ResetPassword}></Stack.Screen>
 		</Stack.Navigator>
 	);
 }
