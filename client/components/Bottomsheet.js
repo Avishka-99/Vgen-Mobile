@@ -1,6 +1,6 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl, Platform} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, RefreshControl, Platform, Animated} from 'react-native';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {COMMUNITY_IMG_PATH, NGROK_URL, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
+import {COMMUNITY_IMG_PATH, NGROK_URL, POST_IMG_PATH, PRODUCT_IMG_PATH, RESTAURANT_IMG_PATH} from '../constants/Constants';
 import {AntDesign, Entypo, EvilIcons, Feather, FontAwesome, FontAwesome5, Fontisto, Foundation, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons, SimpleLineIcons, Zocial} from '@expo/vector-icons';
 import {BaseButton, ScrollView, TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -31,7 +31,11 @@ import {RadioButton} from 'react-native-paper';
 import {updateprofile} from '../constants/Localizations';
 import {I18n} from 'i18n-js';
 import * as Icons from '../constants/Icons';
-import {Grayscale} from 'react-native-color-matrix-image-filters';
+import Backdrop from './Backdrop';
+import {AnimatedFAB} from 'react-native-paper';
+import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import CreatePostModal from './CreatePostModal';
+import * as Device from 'expo-device'
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -545,7 +549,7 @@ export function ProfileBottomSheet(props) {
 
 		if (!result.canceled) {
 			setImage(result.assets[0]);
-			setRes(result.base64);
+			setRes(result.assets[0].base64);
 		}
 	};
 	const changeOption = () => {
@@ -618,7 +622,7 @@ export function ProfileBottomSheet(props) {
 						width: '94%',
 						height: '25%',
 						backgroundColor: '#dfdfdf',
-						borderRadius: '7em',
+						borderRadius:Device.brand=='Apple'? '7em':12,
 					}}
 					activeOpacity={0.7}
 					onPress={pickImage}
@@ -655,7 +659,7 @@ export function ProfileBottomSheet(props) {
 						top: '9%',
 						width: '95%',
 						height: '12%',
-						borderRadius: '200em',
+						borderRadius: Device.brand=='Apple'?'200em':12,
 						backgroundColor: '#7EB693',
 						alignItems: 'center',
 						justifyContent: 'center',
@@ -734,7 +738,7 @@ export function CreateCommunityBottomSheet(props) {
 						width: '94%',
 						height: '25%',
 						backgroundColor: '#dfdfdf',
-						borderRadius: '7em',
+						borderRadius:Device.brand=='Apple'? '7em':4,
 					}}
 					activeOpacity={0.7}
 					onPress={pickImage}
@@ -780,7 +784,7 @@ export function CreateCommunityBottomSheet(props) {
 						top: '9%',
 						width: '95%',
 						height: '12%',
-						borderRadius: '200em',
+						borderRadius:Device.brand=='Apple'?  '200em':60,
 						backgroundColor: '#7EB693',
 						alignItems: 'center',
 						justifyContent: 'center',
@@ -795,18 +799,21 @@ export function CreateCommunityBottomSheet(props) {
 	);
 }
 export function CommunityHomeBottomSheet(props) {
-	console.log(props)
-	const [isMember, setIsMemeber] = useState(props.isMember);
+	console.log(props);
+	const [isMember, setIsMemeber] = useState(true);
 	const [load, setLoad] = useState(true);
 	const [image, setImage] = useState(null);
 	const [res, setRes] = useState(null);
 	const [communityName, setCommunityName] = useState('');
 	const [communityDescription, setCommunityDescription] = useState('');
 	const [visibility, setVisibility] = useState(0);
-	const [ userCount,setUserCount] = useState();
+	const [userCount, setUserCount] = useState();
 	const user_id = useSelector((state) => state.userReducer.userid);
 	const userCommunities = useSelector((state) => state.userReducer.userCommunities);
-	//console.log(isMember);
+	const [isExtended, setIsExtended] = useState(true);
+	const bottomSheetModalRef = useRef(null);
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [posts, setPosts] = useState();
 	const pickImage = async () => {
 		// No permissions request is necessary for launching the image library
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -817,19 +824,19 @@ export function CommunityHomeBottomSheet(props) {
 			base64: true,
 		});
 
-		console.log(result.assets[0]);
+		//console.log(result.assets[0]);
 
 		if (!result.canceled) {
 			setImage(result.assets[0]);
 			setRes(result.assets[0].base64);
 		}
 	};
-	const handleSubmit = (id) => {
-		setIsMemeber(!isMember);
-		console.log(id);
+	const handleSubmit = (id, type) => {
+		//setIsMemeber(!isMember);
+		//console.log(id);
 		const tempArray = userCommunities.map((innerArray) => innerArray);
-		tempArray.push(id);
-		console.log(tempArray);
+		// tempArray.push(id);
+		// console.log(tempArray);
 		// if (type == 'heart-border') {
 		// 	if (tempArray.indexOf(id) == -1) {
 		// 		tempArray.push(id);
@@ -948,16 +955,45 @@ export function CommunityHomeBottomSheet(props) {
 			members: 1.7,
 		},
 	];
+	const onScroll = ({nativeEvent}) => {
+		const currentScrollPosition = Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+
+		setIsExtended(currentScrollPosition <= 0);
+	};
+	const fabStyle = {['right']: 16};
 	useEffect(() => {
 		Axios.post(API_ENDPOINTS.GET_COMMUNITY_DETAILS, {
 			communityId: props.data.communityId,
-		}).then((response)=>{
+		}).then((response) => {
+			//console.log(response.data);
 			setUserCount(response.data.count);
 		});
+		Axios.get('/api/getFeed', {
+			params: {
+				communityId: props.data.communityId,
+			},
+		}).then((response) => {
+			setPosts(response.data);
+			console.log(posts);
+		});
 	}, []);
+	const openModal = (data) => {
+		setIsModalVisible(!isModalVisible);
+		//console.log(isModalVisible);
+		//bottomSheetModalRef.current.present();
+	};
+	const closeModal = () => {
+		setIsModalVisible(!isModalVisible);
+	};
+	const snapPoints = useMemo(() => ['96%'], []);
 	return (
 		<View style={styles.container}>
-			<View style={{height: Dimensions.get('screen').height / 4}}>
+			{isModalVisible && (
+				<Portal>
+					<CreatePostModal isVisible={isModalVisible} closeFun={closeModal} id={props.data.communityId} />
+				</Portal>
+			)}
+			<View style={{height: '30%'}}>
 				{load && (
 					<Image
 						style={{
@@ -994,58 +1030,160 @@ export function CommunityHomeBottomSheet(props) {
 			</View>
 			{isMember ? (
 				<>
-					<View style={{height: '22%', flexDirection: 'row'}}>
+					<View style={{height: '12%', flexDirection: 'row'}}>
 						<View style={{width: '70%', height: '100%'}}>
 							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 28, left: '2%'}}>{props.data.name}</Text>
 							<View style={{flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft: '2%'}}>
 								<Text style={{fontFamily: 'Poppins-medium', fontSize: 14, color: '#4D4C44'}}>{props.data.visibility == 0 ? 'Public community' : 'Private community'}</Text>
-								<Text style={{fontFamily: 'Poppins-medium'}}> {userCount} members</Text>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14}}>.</Text>
+								<Text style={{fontFamily: 'Poppins-medium'}}> {userCount == 1 ? userCount + ' member' : userCount > 999 ? (userCount * 1.0) / 1000 + 'K members' : userCount + ' members'}</Text>
 							</View>
 						</View>
 
-						<View style={{width: '30%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
-							<TouchableOpacity activeOpacity={0.3} onPress={() => setIsMemeber(true)}>
+						<View style={{width: '30%', height: '80%', alignItems: 'center', justifyContent: 'center'}}>
+							<TouchableOpacity activeOpacity={0.3} onPress={() => handleSubmit(props.data.communityId, 'leave')}>
 								<View style={{height: '70%', width: '100%', justifyContent: 'flex-end', flexDirection: 'row', marginRight: '10%'}}>
-									<View style={[{width: '77%', height: '100%', backgroundColor: 'white', borderRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderWidth: '2px', alignItems: 'center'}]}>
+									<View style={[{width: '77%', height: '100%', backgroundColor: 'white', borderRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderWidth:Device.brand=='Apple'? '2px':2, alignItems: 'center'}]}>
 										<Text style={{fontFamily: 'Poppins-semibold'}}>Leave</Text>
 									</View>
 								</View>
 							</TouchableOpacity>
 						</View>
 					</View>
-					<View style={{width: '100%', height: '100%', backgroundColor: 'dodger'}}>{isMember && <FlashList data={communities} renderItem={({item}) => <View style={{width: '100%', height: 100, backgroundColor: 'green', marginBottom: '2%'}}></View>} estimatedItemSize={communities.length} />}</View>
+					<View style={{width: '100%', height: '58%', backgroundColor: 'dodger'}}>
+						{isMember && posts && (
+							<FlashList
+								onScroll={onScroll}
+								data={posts}
+								renderItem={({item}) => (
+									<View style={{width: '100%', height: Dimensions.get('screen').height / 4, marginBottom: '2%', justifyContent: 'center', alignItems: 'center'} }key={Math.random()}>
+										<View style={{width: '97%', borderColor: 'black', borderWidth: 3, borderRadius: 8}}>
+											<View
+												style={{
+													height: '20%',
+													width: '100%',
+												}}
+											>
+												<Text style={{fontFamily: 'Poppins-semibold', fontSize: 18, top: '5%', color: '#000'}}>{item.title}</Text>
+											</View>
+											<View
+												style={{
+													height: '50%',
+													width: '100%',
+												}}
+											>
+												<Text>{item.description}</Text>
+											</View>
+											<View
+												style={{
+													height: '30%',
+													width: '100%',
+													flexDirection: 'row',
+													alignItems:'center',
+													justifyContent:'center'
+												}}
+											>
+												{item.images.map((image, index) => (
+													
+														<Image key={Math.random()}
+															style={{
+																height: 40,
+																width: 40,
+																borderTopLeftRadius: 15,
+																borderTopRightRadius: 15,
+															}}
+															source={{uri: NGROK_URL + POST_IMG_PATH + image.images}}
+															// onLoad={() => setLoad(false)}
+														/>
+													
+												))}
+											</View>
+										</View>
+									</View>
+								)}
+								estimatedItemSize={communities.length}
+								contentContainerStyle={{
+									paddingTop: 10,
+								}}
+							/>
+						)}
+						<AnimatedFAB
+							icon={'plus'}
+							label={'Create'}
+							extended={isExtended}
+							onPress={openModal}
+							visible={true}
+							animateFrom={'right'}
+							iconMode={'dynamic'}
+							color={'white'}
+							style={[
+								{
+									position: 'absolute',
+									backgroundColor: '#76B693',
+									right: 0,
+									bottom: 13,
+								},
+								fabStyle,
+							]}
+						/>
+					</View>
+
+					{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
+					<View style={{flex: 1}}>
+						<Text>Hello!</Text>
+
+						<Button title='Hide modal' onPress={toggleModal} />
+					</View>
+				</Modal> */}
 				</>
 			) : (
 				<>
-					<View style={{height: '22%', flexDirection: 'row'}}>
+					<View style={{height: '12%', flexDirection: 'row'}}>
 						<View style={{width: '70%', height: '100%'}}>
 							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 28, left: '2%'}}>{props.data.name}</Text>
 							<View style={{flexDirection: 'row', alignItems: 'center', width: '100%', marginLeft: '2%'}}>
 								<Text style={{fontFamily: 'Poppins-medium', fontSize: 14, color: '#4D4C44'}}>{props.data.visibility == 0 ? 'Public community' : 'Private community'}</Text>
-								<Text style={{fontFamily: 'Poppins-medium'}}> {userCount} members</Text>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14}}>.</Text>
+								<Text style={{fontFamily: 'Poppins-medium'}}> {userCount == 1 ? userCount + ' member' : userCount > 999 ? (userCount * 1.0) / 1000 + 'K members' : userCount + ' members'}</Text>
 							</View>
 						</View>
 
-						<View style={{width: '30%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
-							<TouchableOpacity activeOpacity={0.3} onPress={() => setIsMemeber(true)}>
+						<View style={{width: '30%', height: '80%', alignItems: 'center', justifyContent: 'center'}}>
+							<TouchableOpacity activeOpacity={0.3} onPress={() => handleSubmit(props.data.communityId, 'add')}>
 								<View style={{height: '70%', width: '100%', justifyContent: 'flex-end', flexDirection: 'row', marginRight: '10%'}}>
 									{/* <View style={{width: '33%', height: '100%', backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', borderTopLeftRadius: 400, borderBottomLeftRadius: 400, borderColor: 'black', borderLeftWidth: '2px', borderTopWidth: '2px', borderBottomWidth: '2px'}}>
 									<Icons.Ionicons name='exit-outline' size={23} color='black' />
 								</View> */}
-									<View style={[{width: '77%', height: '100%', backgroundColor: 'white', borderRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderWidth: '2px', alignItems: 'center'}]}>
+									<View style={[{width: '77%', height: '100%', backgroundColor: 'white', borderRadius: 400, justifyContent: 'center', fontFamily: 'Yellowtail-Regular', borderWidth: Device.brand=='Apple'? '2px':2, alignItems: 'center'}]}>
 										<Text style={{fontFamily: 'Poppins-semibold'}}>Join</Text>
 									</View>
 								</View>
 							</TouchableOpacity>
 						</View>
 					</View>
-					<View style={{width: '100%', height: '100%'}}>
-						<View>
-							<Text>error</Text>
-						</View>
+					<View style={{width: '100%', height: '50%', alignItems: 'center', justifyContent: 'center'}}>
+						<Image
+							style={{
+								height: '60%',
+								width: '60%',
+								opacity: 0.4,
+							}}
+							source={require('../assets/private.png')}
+							contentFit='cover'
+						/>
+
+						<Text style={{fontFamily: 'Poppins-semibold', color: '#4D4C44'}}>Please join to community</Text>
+						<Text style={{fontFamily: 'Poppins-semibold', color: '#4D4C44'}}>in order to view its content</Text>
 					</View>
 				</>
 			)}
+		</View>
+	);
+}
+export function CreatePostBottomSheet(props) {
+	return (
+		<View>
+			<Text>Hello</Text>
 		</View>
 	);
 }
@@ -1070,10 +1208,10 @@ const styles = StyleSheet.create({
 		height: 40,
 		borderRadius: 20,
 		backgroundColor: 'white',
-		shadowColor: '#171717',
-		shadowOffset: {width: -2, height: 4},
-		shadowOpacity: 0.2,
-		shadowRadius: 3,
+		// shadowColor: '#171717',
+		// shadowOffset: {width: -2, height: 4},
+		// shadowOpacity: 0.2,
+		// shadowRadius: 3,
 		alignItems: 'center',
 		justifyContent: 'center',
 	},

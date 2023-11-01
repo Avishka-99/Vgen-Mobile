@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {TouchableOpacity, Text, StyleSheet, Dimensions, View, Animated} from 'react-native';
-
+import * as Device from 'expo-device'
 export default function Button(props) {
 	return (
 		<TouchableOpacity style={[styles.button, props.custermize]} onPress={() => props.func()}>
@@ -24,7 +24,7 @@ export function IconButton(props) {
 					justifyContent: 'center',
 					flexDirection: 'row',
 					alignItems: 'center',
-					borderRadius: '100%',
+					borderRadius: 400,
 					alignSelf: 'flex-start',
 					padding: 1,
 				}}
@@ -75,9 +75,9 @@ export function HeartButton(props) {
 		return (
 			<TouchableOpacity onPress={() => props.onPress(props.type, props.data)}>
 				<Animated.View style={[stylesr.container]}>
-					<View style={{width: '50%', height: '50%', backgroundColor: 'white', position: 'absolute', right: '43%', borderRadius: '100%', bottom: '43%', borderColor: '#F36B7E', borderWidth: '2%'}}></View>
-					<View style={{width: '50%', height: '50%', backgroundColor: 'white', position: 'absolute', left: '43%', borderRadius: '100%', bottom: '43%', borderWidth: '2%', borderColor: '#F36B7E'}}></View>
-					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', borderWidth: '2%', borderColor: '#F36B7E', borderLeftWidth: '0%', borderTopWidth: '0%'}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', position: 'absolute', right: '43%', borderRadius: 400, bottom: '43%', borderColor: '#F36B7E', borderWidth:Device.brand=='Apple'? '2%':5}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', position: 'absolute', left: '43%', borderRadius: 400, bottom: '43%', borderWidth:Device.brand=='Apple'? '2%':5, borderColor: '#F36B7E'}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', borderWidth:Device.brand=='Apple'? '2%':5, borderColor: '#F36B7E', borderLeftWidth: Device.brand=='Apple'? '0%':0, borderTopWidth:Device.brand=='Apple'? '0%':0}}></View>
 					<View style={{width: '7%', height: '7%', backgroundColor: '#F36B7E', position: 'absolute', transform: 'rotate(45deg)', top: '15%'}}></View>
 				</Animated.View>
 			</TouchableOpacity>
@@ -87,8 +87,8 @@ export function HeartButton(props) {
 			<TouchableOpacity onPress={() => props.onPress(props.type, props.data)}>
 				<Animated.View style={[stylesr.container]}>
 					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', backgroundColor: '#F36B7E'}}></View>
-					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', position: 'absolute', right: '43%', borderRadius: '100%', bottom: '43%', backgroundColor: '#F36B7E'}}></View>
-					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', position: 'absolute', left: '43%', borderRadius: '100%', bottom: '43%', backgroundColor: '#F36B7E'}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', position: 'absolute', right: '43%', borderRadius: 400, bottom: '43%', backgroundColor: '#F36B7E'}}></View>
+					<View style={{width: '50%', height: '50%', backgroundColor: 'white', transform: 'rotate(45deg)', position: 'absolute', left: '43%', borderRadius: 400, bottom: '43%', backgroundColor: '#F36B7E'}}></View>
 				</Animated.View>
 			</TouchableOpacity>
 		);

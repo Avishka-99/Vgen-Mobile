@@ -166,7 +166,7 @@ const updateprofile = {
 	en: {
 		title: 'Update profile',
 		chooseimage: 'New profile picture ',
-		contactno: 'Contact no',
+		contactno: 'New contact no',
 		newpassword: 'New password',
 		confirmnewpassword: 'Confirm new password',
 		btntitle: 'Update',
@@ -174,7 +174,7 @@ const updateprofile = {
 	si: {
 		title: 'ගිණුම යාවත්කාලීන කරන්න',
 		chooseimage: 'පැතිකඩ පින්තූරය',
-		contactno: 'දුරකථන අංකය',
+		contactno: 'නව දුරකථන අංකය',
 		newpassword: 'නව මුරපදය',
 		confirmnewpassword: 'නව මුරපදය තහවුරු කරන්න',
 		btntitle: 'යාවත්කාලීන කරන්න',

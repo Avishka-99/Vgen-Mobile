@@ -16,4 +16,6 @@ export const FETCH_PROFILE = '/api/fetchprofile';
 export const ADD_FAV_STORE = '/api/addfavstore';
 export const REMOVE_FAV_STORE = '/api/removefavstore';
 export const JOIN_COMMUNITY = '/api/joincommunitymobile';
-export const GET_COMMUNITY_DETAILS = '/api/getcommunitydetails'
+export const GET_COMMUNITY_DETAILS = '/api/getcommunitydetails';
+export const GET_USER_PROFILE = '/api/getuserprofile';
+export const CREATE_POST_MOBILE = '/api/createpostmobile'

@@ -383,7 +383,7 @@ export default function Card(props) {
 						width: Dimensions.get('screen').height / 11,
 						backgroundColor: '#efefef',
 						left: '1%',
-						borderRadius: '100%',
+						borderRadius: 30,
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}
@@ -405,7 +405,7 @@ export default function Card(props) {
 							fontSize: 20,
 						}}
 					>
-						Avishka Prabhath
+						{props.name}
 					</Text>
 					<Text
 						style={{
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
 	StoreCardContainerRow1: {
 		width: '100%',
 		height: '75%',
-		borderRadius: 14,
+		// borderRadius: 14,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},

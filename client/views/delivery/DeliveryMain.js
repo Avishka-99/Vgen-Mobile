@@ -9,6 +9,7 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import Menu from './screens/Menu';
 export default function CustomerMain() {
     const Tab = createBottomTabNavigator();
     return (
@@ -58,7 +59,7 @@ export default function CustomerMain() {
                         <MaterialIcons name="delivery-dining" size={30} color={focused ? "#7EB693" : "black"} />
                     ),
                 }} />
-            <Tab.Screen name="Account" component={Account}
+            <Tab.Screen name="Account" component={Menu}
                 options={{
                     headerShown: false,
                     tabBarInactiveTintColor: 'black',

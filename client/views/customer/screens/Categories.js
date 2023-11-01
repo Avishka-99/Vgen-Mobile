@@ -71,9 +71,9 @@ export default function Categories() {
 	const openModal = (data) => {
 		Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
 			const newFoods = result.data.filter((item) => filterArrayByCategory(item, data));
-			setOption('all')
+			setOption('all');
 			setFoods(newFoods);
-			setSheetFoods(newFoods)
+			setSheetFoods(newFoods);
 			//dispatch(ALL_ACTIONS.setAllProducts(result.data));
 			//allFoods = useSelector((state) => state.userReducer.allProducts);
 		});
@@ -100,7 +100,7 @@ export default function Categories() {
 	return (
 		<View style={styles.container}>
 			{categories ? (
-				<FlashList contentContainerStyle={{paddingBottom: 100,paddingTop:5}} ItemSeparatorComponent={() => <View style={{height: 20}} />} numColumns={2} data={categories} renderItem={({item}) => <Card type='category' openFun={openModal} data={item} />} estimatedItemSize={categories.length} />
+				<FlashList contentContainerStyle={{paddingBottom: 100, paddingTop: 5}} ItemSeparatorComponent={() => <View style={{height: 20}} />} numColumns={2} data={categories} renderItem={({item}) => <Card type='category' openFun={openModal} data={item} />} estimatedItemSize={categories.length} />
 			) : (
 				<View style={{flex: 1, justifyContent: 'center'}}>
 					<ActivityIndicator size='large' color='#76B693' />
@@ -109,7 +109,7 @@ export default function Categories() {
 
 			<Portal>
 				<BottomSheetModal backgroundComponent={null} backdropComponent={Backdrop} ref={bottomSheetModalRef} index={0} snapPoints={snapPoints}>
-					{sheetFoods && <CategoryBottomSheet optionChangeFun={changeOption} data={sheetFoods} closeFun={CloseModal} type={option} title={sheetTitle} />} 
+					{sheetFoods && <CategoryBottomSheet optionChangeFun={changeOption} data={sheetFoods} closeFun={CloseModal} type={option} title={sheetTitle} />}
 				</BottomSheetModal>
 				{/* <Modal swipeDirection={'down'} isVisible={isModalVisible}>
 					<View style={{flex: 1}}>

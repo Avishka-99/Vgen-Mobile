@@ -20,7 +20,9 @@ import * as API_ENDPOINTS from '../../../api/ApiEndpoints';
 import * as ALL_ACTIONS from '../../../actions/AllActions';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Tab} from 'react-native-elements';
-const {diffClamp} = Animated;
+import ItemModal from '../../../components/ItemModal';
+import {setModalDetails} from '../../../actions/AllActions';
+//const {diffClamp} = Animated;
 
 export default function Home({navigation}) {
 	const dispatch = useDispatch();
@@ -33,6 +35,7 @@ export default function Home({navigation}) {
 	const [focused, setFocused] = useState(false);
 	const [fetchedData, setFethedData] = useState(false);
 	const [SearchTerm, setSearchTerm] = useState('');
+	const [isModalVisible, setIsModalVisible] = useState(false);
 	const headerTranslateY = diffClamp.interpolate({
 		inputRange: [0, HEADER_HEIGHT],
 		outputRange: [0, -HEADER_HEIGHT],
@@ -117,8 +120,8 @@ export default function Home({navigation}) {
 	};
 	const Tab = createMaterialTopTabNavigator();
 	useEffect(() => {
-		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((response) => {
-			dispatch(ALL_ACTIONS.setRestaurantAction(response.data));
+		Axios.post(API_ENDPOINTS.FETCH_RESTAURANT_DETAILS).then((result) => {
+			dispatch(ALL_ACTIONS.setRestaurantAction(result.data));
 		});
 	}, []);
 	const searchFun = (text) => {
@@ -128,7 +131,10 @@ export default function Home({navigation}) {
 			Axios.post(API_ENDPOINTS.FETCH_SEARCH_RESULT, {
 				parameter: text,
 			}).then((response) => {
-				setFethedData(response.data);
+				if (response) {
+					setFethedData(response.data);
+				}
+
 				//console.log(response.data);
 			});
 		} else {
@@ -136,16 +142,39 @@ export default function Home({navigation}) {
 		}
 	};
 	const handleModal = (data) => {
-		console.log('hello');
+		console.log(data);
+		Axios.post(API_ENDPOINTS.FETCH_PRODUCT, {
+			id: data.productId,
+			restaurantId: data.sell_products[0].manufactureId,
+		}).then((response) => {
+			//console.log(response.data);
+			Axios.post(API_ENDPOINTS.FETCH_RESTAURANT, {
+				id: response.data[0].sell_products[0].manufactureId,
+			}).then((response_2) => {
+				console.log(response.data);
+				let product = response.data[0];
+				let restaurant = response_2.data[0];
+				let modalData = {
+					...product,
+					...restaurant,
+				};
+				dispatch(ALL_ACTIONS.setModalDetails(modalData));
+				setIsModalVisible(true);
+			});
+		});
+		//console.log('hello');
 		// Axios.post('/api/fetchproduct', {
 		// 	id: data.productId,
 		// 	restaurantId: data.sell_products[0].manufactureId,
 		// }).then(async (response) => {
 		// 	dispatch(ALL_ACTIONS.setModalDetails(response.data[0]));
 		// });
-		//(data);
+		// (data);
 
-		//setIsModalVisible(true);
+		// setIsModalVisible(true);
+	};
+	const closeModal = () => {
+		setIsModalVisible(false);
 	};
 	const ExploreCommunities = () => {
 		const Tab = createMaterialTopTabNavigator();
@@ -201,6 +230,11 @@ export default function Home({navigation}) {
 				) : (
 					<View style={{flex: 1, width: '100%', height: '100%'}}>
 						<FlashList contentContainerStyle={{paddingBottom: 20}} data={fetchedData} renderItem={({item}) => <Card openModal={handleModal} type='food' data={item} />} estimatedItemSize={fetchedData.length} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} />
+						{isModalVisible && (
+							<Portal>
+								<ItemModal isModalVisible={isModalVisible} closeModal={closeModal} />
+							</Portal>
+						)}
 					</View>
 				)}
 			</Animated.View>

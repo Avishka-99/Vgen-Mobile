@@ -74,10 +74,10 @@ function Home({navigation}) {
      value.push(item)
    })
 
-   console.log("shgfsdgf",value)
+   //console.log("shgfsdgf",value)
   
-  console.log("lati",lati)
-  console.log("long",longi)
+  // console.log("lati",lati)
+  // console.log("long",longi)
   //console.log('eaultttt',orders.orderTableData[0][0]) 
     
     return (
