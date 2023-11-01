@@ -36,6 +36,7 @@ import {AnimatedFAB} from 'react-native-paper';
 import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@gorhom/bottom-sheet';
 import CreatePostModal from './CreatePostModal';
 import * as Device from 'expo-device'
+import { categoryBottomSheetLocale } from '../constants/Localizations';
 export default function Bottomsheet(props) {
 	//console.log(props);
 	const dispatch = useDispatch();
@@ -74,7 +75,7 @@ export default function Bottomsheet(props) {
 		}, []);
 		const products = useSelector((state) => state.restaurantReducer.products);
 		const modalDetails = useSelector((state) => state.restaurantReducer.modalDetails);
-		//console.log(useSelector((state) => state.userReducer.userid));
+		console.log(products);
 		const onRefresh = React.useCallback(() => {
 			setRefreshing(true);
 			setTimeout(() => {
@@ -167,13 +168,13 @@ export default function Bottomsheet(props) {
 						/>
 						<LinearGradient style={styles.gradient} colors={['transparent', 'rgba(0,0,0,0.8)']}>
 							<View style={styles.restaurantDetails}>
-								<View style={{height: '70%'}}>
+								<View style={{height: '100%'}}>
 									<Text style={{color: 'white', fontSize: 24}}>{props.info.restaurant_manager.resturantName}</Text>
 								</View>
-								<View style={{top: -10, flexDirection: 'row', alignItems: 'center'}}>
+								{/* <View style={{top: -10, flexDirection: 'row', alignItems: 'center'}}>
 									<AntDesign name='star' size={16} color={'white'} />
 									<Text style={{color: 'white', fontSize: 16, left: 4}}>{props.info.rating}</Text>
-								</View>
+								</View> */}
 							</View>
 						</LinearGradient>
 						{/* <IconButton icon='camera' iconColor={MD3Colors.error50} size={20} onPress={() => //('Pressed')} /> */}
@@ -275,11 +276,12 @@ export default function Bottomsheet(props) {
 										</View>
 									</View>
 									<View style={{height: '100%', width: '50%', justifyContent: 'space-evenly', left: '8%'}}>
-										<TouchableWithoutFeedback style={{width: '70%', height: '60%', borderRadius: 10}} onPress={() => makePayment((modalProductQuantity * parseInt(modalDetails.sell_products[0].price)).toFixed(2))}>
+										{modalDetails.sell_products[0].quantity>0?<TouchableWithoutFeedback style={{width: '70%', height: '60%', borderRadius: 10}} onPress={() => makePayment((modalProductQuantity * parseInt(modalDetails.sell_products[0].price)).toFixed(2))}>
 											<View style={{width: '100%', height: '100%', backgroundColor: '#7EB693', alignItems: 'center', justifyContent: 'center', borderRadius: 10}}>
 												<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#fff'}}>Buy now</Text>
 											</View>
-										</TouchableWithoutFeedback>
+										</TouchableWithoutFeedback>:<></>}
+										
 										<TouchableWithoutFeedback style={{width: '70%', height: '60%'}}>
 											<View style={{width: '100%', height: '100%', backgroundColor: '#7EB693', alignItems: 'center', justifyContent: 'center', borderRadius: 10}}>
 												<Text style={{fontFamily: 'Poppins-semibold', fontSize: 14, color: '#fff'}}>Add to Cart</Text>
@@ -368,6 +370,7 @@ export function CategoryBottomSheet(props) {
 	const [totalCost, setTotalCost] = useState(0);
 	const data = props.data;
 	const dispatch = useDispatch();
+	const locale = useSelector((state) => state.userReducer.userLanguage);
 	// useEffect(() => {
 	// 	Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
 	// 		dispatch(ALL_ACTIONS.setAllProducts(result.data));
@@ -402,7 +405,9 @@ export function CategoryBottomSheet(props) {
 	const closeModal = () => {
 		setIsModalVisible(false);
 	};
-
+	const i18n = new I18n(categoryBottomSheetLocale);
+	i18n.enableFallback = true;
+	i18n.locale = locale;
 	return (
 		<View style={styles.container}>
 			{isModalVisible && (
@@ -440,7 +445,7 @@ export function CategoryBottomSheet(props) {
 								paddingTop: 20,
 							}}
 						>
-							Oops! No Products
+							{i18n.t('noproducts')}
 						</Text>
 					</View>
 				)}
@@ -462,7 +467,7 @@ export function CategoryBottomSheet(props) {
 						justifyContent: 'center',
 					}}
 				>
-					<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 37, paddingLeft: Dimensions.get('screen').width / 45}}>{props.title}</Text>
+					<Text style={{fontFamily: 'Gabarito-Bold', fontSize: 37, paddingLeft: Dimensions.get('screen').width / 45}}>{i18n.t(`${props.title.toLowerCase()}`)}</Text>
 				</View>
 				{props.data.length > 0 ? (
 					<View

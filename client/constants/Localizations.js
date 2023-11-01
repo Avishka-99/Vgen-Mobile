@@ -188,4 +188,50 @@ const updateprofile = {
 		btntitle: 'மேம்படுத்தல்',
 	},
 };
-export {signin, signup, menu, updateprofile};
+const customerHome = {
+	si: {
+		search: 'සොයන්න...',
+	},
+	en: {
+		search: 'Search...',
+	},
+	ta: {
+		search: 'தேடல்',
+	},
+};
+const categoryBottomSheetLocale = {
+	si: {
+		legumes: 'රනිල කුලයට අයත් බෝග',
+		fruits: 'පලතුරු',
+		vegetables: 'එළවලු',
+		grains: 'ධාන්‍ය වර්ග',
+		oils: 'තෙල් වර්ග',
+		desserts: 'අතුරුපස',
+		snacks: 'ක්ෂණික ආහාර',
+		beverages: 'බීම වර්ග',
+		noproducts: 'කිසිදු නිෂ්පාදනයක් නොමැත',
+	},
+	en: {
+		legumes: 'Legumes',
+		fruits: 'Fruits',
+		vegetables: 'Vegetables',
+		grains: 'Grains',
+		oils: 'Oils',
+		desserts: 'Desserts',
+		snacks: 'Snacks',
+		beverages: 'Beverages',
+		noproducts:'Oops! No Products'
+	},
+	ta: {
+		legumes: 'பருப்பு வகைகள்',
+		fruits: 'பழங்கள்',
+		vegetables: 'காய்கறிகள்',
+		grains: 'தானியங்கள்',
+		oils: 'எண்ணெய்கள்',
+		desserts: 'இனிப்புகள்',
+		snacks: 'தின்பண்டங்கள்',
+		beverages: 'பானங்கள்',
+		noproducts: 'அச்சச்சோ! தயாரிப்புகள் இல்லை',
+	},
+};
+export {signin, signup, menu, updateprofile,customerHome,categoryBottomSheetLocale};

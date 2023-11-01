@@ -22,7 +22,9 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {Tab} from 'react-native-elements';
 import ItemModal from '../../../components/ItemModal';
 import {setModalDetails} from '../../../actions/AllActions';
+import {I18n} from 'i18n-js';
 //const {diffClamp} = Animated;
+import { customerHome } from '../../../constants/Localizations';
 
 export default function Home({navigation}) {
 	const dispatch = useDispatch();
@@ -36,6 +38,7 @@ export default function Home({navigation}) {
 	const [fetchedData, setFethedData] = useState(false);
 	const [SearchTerm, setSearchTerm] = useState('');
 	const [isModalVisible, setIsModalVisible] = useState(false);
+	const locale = useSelector((state) => state.userReducer.userLanguage);
 	const headerTranslateY = diffClamp.interpolate({
 		inputRange: [0, HEADER_HEIGHT],
 		outputRange: [0, -HEADER_HEIGHT],
@@ -190,6 +193,9 @@ export default function Home({navigation}) {
 			</Tab.Navigator>
 		);
 	};
+	const i18n = new I18n(customerHome);
+	i18n.enableFallback = true;
+	i18n.locale = locale;
 	//favourite_restaurants.stores.push('67');
 	//console.log(restaurantArray);
 	//console.log(favourite_restaurants.stores.indexOf((38).toString()));
@@ -203,7 +209,7 @@ export default function Home({navigation}) {
 
 			{/* <Animated.View style={[styles.container_2, {transform: [{translateY: headerTranslateY}]}]}> */}
 			<Animated.View style={[styles.container_2]}>
-				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} searchFun={searchFun} />
+				<SearchBar focusFun={onFocusFun} blurFun={onBlurFun} searchFun={searchFun} text={i18n.t('search')} />
 				{!focused && SearchTerm == '' ? (
 					<Animated.ScrollView
 						style={{flex: 1, width: '100%', height: '100%'}}
