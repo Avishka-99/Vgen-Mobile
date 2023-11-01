@@ -15,7 +15,11 @@ import {HeartButton} from './Button';
 import * as ALL_ACTIONS from '../actions/AllActions';
 import * as API_ENDPOINTS from '../api/ApiEndpoints';
 import * as Haptics from 'expo-haptics';
+import { I18n } from 'i18n-js';
+import { categoryBottomSheetLocale } from '../constants/Localizations';
+
 export default function Card(props) {
+	const locale = useSelector((state) => state.userReducer.userLanguage);
 	const dispatch = useDispatch();
 	const [btnType, setBtnType] = useState('heart-border');
 	const user_id = useSelector((state) => state.userReducer.userid);
@@ -297,6 +301,9 @@ export default function Card(props) {
 		);
 	} else if (props.type == 'category') {
 		const [load, setLoad] = useState(true);
+		const i18n = new I18n(categoryBottomSheetLocale);
+		i18n.enableFallback = true;
+		i18n.locale = locale;
 		return (
 			<TouchableWithoutFeedback
 				onPress={() => props.openFun(props.data.name)}
@@ -360,7 +367,7 @@ export default function Card(props) {
 								justifyContent: 'center',
 							}}
 						>
-							<Text style={{fontFamily: 'Poppins-regular'}}>{props.data.name}</Text>
+							<Text style={{fontFamily: 'Poppins-regular'}}>{i18n.t(`${props.data.name.toLowerCase()}`)}</Text>
 						</View>
 					</View>
 				</View>

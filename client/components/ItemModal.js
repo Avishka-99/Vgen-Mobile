@@ -8,14 +8,18 @@ import CounterInput from 'react-native-counter-input';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Axios from '../api/Axios';
 import {CardField, confirmPayment, useConfirmPayment, useStripe} from '@stripe/stripe-react-native';
-import { setCart } from '../actions/UserAction';
+import {setCart} from '../actions/UserAction';
 export default function ItemModal(props) {
+	console.log(props);
 	const dispatch = useDispatch();
 	const [modalProductQuantity, setModalProductQuantity] = useState(1);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [totalCost, setTotalCost] = useState(0);
 	const modalDetails = useSelector((state) => state.restaurantReducer.modalDetails);
 	const cart = useSelector((state) => state.userReducer.cart);
+	const langitude = useSelector((state) => state.userReducer.userLocation.lang);
+	const longitude = useSelector((state) => state.userReducer.userLocation.lang);
+	const userID = useSelector((state) => state.userReducer.userid);
 	const {initPaymentSheet, presentPaymentSheet} = useStripe();
 	const makePayment = (amount) => {
 		Axios.post('/api/intents', {
@@ -58,18 +62,17 @@ export default function ItemModal(props) {
 			}
 		});
 	};
-	const addToCart =(id,qty)=>{
-		
+	const addToCart = (id, qty) => {
 		var newCart = [];
 		//var filteredCommunities = {};
 		async function updateCart() {
 			try {
 				if (cart) {
 					newCart = cart.map((innerArray) => innerArray);
-					const newItem={id:id,qty:qty}
-					newCart.push(newItem)
-					dispatch(setCart(newCart))
-					console.log(newCart)
+					const newItem = {id: id, qty: qty};
+					newCart.push(newItem);
+					dispatch(setCart(newCart));
+					console.log(newCart);
 					props.closeModal();
 					//filteredCommunities = tempCommunities.filter((item) => userCommunities.indexOf(item.communityId) == -1);
 					//console.log(tempCommunities);
@@ -79,9 +82,8 @@ export default function ItemModal(props) {
 			}
 		}
 		updateCart();
-		console.log(id,qty)
-
-	}
+		console.log(id, qty);
+	};
 	return (
 		<Modal
 			dismissable={false}
@@ -135,10 +137,12 @@ export default function ItemModal(props) {
 							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>In Stock :</Text>
 							<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>{modalDetails.sell_products[0].quantity}</Text>
 						</View>
-						<View>
-							<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>Cooking Time :</Text>
-							<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>{parseInt(modalDetails.cooking_time.split(':')[0]) * 60 + parseInt(modalDetails.cooking_time.split(':')[1])} minutes</Text>
-						</View>
+						{modalDetails.cooking_time && (
+							<View>
+								<Text style={{fontFamily: 'Poppins-semibold', fontSize: 16}}>Cooking Time :</Text>
+								<Text style={{fontFamily: 'Poppins-regular', fontSize: 14}}>{modalDetails.cooking_time && parseInt(modalDetails.cooking_time.split(':')[0]) * 60 + parseInt(modalDetails.cooking_time.split(':')[1])} minutes</Text>
+							</View>
+						)}
 					</View>
 				</View>
 				<View style={{width: '100%', height: '17%', left: '3%'}}>

@@ -69,11 +69,13 @@ export default function Categories() {
 	const bottomSheetModalRef = useRef(null);
 	const snapPoints = useMemo(() => ['98%'], []);
 	const openModal = (data) => {
+		console.log(data)
 		Axios.post(API_ENDPOINTS.FETCH_ALL_PRODUCTS).then((result) => {
 			const newFoods = result.data.filter((item) => filterArrayByCategory(item, data));
 			setOption('all');
 			setFoods(newFoods);
 			setSheetFoods(newFoods);
+			console.log(newFoods)
 			//dispatch(ALL_ACTIONS.setAllProducts(result.data));
 			//allFoods = useSelector((state) => state.userReducer.allProducts);
 		});
