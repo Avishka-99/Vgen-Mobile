@@ -5,7 +5,7 @@ export default function Button(props) {
 	//console.log(props)
 	return (
 		<TouchableOpacity style={[styles.button,props.custermize]} onPress={() => props.func()}>
-			<Text style={{color: 'white', fontWeight: 500, fontSize: 20}}>{props.butname}</Text>
+			<Text style={{color: 'white', fontWeight: 500, fontSize: 15}}>{props.butname}</Text>
 		</TouchableOpacity>
 	);
 }
@@ -48,5 +48,6 @@ const styles = StyleSheet.create({
 		backgroundColor: '#7EB693',
 		alignItems: 'center',
 		justifyContent: 'center',
+		paddingBottom:2
 	},
 });
