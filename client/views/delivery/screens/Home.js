@@ -15,6 +15,7 @@ import {BottomSheetModal, BottomSheetModalProvider, BottomSheetBackdrop} from '@
 import {Portal, PortalHost} from '@gorhom/portal';
 import Backdrop from '../../../components/Backdrop';
 import SamaryCard from '../../../components/SamaryCard';
+import { Linking } from 'react-native';
 
 
 
@@ -28,6 +29,9 @@ function Home({navigation}) {
     let [longi,setlongi]=useState(0.0)
     const [errorMsg, setErrorMsg] = useState('');
     const[orderProsess,setorderProsess]=useState(false)
+    const[getProduct,setProduct]=useState(false)
+    const[userData,setUserData]=useState([])
+    const[call,setcall]=useState('')
     const userID =useSelector((state) => state.userReducer.userid) 
     const [orderHistory,setOrderHistory]=useState([]);
     const dispatch = useDispatch();
@@ -35,16 +39,22 @@ function Home({navigation}) {
     const bottomSheetModalRef = useRef(null);
 	  const snapPoints = useMemo(() => ["30%"], []); // for bottom sheet 
 
-   //const value=[] // push card data
-   //  console.log("latiiiiii",order[0].rest_latitude)
+   
    const Accsept=(id)=>{
     navigation.navigate('Delivery',{
       shop_lati: parseFloat(order[0].rest_latitude),
       shop_longi: parseFloat(order[0].rest_longitude)
     }) 
     setorderProsess(true)// call  prosess function
+    setcall(order[0].rest_contacNo)
+    // Axios.get(API_ENDPOINTS.Delivery_Orders_Accsept_URL,{
+    //     params:{
+    //       userid:userID,
+    //       orderID:order[0].order_id
+    //     }
+    // });
    }
-
+//reject orders
   const reject=()=>{
       Axios.get(API_ENDPOINTS.Delivery_Orders_Reject_URL,{
         params:{
@@ -55,15 +65,25 @@ function Home({navigation}) {
      });
      bottomSheetModalRef.current.close();
   } 
-
-
+//bottom sheet present
    const presentBottom=()=>{
     bottomSheetModalRef.current.present();
    }
 
    //procesing part dilivery
    const process=()=>{
-      
+       navigation.navigate('Delivery',{
+      shop_lati:parseFloat(order[0].vgen_latitude),
+      shop_longi:parseFloat(order[0].vgen_longitude)
+    }) 
+      setProduct(true)
+      setcall(order[0].vgen_contacNo)
+      bottomSheetModalRef.current.close();
+   }
+
+   const callUser=()=>{
+    const phoneNumber = 'tel:'+call; 
+    Linking.openURL(phoneNumber).catch(err => console.error('An error occurred', err));
    }
 
    useEffect(()=>{
@@ -149,7 +169,7 @@ function Home({navigation}) {
                           <Feather name='truck' color={'#7EB693'} size={30}/>
                      </View>
                      <View style={{width:'50%',height:70,alignItems:'center',justifyContent:'center'}}>
-                        <Text style={{fontSize:20,color:'#274C5B'}}>Hellow  Avater</Text>
+                        <Text style={{fontSize:20,color:'#274C5B'}}>Orders summary</Text>
                         <Text style={{fontSize:12,fontWeight:300}}>Colombo,Srilanka</Text>
                      </View>
                      <View style={{backgroundColor:'#ffff',width:'25%',height:60,borderTopLeftRadius:50,borderBottomLeftRadius:50,elevation:7,shadowColor:'black',alignItems:'center',justifyContent:'center'}}>
@@ -161,7 +181,7 @@ function Home({navigation}) {
                         </View>
                      </View>
                  </View>
-                    <View style={styles.Revenue}>
+                    {/* <View style={styles.Revenue}>
                        <View style={styles.count}>
                          <Text style={{color:'#4D5959',fontSize:20,fontWeight:600}}>Count</Text>
                          <Text style={{fontSize:18,fontWeight:300}}>05</Text>
@@ -176,7 +196,7 @@ function Home({navigation}) {
                             <Image style={{width:60,height:60,borderRadius:50,borderWidth:1,borderColor:'#EFD373'}} source={require('../../../assets/th1.jpg')}/>
                           </View>
                        </View>
-                   </View>
+                   </View> */}
                     <View style={styles.recvest}>
                       
                       
@@ -212,7 +232,7 @@ function Home({navigation}) {
                            snapPoints={snapPoints}
                            
                           >
-                              {<BottomSheetOrder data={order[0]} func={Accsept} funcReject={reject} funprosess={process} setBoolean={orderProsess}/>}
+                              {<BottomSheetOrder data={order[0]} func={Accsept} funcReject={reject} funprosess={process} setBoolean={orderProsess} user={getProduct} usercall={callUser}/>}
                           </BottomSheetModal>
                           
                           </Portal>:null

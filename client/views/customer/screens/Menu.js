@@ -115,11 +115,11 @@ export default function Menu() {
 			<Card type='profile' openModal={openProfileSheet} text={i18n.t('profile')} name={userName} />
 			<Divider
 				style={{
-					width: '96%',
-					left: '2%',
+					width:'96%',
+					left:'2%',
 				}}
 			/>
-			<View
+			{/* <View
 				style={{
 					height: '8%',
 					width: '100%',
@@ -149,14 +149,14 @@ export default function Menu() {
 				>
 					<Button onPress={toggleSwitch} title='Click me'></Button>
 				</View>
-			</View>
-			<Divider
+			</View> */}
+			{/* <Divider
 				style={{
 					width: '96%',
 					left: '2%',
 				}}
-			/>
-			<View
+			/> */}
+			{/* <View
 				style={{
 					height: '8%',
 					width: '100%',
@@ -195,14 +195,14 @@ export default function Menu() {
 						</View>
 					</TouchableOpacity>
 				</View>
-			</View>
-			<Divider
+			</View> */}
+			{/* <Divider
 				style={{
 					width: '96%',
 					left: '2%',
 				}}
-			/>
-			<TouchableOpacity
+			/> */}
+			{/* <TouchableOpacity
 				style={{
 					flexDirection: 'row',
 					justifyContent: 'space-evenly',
@@ -243,8 +243,8 @@ export default function Menu() {
 						</View>
 					</LinearGradient>
 				</View>
-			</TouchableOpacity>
-			<View
+			</TouchableOpacity> */}
+			{/* <View
 				style={{
 					width: '100%',
 					flexDirection: 'row',
@@ -267,7 +267,7 @@ export default function Menu() {
 						backgroundColor: 'red',
 					}}
 				></View>
-			</View>
+			</View> */}
 			<Button
 				title='Log out'
 				onPress={() => {

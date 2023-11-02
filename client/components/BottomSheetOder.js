@@ -1,5 +1,6 @@
 import {View, Text, StyleSheet, Switch, 
-  Dimensions,ImageBackground,FlatList,ScrollView,Image} from 'react-native';
+  Dimensions,ImageBackground,FlatList,
+  ScrollView,Image,TouchableOpacity} from 'react-native';
 import Order from './Order';
 import { Feather } from '@expo/vector-icons';
 import Button from './Button';
@@ -24,13 +25,13 @@ export default function BottomSheetOrder(props){
 
                     
                   <View style={{marginLeft:14,marginTop:4}}>
-                    <Text style={{fontFamily:"Poppins-medium"}}>{props.data.rest_name}</Text>
-                    <Text style={{fontFamily:"Poppins-medium"}}>{props.data. rest_contacNo}</Text>
+                    <Text style={{fontFamily:"Poppins-medium"}}>{!props.user?props.data.rest_name:props.data.vgen_name}</Text>
+                    <Text style={{fontFamily:"Poppins-medium"}}>{!props.user?props.data. rest_contacNo:props.data.vgen_contacNo}</Text>
                   </View>
                </View>
-
-               <View style={{width:40,height:40,marginTop:'4%',marginHorizontal:"32%",backgroundColor:"#ffff",alignItems:'center',justifyContent:'center',borderRadius:10,elevation:3}}><Feather name='phone' size={25} color={"red"}/></View>
-
+                
+                    <View style={{width:40,height:40,marginTop:'4%',marginHorizontal:"32%",backgroundColor:"#ffff",alignItems:'center',justifyContent:'center',borderRadius:10,elevation:3}}><TouchableOpacity onPress={()=>props.usercall()}><Feather name='phone' size={25} color={ !props.user?"red":"green"}/></TouchableOpacity></View>
+              
            </View>
 
            <View style={{
@@ -41,10 +42,11 @@ export default function BottomSheetOrder(props){
                 
            
                 <View style={{marginLeft:'5%',marginTop:'0%'}}><Text style={{fontFamily:"Poppins-medium"}}>Order quantitiy x {props.data.order_quantitiy} Amount {props.data.order_amount} order free 200 </Text></View>
-                <View style={{marginLeft:'5%',marginTop:'0%'}}><Text style={{fontFamily:"Poppins-medium"}}>{props.data.rest_address}</Text></View>
+                <View style={{marginLeft:'5%',marginTop:'0%'}}><Text style={{fontFamily:"Poppins-medium"}}>{!props.user?props.data.rest_address:props.data.vgen_address}</Text></View>
                { !props.setBoolean?<Button butname={"Accept"} func={props.func} custermize={styles.custermize}/>:null}
                 {!props.setBoolean?<Button butname={"Reject"} func={props.funcReject} custermize={styles.custermize1}/>:null}
                 { props.setBoolean?<Button butname={"Prosess"} func={props.funprosess} custermize={styles.custermize2}/>:null}
+                { props.user?<Button butname={"Deliverd"} func={props.funprosess} custermize={styles.custermize2}/>:null}
 
            </View>
      

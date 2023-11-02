@@ -155,7 +155,7 @@ export default function Menu() {
 					left: '2%',
 				}}
 			/> */}
-			<View
+			{/* <View
 				style={{
 					height: '8%',
 					width: '100%',
@@ -194,13 +194,13 @@ export default function Menu() {
 						</View>
 					</TouchableOpacity>
 				</View>
-			</View>
-			<Divider
+			</View> */}
+			{/* <Divider
 				style={{
 					width: '96%',
 					left: '2%',
 				}}
-			/>
+			/> */}
 			{/* <TouchableOpacity
 				style={{
 					flexDirection: 'row',
@@ -243,7 +243,7 @@ export default function Menu() {
 					</LinearGradient>
 				</View>
 			</TouchableOpacity> */}
-			<View
+			{/* <View
 				style={{
 					width: '100%',
 					flexDirection: 'row',
@@ -266,7 +266,7 @@ export default function Menu() {
 						backgroundColor: 'red',
 					}}
 				></View>
-			</View>
+			</View> */}
 			<Button
 				title='Log out'
 				onPress={() => {

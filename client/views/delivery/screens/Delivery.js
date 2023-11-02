@@ -44,8 +44,8 @@ export default function Delivery({route}) {
     {
       title:"end",
       location:{
-        latitude:shop_latitude,
-        longitude:shop_longitude
+        latitude:shop_latitude==null?loction_deliver.latitude:shop_latitude,
+        longitude:shop_longitude==null?loction_deliver.longitude:shop_longitude
        
       },
       descryption:"custemore home"
@@ -120,7 +120,7 @@ export default function Delivery({route}) {
               latitude:bitweenpoint[0].location.latitude,
               longitude:bitweenpoint[0].location.longitude,
               latitudeDelta:0.1, 
-              longitudeDelta: 0.1, 
+              longitudeDelta:0.1, 
             }}
             onRegionChangeComplete={RegionChange}
             ref={mapref}
@@ -139,31 +139,7 @@ export default function Delivery({route}) {
          </MapView>  
         }
 
-				{loction_deliver.latitude == null && loction_deliver.longitude == null ? (
-					<View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-						<ActivityIndicator size={'number'} theme={{colors: {primary: 'green'}}} />
-					</View>
-				) : (
-					<MapView
-						style={styles.mapview}
-						region={{
-							latitude: bitweenpoint[0].location.latitude,
-							longitude: bitweenpoint[0].location.longitude,
-							latitudeDelta: latitudeDelta,
-							longitudeDelta: longitudeDelta,
-						}}
-						onRegionChangeComplete={RegionChange}
-						// onRegionChange={(region)=>{
-						//   setLalitudeDelta(region.latitudeDelta)
-						//   setLongitudeDelta(region.longitudeDelta)
-						// }}
-						ref={mapref}
-					>
-						{showPoint()}
-
-						<MapViewDirections origin={bitweenpoint[0].location} destination={bitweenpoint[1].location} apikey={GOOGLE_API} strokeWidth={6} strokeColor='green' />
-					</MapView>
-				)}
+			
 			</View>
 		</SafeAreaView>
 	);

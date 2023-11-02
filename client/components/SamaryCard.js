@@ -23,7 +23,8 @@ export default function SamaryCard(props){
               <View style={styles.text}><Text style={{fontSize:15,fontFamily:"Poppins-medium"}} >{props.data.foodNAme}</Text></View>
               <View style={styles.text1} ><Text style={{fontFamily:"Poppins-medium"}}>Total Quantitiy x {props.data.quantitiy}</Text></View>
               <View style={styles.text1}><Text style={{fontFamily:"Poppins-medium"}}>Total Amount {props.data.price}</Text></View>
-              <View style={styles.text1}>{props.data.state==2?<Text style={{fontFamily:"Poppins-medium",color:'red'}}>order state pending</Text>:null}</View>
+              <View style={styles.text1}>{props.data.state==='online'?<Text style={{fontFamily:"Poppins-medium",color:'red'}}>Online payment</Text>:
+              <Text style={{fontFamily:"Poppins-medium",color:'red'}}>COD payment</Text>}</View>
               
            </View>
         </View> 
